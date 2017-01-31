@@ -6,7 +6,7 @@ import java.util.LinkedList;
  * Created by Neil on 15/12/2016.
  */
 public class GamePlayerRecord {
-    private ArrayList<LinkedList> playerActions = new ArrayList<>();
+    private LinkedList<LinkedList> playerActions = new LinkedList<>();
     private HashMap<String,PokerAction> mappedActions = new HashMap<>();
 
     public GamePlayerRecord() {
@@ -24,15 +24,14 @@ public class GamePlayerRecord {
         LinkedList l = new LinkedList();
         l.add(playerName);
         l.add(action);
-        playerActions.add(l);
+        if(action == PokerAction.ALL_IN) {
+            playerActions.remove(playerActions.size()-2);
+            playerActions.add(playerActions.size()-1, l);
+        } else {
+            playerActions.add(l);
+        }
     }
     public void addPlayerAction(String playerName, String charAction) {
-//        LinkedList l = new LinkedList();
-//        l.add(playerName);
-//        l.add(charAction);
-//
-//
-//        playerActions.add(l);
         PokerAction action = mappedActions.get(charAction);
         if (action != null) {
             addPlayerAction(playerName, action);

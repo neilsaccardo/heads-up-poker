@@ -16,7 +16,6 @@ public class PlayerActions {
         String playerOneLine = inPlayerOne.nextLine();
         String playerTwoLine = "";
         while(inPlayerOne.hasNextLine() && !(playerOneLine.contains(strGameID))) {
-            System.out.println(playerOneLine);
             playerOneLine = inPlayerOne.nextLine();
         }
         inPlayerOne.close();
@@ -40,23 +39,15 @@ public class PlayerActions {
     private void addActions(String playerOneLine, String playerTwoLine) {
         String [] playerOneList = playerOneLine.trim().split("\\s+");
         String [] playerTwoList = playerTwoLine.trim().split("\\s+");
-        for(int i = 0; i< playerOneList.length; i++) {
-//            System.out.println(playerOneList[i]);
-//            System.out.println(playerTwoList[i]);
-        }
         if(playerOneList[3].equals("1")) {
             addActionsToRecord(playerOneList, playerTwoList);
-            GamePlayerRecord gpr = new GamePlayerRecord();
         } else {
-            GamePlayerRecord gpr = new GamePlayerRecord();
             addActionsToRecord(playerTwoList, playerOneList);
         }
     }
 
     private void addActionsToRecord(String[] playerOneList, String[] playerTwoList) {
         GamePlayerRecord gpr = new GamePlayerRecord();
-        System.out.println(playerOneList);
-        System.out.println(playerOneList.length);
         for (int i = 4; i < 8; i++) {
             String [] charsPlayerOne = playerOneList[i].split("");
             String [] charsPlayerTwo = playerTwoList[i].split("");
@@ -65,8 +56,6 @@ public class PlayerActions {
                 gpr.addPlayerAction(playerTwoList[0], charsPlayerTwo[j]);
             }
         }
-//        System.out.println(playerOneList[4]);
-//        System.out.println(playerTwoList[4]);
         System.out.println(gpr);
     }
 }

@@ -10,5 +10,6 @@ public enum PokerAction {
     CHECK,
     BIG_BLIND,
     SMALL_BLIND,
-    NO_ACTION, QUIT
+    NO_ACTION,
+    QUIT
 }
