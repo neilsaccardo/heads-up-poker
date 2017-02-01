@@ -39,6 +39,9 @@ public class PlayerActions {
     private void addActions(String playerOneLine, String playerTwoLine) {
         String [] playerOneList = playerOneLine.trim().split("\\s+");
         String [] playerTwoList = playerTwoLine.trim().split("\\s+");
+//        for (int i = 0; i < playerOneList.length; i++) {
+//            System.out.println(i + " : " + playerOneList[i]);
+//        }
         if(playerOneList[3].equals("1")) {
             addActionsToRecord(playerOneList, playerTwoList);
         } else {
@@ -51,7 +54,7 @@ public class PlayerActions {
         for (int i = 4; i < 8; i++) {
             String [] charsPlayerOne = playerOneList[i].split("");
             String [] charsPlayerTwo = playerTwoList[i].split("");
-            for(int j = 0; j < charsPlayerOne.length; j++) {
+            for(int j = 0; j < charsPlayerOne.length && j < charsPlayerTwo.length; j++) {
                 gpr.addPlayerAction(playerOneList[0], charsPlayerOne[j]);
                 gpr.addPlayerAction(playerTwoList[0], charsPlayerTwo[j]);
             }
