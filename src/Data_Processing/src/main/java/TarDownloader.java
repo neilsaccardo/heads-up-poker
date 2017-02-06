@@ -16,12 +16,19 @@ import java.util.regex.Pattern;
  */
 public class TarDownloader {
     private final String urlBaseString = "http://webdocs.cs.ualberta.ca/~games/poker/IRCdata/";
-    private File filePath = new File("C:\\Data\\tar.tgz");
-    private File destDir = new File("C:\\Data\\test");
     private final String tar = "tar";
     private final String gz = "gz";
+    private final String noLimitRegex = "nolimit\\.\\d{6}\\.tgz";
+
+    private File filePath = new File("C:\\Data\\tar.tgz");
+    private File destDir = new File("C:\\Data\\test");
 
     public TarDownloader() throws MalformedURLException {
+    }
+
+    public TarDownloader(File filePath0, File destDir0) {
+        filePath = filePath0;
+        destDir = destDir0;
     }
 
     public List<String> retrieveFileNames(String patternString) {
@@ -51,23 +58,28 @@ public class TarDownloader {
         }
     }
 
-    public void retrieveGameData(String patternString) {
+
+    // RETURNS the list of file names that were downloaded.
+    public List<String> retrieveGameData(String patternString) {
         List<String> fileNames= retrieveFileNames(patternString);
-
         for(String fileName : fileNames) {
-
             downloadTarGz(fileName);
             unPackTarGz(fileName.split("\\.")[1]);
         }
+        return fileNames;
+    }
+
+    //RETURNS the list of file names of no limit games that were downloaded.
+    public List<String> retrieveNoLimitGames() {
+        return retrieveFileNames(noLimitRegex);
     }
 
     public static void main(String [] args) throws IOException {
 
-//        Pattern p = Pattern.compile("7stud\\.\\d{6}\\.tgz");
-//        TarGzNameRetriever tgzRetriever = new TarGzNameRetriever();
-//        tgzRetriever.getFileNamesByStringPattern("7stud\\.199507\\.tgz");//Pattern("7stud\\.\\d{6}\\.tgz");
+        Pattern p = Pattern.compile("7stud\\.\\d{6}\\.tgz");
+        TarGzNameRetriever tgzRetriever = new TarGzNameRetriever();
+        tgzRetriever.getFileNamesByStringPattern("nolimit\\.\\d{6}\\.tgz");//Pattern("7stud\\.\\d{6}\\.tgz");
 //
-//        new TarDownloader().retrieveGameData("nolimit\\.199510\\.tgz");
-
+        new TarDownloader().retrieveGameData("nolimit\\.\\d{6}\\.tgz");
     }
 }

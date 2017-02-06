@@ -7,13 +7,22 @@ import java.util.Scanner;
  */
 public class GameMaker {
 
-    private String pdb = "pdb.";
+    private File pdb;
     private File hdb = new File("C:\\Data\\hdb");
-    private File hroster = new File("C:\\Data\\hroster");
+    private File hroster;
 
-    private Scanner inHroster = new Scanner(hroster);
+    private Scanner inHroster;
 
     public GameMaker() throws FileNotFoundException {
+        hroster = new File("C:\\Data\\hroster");
+        inHroster = new Scanner(hroster);
+        pdb = new File(hroster.getParentFile(), "pdb");
+    }
+
+    public GameMaker(File hroster0) throws FileNotFoundException {
+        hroster = hroster0;
+        inHroster = new Scanner(hroster);
+        pdb = new File(hroster.getParentFile(), "pdb");
     }
 
     public void readAllGames() throws FileNotFoundException {
@@ -40,12 +49,12 @@ public class GameMaker {
     }
 
     public void getPlayerActions(String name1, String name2,String gameId) throws FileNotFoundException {
-        PlayerActions pa = new PlayerActions();
+        PlayerActions pa = new PlayerActions(pdb);
         pa.getAction(name1, name2, gameId);
     }
 
     public  static void main(String [] args) throws FileNotFoundException {
-        GameMaker gm = new GameMaker();
+        GameMaker gm = new GameMaker(new File("C:\\Data\\test\\nolimit\\199701\\hroster"));
         gm.readAllGames();
     }
 }

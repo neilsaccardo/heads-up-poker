@@ -7,11 +7,16 @@ import java.util.Scanner;
  */
 public class PlayerActions {
 
-    private String pdb = "C:\\Data\\pdb\\pdb.";
+    private File pdb = new File("C:\\Data\\pdb\\");
+
+    public PlayerActions(File pdbFilePath) {
+        pdb = pdbFilePath;
+    }
+
 
     public void getAction(String name1, String name2, String gameID) throws FileNotFoundException {
-        Scanner inPlayerOne = new Scanner(new File(pdb + name1));
-        Scanner inPlayerTwo = new Scanner(new File(pdb + name2));
+        Scanner inPlayerOne = new Scanner(new File(pdb, "pdb." + name1));
+        Scanner inPlayerTwo = new Scanner(new File(pdb, "pdb." + name2));
         String strGameID = gameID + "";
         String playerOneLine = inPlayerOne.nextLine();
         String playerTwoLine = "";
