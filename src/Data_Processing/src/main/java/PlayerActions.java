@@ -60,9 +60,28 @@ public class PlayerActions {
             String [] charsPlayerOne = playerOneList[i].split("");
             String [] charsPlayerTwo = playerTwoList[i].split("");
             for(int j = 0; j < charsPlayerOne.length && j < charsPlayerTwo.length; j++) {
-                gpr.addPlayerAction(playerOneList[0], charsPlayerOne[j]);
-                gpr.addPlayerAction(playerTwoList[0], charsPlayerTwo[j]);
+                if (i == 4) {
+                    gpr.addPlayerActionPreFlop(playerOneList[0], charsPlayerOne[j]);
+                    gpr.addPlayerActionPreFlop(playerTwoList[0], charsPlayerTwo[j]);
+                } else if (i == 5) {
+                    gpr.addPlayerActionFlop(playerOneList[0], charsPlayerOne[j]);
+                    gpr.addPlayerActionFlop(playerTwoList[0], charsPlayerTwo[j]);
+                } else if (i == 6) {
+                    gpr.addPlayerActionTurn(playerOneList[0], charsPlayerOne[j]);
+                    gpr.addPlayerActionTurn(playerTwoList[0], charsPlayerTwo[j]);
+                } else if (i == 7) {
+                    gpr.addPlayerActionRiver(playerOneList[0], charsPlayerOne[j]);
+                    gpr.addPlayerActionRiver(playerTwoList[0], charsPlayerTwo[j]);
+                }
+//                gpr.addPlayerAction(playerOneList[0], charsPlayerOne[j]);
+//                gpr.addPlayerAction(playerTwoList[0], charsPlayerTwo[j]);
             }
+        }
+
+
+        if(playerOneList.length > 11) {
+            gpr.addCardsPlayerOne(playerOneList[11], playerOneList[12]);
+            gpr.addCardsPlayerTwo(playerTwoList[11], playerTwoList[12]);
         }
         System.out.println(gpr);
     }
