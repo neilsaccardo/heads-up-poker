@@ -8,7 +8,7 @@ import java.util.LinkedList;
 public class GamePlayerRecord {
     private LinkedList<LinkedList> playerActions = new LinkedList<>();
     private HashMap<String,PokerAction> mappedActions = new HashMap<>();
-
+    private HashMap<PokerStage, LinkedList> mappedStagesToList = new HashMap<>();
     private LinkedList<String> cardPairPlayerOne = new LinkedList<>();
     private LinkedList<String> cardPairPlayerTwo = new LinkedList<>();
 
@@ -21,12 +21,18 @@ public class GamePlayerRecord {
     public GamePlayerRecord() {
         mappedActions.put("-", PokerAction.NO_ACTION);
         mappedActions.put("B", PokerAction.BIG_BLIND);
+        mappedActions.put("b", PokerAction.BET);
+        mappedActions.put("c", PokerAction.CALL);
         mappedActions.put("f", PokerAction.FOLD);
         mappedActions.put("k", PokerAction.CHECK);
         mappedActions.put("r", PokerAction.RAISE);
         mappedActions.put("A", PokerAction.ALL_IN);
         mappedActions.put("Q", PokerAction.QUIT);
-        mappedActions.put("K", PokerAction.QUIT);
+
+        mappedStagesToList.put(PokerStage.PREFLOP, playerActionsPreFlop);
+        mappedStagesToList.put(PokerStage.FLOP, playerActionsFlop);
+        mappedStagesToList.put(PokerStage.TURN, playerActionsTurn);
+        mappedStagesToList.put(PokerStage.RIVER, playerActionsRiver);
     }
 
     private void addPlayerAction(String playerName, PokerAction action) {
@@ -46,8 +52,9 @@ public class GamePlayerRecord {
         l.add(playerName);
         l.add(action);
         if(action == PokerAction.ALL_IN) {
-            stageOfPlay.remove(stageOfPlay.size()-2);
-            stageOfPlay.add(stageOfPlay.size()-1, l);
+            System.out.println("WE'RE HERE: " + stageOfPlay);
+            stageOfPlay.remove(stageOfPlay.size() - 2);
+            stageOfPlay.add(stageOfPlay.size() - 1, l);
         } else {
             stageOfPlay.add(l);
         }
@@ -76,7 +83,9 @@ public class GamePlayerRecord {
         addPlayerAction(playerName, charAction, playerActionsPreFlop);
     }
     public void addPlayerActionFlop(String playerName, String charAction) {
+        System.out.println("FLOP");
         addPlayerAction(playerName, charAction, playerActionsFlop);
+        System.out.println(playerActionsFlop);
     }
 
     public void addPlayerActionTurn(String playerName, String charAction) {
@@ -87,6 +96,9 @@ public class GamePlayerRecord {
         addPlayerAction(playerName, charAction, playerActionsRiver);
     }
 
+    public void addPlayerAction(String playerName, String charAction, PokerStage stage) {
+        addPlayerAction(playerName, charAction, mappedStagesToList.get(stage));
+    }
 
     public String toString() {
         return "Actions: " + "Preflop: " + playerActionsPreFlop + " Flop: " + playerActionsFlop
