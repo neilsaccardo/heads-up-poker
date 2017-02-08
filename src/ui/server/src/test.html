@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/poker.css">
+    <script   src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="js/util/playing-card/playing-card.js"></script>
+    <script src="js/util/dealer-button/dealer-button.js"></script>
+    <script src="js/util/chip-stack/chip-stack.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/ai-player.js"></script>
+    <script src="../bower_components/angular-playing-cards/angular-playing-cards.js"></script>
+
+</head>
+<body ng-app="cardDemo">
+<div ng-controller="DemoCtrl">
+    <div class="row padding-bottom-md">
+        <div>
+            <ai-player card-one="cardOne" card-two="cardTwo" hide-card="true"
+                       is-dealer="false" is-turn="!isTurn"></ai-player>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <player card-one="cardOne" card-two="cardTwo" hide-card="false"
+                    is-dealer="true" is-own-player="true" is-turn="isTurn"></player>
+        </div>
+    </div>
+</div>
+
+<button ng-click="isTurn = !isTurn">click</button>
+<script>
+    angular.module('cardDemo', [
+        'player', 'ai-player'
+    ]);
+
+    angular.module('cardDemo').controller('DemoCtrl', function($scope) {
+        var suits = ['hearts', 'diamonds', 'spades', 'clubs'];
+        var ranks = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king'];
+        $scope.Cards = [];
+        $scope.Cards.push({suit: 'heart', rank: 'back'});
+
+        angular.forEach(suits, function(suit) {
+            angular.forEach(ranks, function(rank) {
+                $scope.Cards.push(
+                        {
+                            suit: suit,
+                            rank: rank
+                        });
+            });
+        });
+
+        $scope.cardOne = {suit: 'hearts', value: '2'};
+        $scope.cardTwo = {suit: 'hearts', value: '3'};
+    });
+</script>
+
+</body>
+
+</html>

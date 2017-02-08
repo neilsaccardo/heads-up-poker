@@ -9,3 +9,6 @@ build/
 # Ignore jetbrains intellij config stuff
 *.iml
 .idea/
+
+# Ignore npm modules
+node_modules/
