@@ -1,9 +1,0 @@
-<playing-card suit="$ctrl.cardOne.suit" value="$ctrl.cardOne.value" is-hidden="$ctrl.hideCard"></playing-card>
-<playing-card suit="$ctrl.cardTwo.suit" value="$ctrl.cardTwo.value" is-hidden="$ctrl.hideCard"></playing-card>
-<dealer-button ng-if="$ctrl.isDealer"></dealer-button>
-<chip-stack total="4000"></chip-stack>
-<div ng-if="$ctrl.isOwnPlayer">
-    <button type="button" ng-disabled="!$ctrl.isTurn" class="btn btn-primary">Raise</button>
-    <button type="button" ng-disabled="!$ctrl.isTurn" class="btn btn-success">Call</button>
-    <button type="button" ng-disabled="!$ctrl.isTurn" class="btn btn-danger">Fold</button>
-</div>
