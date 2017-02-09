@@ -5,5 +5,5 @@
 <div ng-if="$ctrl.isOwnPlayer">
     <button type="button" ng-disabled="!$ctrl.isTurn" class="btn btn-primary">Raise</button>
     <button type="button" ng-disabled="!$ctrl.isTurn" class="btn btn-success">Call</button>
-    <button type="button" ng-disabled="!$ctrl.isTurn" class="btn btn-danger">Fold</button>
+    <button type="button" ng-disabled="!$ctrl.isTurn" class="btn btn-danger" ng-click="$ctrl.fold()">Fold</button>
 </div>

@@ -13,26 +13,50 @@
   left: 30%;
 }
 
-.dealer-btn{
-    width: 70px;
-    height: 70px;
-    padding: 10px 16px;
+.dealer-btn {
     font-size: 24px;
     line-height: 1.33;
-    border-radius: 35px;
     cursor: inherit;
     background-color: #cccccc;
 }
+
+.gray-bg-btn {
+    font-size: 24px;
+    line-height: 1.33;
+    cursor: inherit;
+    background-color: #cccccc;
+}
+
+.thin-black-border {
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+}
+
 .btn-circle {
-    width: 30px;
-    height: 30px;
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+}
+/*
     text-align: center;
     padding: 6px 0;
     font-size: 12px;
     line-height: 1.428571429;
     border-radius: 15px;
-}
-
+*/
 .padding-bottom-md {
     padding-bottom: 30px;
+}
+
+.poker-table {
+    height: auto;
+    border-style: solid;
+    border-width: thick;
+    border-color: chocolate;
+    border-radius: 45px;
+    background-color: green;
+    padding-left: 15%;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

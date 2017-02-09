@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="poker-table">
+        <div class="container-fluid">
+            <div class="row padding-bottom-md">
+                <div>
+                    <ai-player card-one="cardOne" card-two="cardTwo" hide-card="true"
+                               is-dealer="false" is-turn="!isTurn"></ai-player>
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <player card-one="$ctrl.cardOne" card-two="$ctrl.cardTwo" hide-card="false"
+                            is-dealer="true" is-own-player="true" is-turn="isTurn"></player>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
