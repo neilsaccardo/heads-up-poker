@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -8,10 +9,18 @@ import java.util.Scanner;
 public class PlayerActions {
 
     private File pdb = new File("C:\\Data\\pdb\\");
+    private HashMap<Integer, PokerStage> mappedIntegersToPokerStage = new HashMap<>();
+
 
     public PlayerActions(File pdbFilePath) {
         pdb = pdbFilePath;
+        mappedIntegersToPokerStage.put(4, PokerStage.PREFLOP);
+        mappedIntegersToPokerStage.put(5, PokerStage.FLOP);
+        mappedIntegersToPokerStage.put(6, PokerStage.TURN);
+        mappedIntegersToPokerStage.put(7, PokerStage.RIVER);
     }
+
+
 
 
     public void getAction(String name1, String name2, String gameID) throws FileNotFoundException {
@@ -59,10 +68,22 @@ public class PlayerActions {
         for (int i = 4; i < 8; i++) {
             String [] charsPlayerOne = playerOneList[i].split("");
             String [] charsPlayerTwo = playerTwoList[i].split("");
-            for(int j = 0; j < charsPlayerOne.length && j < charsPlayerTwo.length; j++) {
-                gpr.addPlayerAction(playerOneList[0], charsPlayerOne[j]);
-                gpr.addPlayerAction(playerTwoList[0], charsPlayerTwo[j]);
+            int j;
+            for (j = 0; j < charsPlayerOne.length && j < charsPlayerTwo.length; j++) {
+                gpr.addPlayerAction(playerOneList[0], charsPlayerOne[j], mappedIntegersToPokerStage.get(i));
+                gpr.addPlayerAction(playerTwoList[0], charsPlayerTwo[j], mappedIntegersToPokerStage.get(i));
             }
+            // CASE where one player performs more actions in one stage than the other player.
+            if (charsPlayerTwo.length < charsPlayerOne.length) {
+                gpr.addPlayerAction(playerOneList[0], charsPlayerOne[j], mappedIntegersToPokerStage.get(i));
+            }
+            else if (charsPlayerTwo.length > charsPlayerOne.length) {
+                gpr.addPlayerAction(playerTwoList[0], charsPlayerTwo[j], mappedIntegersToPokerStage.get(i));
+            }
+        }
+        if(playerOneList.length > 11) {
+            gpr.addCardsPlayerOne(playerOneList[11], playerOneList[12]);
+            gpr.addCardsPlayerTwo(playerTwoList[11], playerTwoList[12]);
         }
         System.out.println(gpr);
     }
