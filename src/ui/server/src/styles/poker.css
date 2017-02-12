@@ -49,6 +49,11 @@
     padding-bottom: 30px;
 }
 
+.padding-bottom-large-md {
+    padding-bottom: 52px;
+}
+
+
 .poker-table {
     height: auto;
     border-style: solid;

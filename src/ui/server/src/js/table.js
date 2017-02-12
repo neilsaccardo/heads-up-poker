@@ -3,7 +3,7 @@ function TableController($scope, cards) {
     ctrl.player = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
     ctrl.aiplayer = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
     ctrl.communityCards = []; //empty
-
+    ctrl.isDealer = false;
     var deckPointer = 0;
     var deck = cards.createDeck();
     var cardtest= cards.getCardValue(deck[0]);
@@ -12,6 +12,7 @@ function TableController($scope, cards) {
 
 
     ctrl.newGame = function() {
+        ctrl.isDealer = !ctrl.isDealer;
         ctrl.communityCards = [];
         ctrl.dealOutCards();
     }
@@ -48,9 +49,11 @@ function TableController($scope, cards) {
 
     ctrl.dealOutCards();
     ctrl.flop();
+    ctrl.turn();
+    ctrl.river();
 };
 
-angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'cardsService']).component('pokerTable', {
+angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'cardsService']).component('pokerTable', {
     templateUrl: 'js/table.html',
     controller: TableController,
     bindings: {
