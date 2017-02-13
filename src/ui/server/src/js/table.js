@@ -12,12 +12,16 @@ function TableController($scope, cards, socket) {
     var deckPointer = 0;
     var deck = cards.createDeck();
     var cardtest= cards.getCardValue(deck[0]);
+    var pokerStage = 0;
+
     console.log(cardtest);
 
     ctrl.newGame = function() {
         ctrl.isPlayerDealer = !ctrl.isPlayerDealer;
         ctrl.isPlayerTurn = !ctrl.isPlayerDealer;
         ctrl.checkBetOptions = ctrl.isPlayerTurn;
+        pokerStage = 0;
+        ctrl.potSize = 0;
         ctrl.communityCards = [];
         ctrl.dealOutCards();
         ctrl.blinds();
@@ -26,11 +30,52 @@ function TableController($scope, cards, socket) {
 
     ctrl.bet = function() {
         console.log('betting');
+        var obj = {action: 'bet', amount: 100} ;
+        socket.emit('action', obj);
         //send event to server saying opponent has bet.
     }
 
+    socket.on('cfr', function(data) {
+        console.log(data);
+        if (data.action === 'call') {
+            ctrl.addToPotAI(data.amount);
+            incrementStage();
+        }
+        else if (data.action === 'fold') {
+            ctrl.addPotToStackPlayer();
+            socket.emit('fold', 'dummy data for the moment');
+            ctrl.newGame();
+        }
+        else { //data.action === 'raise'
+            ctrl.addToPotAI(data.amount);
+            ctrl.checkBetOptions = false;
+            ctrl.isPlayerTurn = true;
+        }
+    });
+
+    socket.on('fcb', function(data) {
+        console.log(data);
+        if (data.action === 'check') {
+            ctrl.addToPotAI(data.amount);
+            ctrl.checkBetOptions = true;
+            ctrl.isPlayerTurn = true;
+            incrementStage();
+        }
+        else if (data.action === 'bet') {
+            ctrl.addToPotAI(data.amount);
+            ctrl.checkBetOptions = false;
+            ctrl.isPlayerTurn = true;
+        }
+        else { //data.action === 'fold'
+            ctrl.addPotToStackPlayer();
+            socket.emit('fold', 'dummy data for the moment');
+            ctrl.newGame();
+        }
+    });
+
     ctrl.fold = function() {
         //send event to server saying opponent lost.
+        ctrl.addPotToStackAI();
         ctrl.newGame();
     }
 
@@ -92,6 +137,13 @@ function TableController($scope, cards, socket) {
         }
     }
 
+    ctrl.addPotToStackPlayer = function() {
+        ctrl.playerStackSize += ctrl.potSize;
+    }
+
+    ctrl.addPotToStackAI = function() {
+        ctrl.aiStackSize += ctrl.potSize;
+    }
     ctrl.blinds = function() {
         if(ctrl.isPlayerDealer) {
             ctrl.addToPotAI(ctrl.bigBlindAmount/2);
@@ -102,12 +154,22 @@ function TableController($scope, cards, socket) {
         }
     }
 
-    ctrl.newGame();
-    ctrl.flop();
-    ctrl.turn();
-    ctrl.river();
 
-    socket.emit('testmessage', 'msg');
+    function incrementStage() {
+        if (pokerStage === 0) {
+            ctrl.flop();
+        } else if (pokerStage === 1) {
+            ctrl.turn();
+        } else if(pokerStage === 2){
+            ctrl.river();
+        }
+        pokerStage++;
+    }
+
+    ctrl.newGame();
+//    ctrl.flop();
+//    ctrl.turn();
+//    ctrl.river();
 };
 
 angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'cardsService', 'socketService']).component('pokerTable', {

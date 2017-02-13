@@ -38,7 +38,13 @@ io.on('connection', function (socket) {
 
     socket.on('testmessage', function (data) {
         console.log(data);
-    })
+    });
+
+    socket.on('action', function (data) {
+        if(data.action == 'bet') {
+            socket.emit('cfr', {action: 'call', amount: data.amount});
+        }
+    });
 });
 
 
