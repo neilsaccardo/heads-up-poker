@@ -10,6 +10,7 @@ angular.module('ai-player', ['playingCard', 'dealerButton']).component('aiPlayer
         cardTwo: '<',
         hideCard: '<',
         isDealer: '<',
-        isTurn: '<'
+        isTurn: '<',
+        stackSize: '<'
     }
 });

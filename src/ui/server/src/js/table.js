@@ -3,18 +3,43 @@ function TableController($scope, cards) {
     ctrl.player = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
     ctrl.aiplayer = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
     ctrl.communityCards = []; //empty
-    ctrl.isDealer = false;
+    ctrl.isPlayerDealer = true;
+    ctrl.playerStackSize = ctrl.stackSize | 4000;
+    ctrl.aiStackSize = ctrl.stackSize | 4000;
+    ctrl.potSize = 0;
+    ctrl.bigBlindAmount = 100;
+    ctrl.isPlayerTurn = ctrl.isPlayerDealer;
     var deckPointer = 0;
     var deck = cards.createDeck();
     var cardtest= cards.getCardValue(deck[0]);
     console.log(cardtest);
 
-
-
     ctrl.newGame = function() {
-        ctrl.isDealer = !ctrl.isDealer;
+        ctrl.isPlayerDealer = !ctrl.isPlayerDealer;
+        ctrl.isPlayerTurn = !ctrl.isPlayerDealer;
+        ctrl.checkBetOptions = ctrl.isPlayerTurn;
         ctrl.communityCards = [];
         ctrl.dealOutCards();
+        ctrl.blinds();
+        ctrl.continueGame();
+    }
+
+    ctrl.bet = function() {
+        console.log('betting');
+        //send event to server saying opponent has bet.
+    }
+
+    ctrl.fold = function() {
+        //send event to server saying opponent lost.
+        ctrl.newGame();
+    }
+
+    ctrl.continueGame = function() {
+        if(ctrl.isPlayerTurn) {
+            //wait for them to complete an action.
+        } else {
+            //send an event for ai to play.
+        }
     }
 
     ctrl.dealOutCards = function() {
@@ -47,7 +72,38 @@ function TableController($scope, cards) {
         deckPointer++;
     }
 
-    ctrl.dealOutCards();
+    ctrl.addToPotAI = function(betAmount) {
+        if(ctrl.aiStackSize - betAmount < 0) {
+            return false;
+        } else {
+            ctrl.aiStackSize -= betAmount;
+            ctrl.potSize += betAmount;
+            return true;
+        }
+    }
+
+    ctrl.addToPotPlayer = function(betAmount) {
+        if(ctrl.playerStackSize - betAmount < 0) {
+            return false;
+        } else {
+            ctrl.playerStackSize -= betAmount;
+            ctrl.potSize += betAmount;
+            return true;
+        }
+    }
+
+    ctrl.blinds = function() {
+        if(ctrl.isPlayerDealer) {
+            ctrl.addToPotAI(ctrl.bigBlindAmount/2);
+            ctrl.addToPotPlayer(ctrl.bigBlindAmount);
+        } else {
+            ctrl.addToPotPlayer(ctrl.bigBlindAmount);
+            ctrl.addToPotAI(ctrl.bigBlindAmount/2);
+        }
+    }
+
+    ctrl.newGame();
+//    ctrl.dealOutCards();
     ctrl.flop();
     ctrl.turn();
     ctrl.river();
@@ -57,6 +113,6 @@ angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 
     templateUrl: 'js/table.html',
     controller: TableController,
     bindings: {
-
+        stackSize: '<'
     }
 });

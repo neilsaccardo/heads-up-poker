@@ -15,6 +15,7 @@ angular.module('player', ['playingCard', 'dealerButton', 'chip-stack']).componen
         hideCard: '<',
         isDealer: '<',
         isOwnPlayer: '<',
-        isTurn: '<'
+        isTurn: '<',
+        stackSize: '<'
     }
 });

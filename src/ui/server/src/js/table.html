@@ -4,19 +4,30 @@
             <div class="row padding-bottom-md">
                 <div>
                     <ai-player card-one="$ctrl.aiplayer.cardOne" card-two="$ctrl.aiplayer.cardTwo" hide-card="true"
-                               is-dealer="!$ctrl.isDealer" is-turn="!isTurn"></ai-player>
+                               is-dealer="!$ctrl.isPlayerDealer" is-turn="!$ctrl.isPlayerTurn" stack-size="$ctrl.aiStackSize"></ai-player>
                 </div>
                 <div class="col-md-3"></div>
-                <pot total="0" class="pull-left padding-bottom-large-md"></pot>
+                <pot total="$ctrl.potSize" class="pull-left padding-bottom-large-md"></pot>
                 <community-cards cards="$ctrl.communityCards"></community-cards>
 
             </div>
             <div class="row">
                 <div>
                     <player card-one="$ctrl.player.cardOne" card-two="$ctrl.player.cardTwo" hide-card="false"
-                            is-dealer="$ctrl.isDealer" is-own-player="true" is-turn="isTurn"></player>
+                            is-dealer="$ctrl.isPlayerDealer" is-own-player="true" is-turn="$ctrl.isPlayerTurn" stack-size="$ctrl.playerStackSize"></player>
+                    <div ng-if="$ctrl.checkBetOptions">
+                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-primary" ng-click="$ctrl.bet()">Bet</button>
+                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-success" ng-click="$ctrl.check()">Check</button>
+                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()">Fold</button>
+                    </div>
+                    <div ng-if="!$ctrl.checkBetOptions">
+                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-primary" ng-click="$ctrl.raise()">Raise</button>
+                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-success" ng-click="$ctrl.call()">Call</button>
+                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()">Fold</button>
+                    </div>
                 </div>
             </div>
+            <button ng-click="$ctrl.addToPotAI(200)">ddddddd</button>
         </div>
     </div>
 </div>
