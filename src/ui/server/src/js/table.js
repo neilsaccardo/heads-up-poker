@@ -1,4 +1,4 @@
-function TableController($scope, cards) {
+function TableController($scope, cards, socket) {
     var ctrl = this;
     ctrl.player = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
     ctrl.aiplayer = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
@@ -103,13 +103,14 @@ function TableController($scope, cards) {
     }
 
     ctrl.newGame();
-//    ctrl.dealOutCards();
     ctrl.flop();
     ctrl.turn();
     ctrl.river();
+
+    socket.emit('testmessage', 'msg');
 };
 
-angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'cardsService']).component('pokerTable', {
+angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'cardsService', 'socketService']).component('pokerTable', {
     templateUrl: 'js/table.html',
     controller: TableController,
     bindings: {
