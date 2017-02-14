@@ -19,7 +19,7 @@ function TableController($scope, cards, socket) {
     ctrl.newGame = function() {
         ctrl.isPlayerDealer = !ctrl.isPlayerDealer;
         ctrl.isPlayerTurn = !ctrl.isPlayerDealer;
-        ctrl.checkBetOptions = ctrl.isPlayerTurn;
+        ctrl.checkBetOptions = !ctrl.isPlayerTurn;
         pokerStage = 0;
         ctrl.potSize = 0;
         ctrl.communityCards = [];
@@ -40,6 +40,7 @@ function TableController($scope, cards, socket) {
         if (data.action === 'call') {
             console.log('AI HAS CALLED');
             ctrl.addToPotAI(data.amount);
+            ctrl.checkBetOptions = true;
             incrementStage();
         }
         else if (data.action === 'fold') {
@@ -71,7 +72,7 @@ function TableController($scope, cards, socket) {
             console.log('AI HAS BET');
             ctrl.addToPotAI(data.amount);
             ctrl.checkBetOptions = false;
-            ctrl.isPlayerTurn = true;
+//            ctrl.isPlayerTurn = true;
         }
         else { //data.action === 'fold'
             console.log('AI HAS FOLDED');
@@ -89,6 +90,11 @@ function TableController($scope, cards, socket) {
         console.log('NEW GAME');
     }
 
+    ctrl.raise = function() {
+        console.log('I HAVE RAISED');
+        socket.emit('action', {action: 'raise', amount: 20});
+    }
+
     ctrl.check = function() {
         console.log('I HAVE CHECKED');
         if(ctrl.isPlayerDealer) {
@@ -104,15 +110,22 @@ function TableController($scope, cards, socket) {
         console.log('I HAVE CALLED');
         ctrl.addToPotPlayer(10);
         incrementStage();
-        ctrl.isPlayerTurn = ctrl.isPlayerDealer;
+        ctrl.isPlayerTurn = !ctrl.isPlayerDealer;
+        socket.emit();//inform server that the player has called.
+        ctrl.checkBetOptions = true;
+        if(ctrl.isPlayerDealer) {
+            socket.emit('call', {action: 'call', amount: 0});
+        }
     }
     ctrl.continueGame = function() {
-        if(ctrl.isPlayerTurn) {
+        if(ctrl.isPlayerDealer) {
+            ctrl.isPlayerTurn = true;
+            ctrl.checkBetOptions = false;
             //wait for them to complete an action.
         } else {
             console.log('WE are here');
             socket.emit('startgame', {data: 'sample'});
-            //send an event for ai to play.
+            //send an event for ai to start the hand.
         }
     }
 
@@ -176,9 +189,9 @@ function TableController($scope, cards, socket) {
     ctrl.blinds = function() {
         if(ctrl.isPlayerDealer) {
             ctrl.addToPotAI(ctrl.bigBlindAmount/2);
-            ctrl.addToPotPlayer(ctrl.bigBlindAmount);
+            ctrl.addToPotPlayer(ctrl.bigBlindAmount);  //player puts small blind
         } else {
-            ctrl.addToPotPlayer(ctrl.bigBlindAmount);
+            ctrl.addToPotPlayer(ctrl.bigBlindAmount); //player puts big blind
             ctrl.addToPotAI(ctrl.bigBlindAmount/2);
         }
     }

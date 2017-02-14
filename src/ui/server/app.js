@@ -45,10 +45,15 @@ io.on('connection', function (socket) {
             socket.emit('cfr', {action: 'call', amount: data.amount}); //call/raise/fold on a bet
         }
         if (data.action === 'check') {
+            socket.emit('fcb', { action: 'bet', amount: 0 }); //call/bet/fold on a check
+        }
+        if (data.action === 'raise') {
             socket.emit('cfr', { action: 'call', amount: 0 }); //call/bet/fold on a check
         }
     });
-
+    socket.on('call', function (data) {
+        socket.emit('fcb', {action: 'check', amount: 0});
+    });
     socket.on('newaction', function (data) {
         if (data.action === 'check') {
             socket.emit('fcb', {action: 'check', amount: data.amount});
@@ -57,7 +62,7 @@ io.on('connection', function (socket) {
 
     socket.on('startgame', function (data) {
         //receive the card info.
-        socket.emit('fcb', {action: 'check', amount: 0});
+        socket.emit('cfr', {action: 'call', amount: 0}); //start game will be call raise or fold on the - big blind
     });
 });
 
