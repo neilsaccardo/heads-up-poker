@@ -43,7 +43,7 @@ function TableController($scope, cards, socket) {
             incrementStage();
         }
         else if (data.action === 'fold') {
-            console.log('AI HAS CHECKED');
+            console.log('AI HAS FOLDED');
             ctrl.addPotToStackPlayer();
             socket.emit('fold', 'dummy data for the moment');
             ctrl.newGame();
@@ -92,13 +92,20 @@ function TableController($scope, cards, socket) {
     ctrl.check = function() {
         console.log('I HAVE CHECKED');
         if(ctrl.isPlayerDealer) {
-
             incrementStage();
+            ctrl.isPlayerTurn = ctrl.isPlayerDealer;
+            socket.emit('newaction', {action: 'check', amount: 0});
         } else {
             socket.emit('action', {action: 'check', amount: 0});
         }
     }
 
+    ctrl.call = function() {
+        console.log('I HAVE CALLED');
+        ctrl.addToPotPlayer(10);
+        incrementStage();
+        ctrl.isPlayerTurn = ctrl.isPlayerDealer;
+    }
     ctrl.continueGame = function() {
         if(ctrl.isPlayerTurn) {
             //wait for them to complete an action.
@@ -179,13 +186,16 @@ function TableController($scope, cards, socket) {
 
     function incrementStage() {
         if (pokerStage === 0) {
+            console.log('FLOP');
             ctrl.flop();
         } else if (pokerStage === 1) {
+            console.log('TURN')
             ctrl.turn();
         } else if(pokerStage === 2){
+            console.log('RIVER')
             ctrl.river();
         }
-        ctrl.checkBetOptions = !ctrl.isPlayerDealer;
+//        ctrl.checkBetOptions = !ctrl.isPlayerDealer;
         pokerStage++;
     }
 

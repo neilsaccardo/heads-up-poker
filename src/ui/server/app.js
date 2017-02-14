@@ -41,11 +41,17 @@ io.on('connection', function (socket) {
     });
 
     socket.on('action', function (data) {
-        if(data.action === 'bet') {
+        if (data.action === 'bet') {
             socket.emit('cfr', {action: 'call', amount: data.amount}); //call/raise/fold on a bet
         }
-        if(data.action === 'check') {
+        if (data.action === 'check') {
             socket.emit('cfr', { action: 'call', amount: 0 }); //call/bet/fold on a check
+        }
+    });
+
+    socket.on('newaction', function (data) {
+        if (data.action === 'check') {
+            socket.emit('fcb', {action: 'check', amount: data.amount});
         }
     });
 
