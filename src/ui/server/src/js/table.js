@@ -38,7 +38,7 @@ function TableController($scope, cards, socket, $timeout) {
         }
         else if (data.action === 'fold') {
             console.log('AI HAS FOLDED');
-            ctrl.addPotToStackPlayer();
+            ctrl.addPotToStackPlayer(ctrl.potSize);
             socket.emit('fold', 'dummy data for the moment');
             ctrl.newHand();
         }
@@ -69,7 +69,7 @@ function TableController($scope, cards, socket, $timeout) {
         }
         else { //data.action === 'fold'
             console.log('AI HAS FOLDED');
-            ctrl.addPotToStackPlayer();
+            ctrl.addPotToStackPlayer(ctrl.potSize);
             socket.emit('fold', 'dummy data for the moment');
             ctrl.newHand();
         }
@@ -85,7 +85,7 @@ function TableController($scope, cards, socket, $timeout) {
 
     ctrl.fold = function() {
         //send event to server saying opponent lost.
-        ctrl.addPotToStackAI();
+        ctrl.addPotToStackAI(ctrl.potSize);
         console.log('I HAVE FOLDED');
         ctrl.newHand();
     }
@@ -151,12 +151,12 @@ function TableController($scope, cards, socket, $timeout) {
         }
     }
 
-    ctrl.addPotToStackPlayer = function() {
-        ctrl.playerStackSize += ctrl.potSize;
+    ctrl.addPotToStackPlayer = function(val) {
+        ctrl.playerStackSize += val;
     }
 
-    ctrl.addPotToStackAI = function() {
-        ctrl.aiStackSize += ctrl.potSize;
+    ctrl.addPotToStackAI = function(val) {
+        ctrl.aiStackSize += val;
     }
     ctrl.blinds = function() {
         if(ctrl.isPlayerDealer) {
@@ -198,6 +198,7 @@ function TableController($scope, cards, socket, $timeout) {
     socket.on('playerwin', function(data) {
         console.log('The player has won the hand!! ', data.handName);
         $timeout(function () {
+                    ctrl.addPotToStackPlayer(ctrl.potSize);
                     ctrl.newHand();
                 }, 2000);
     });
@@ -205,6 +206,7 @@ function TableController($scope, cards, socket, $timeout) {
     socket.on('aiwin', function(data) {
         console.log('The AI has won the hand!! ', data.handName);
         $timeout(function () {
+                    ctrl.addPotToStackAI();
                     ctrl.newHand();
                 }, 2000);
     });
@@ -212,6 +214,8 @@ function TableController($scope, cards, socket, $timeout) {
     socket.on('playeraidraw', function(data) {
         console.log('There was a draw this hand ', data.handName);
         $timeout(function () {
+            ctrl.addPotToStackAI(ctrl.potSize/2);
+            ctrl.addPotToStackPlayer(ctrl.potSize/2);
             ctrl.newHand();
         }, 2000);
     });
@@ -246,7 +250,6 @@ function TableController($scope, cards, socket, $timeout) {
         ctrl.communityCards.push(cards.getCardValue(deck[deckPointer]));
         deckPointer++;
     }
-
 
     ctrl.newHand(); //start a game.
 };

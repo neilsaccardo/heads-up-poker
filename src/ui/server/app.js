@@ -72,7 +72,7 @@ io.on('connection', function (socket) {
     socket.on('evaluate hands', function (data) {
         var playerHandRank = PokerEvaluator.evalHand(data.communityCards.concat(data.playerCards));
         var aiHandRank = PokerEvaluator.evalHand(data.communityCards.concat(data.aiCards));
-        console.log('community: ', data.communityCards.concat(data.aiCards));
+        console.log('community cards: ', data.communityCards);
         console.log('player cards: ', data.playerCards);
         console.log('AI cards: ', data.aiCards);
         console.log(aiHandRank);
@@ -91,7 +91,7 @@ io.on('connection', function (socket) {
             socket.emit('aiwin', aiHandRank);
 
         } else { //its a draw
-            console.log('Its A draww. What are the odds?');
+            console.log('Its A draw. What are the odds?');
             socket.emit('playeraidraw', playerHandRank);
         }
     });
