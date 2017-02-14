@@ -73,8 +73,8 @@ io.on('connection', function (socket) {
         var playerHandRank = PokerEvaluator.evalHand(data.communityCards.concat(data.playerCards));
         var aiHandRank = PokerEvaluator.evalHand(data.communityCards.concat(data.aiCards));
         console.log('community: ', data.communityCards.concat(data.aiCards));
-        console.log('community: ', data.playerCards);
-        console.log('community: ', data.aiCards);
+        console.log('player cards: ', data.playerCards);
+        console.log('AI cards: ', data.aiCards);
         console.log(aiHandRank);
         console.log(playerHandRank);
         var returnData = {};
