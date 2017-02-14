@@ -2,7 +2,11 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app)
 var io = require('socket.io')(server);
+var PokerEvaluator = require("poker-evaluator");
 
+var obj = PokerEvaluator.evalHand(["Th", "Kh", "Qh", "Jh", "9h", "3s", "5h"]);
+
+console.log(obj);
 var net = require('net');
 
 var PORT = 3500;
@@ -63,6 +67,33 @@ io.on('connection', function (socket) {
     socket.on('startgame', function (data) {
         //receive the card info.
         socket.emit('cfr', {action: 'call', amount: 0}); //start game will be call raise or fold on the - big blind
+    });
+
+    socket.on('evaluate hands', function (data) {
+        var playerHandRank = PokerEvaluator.evalHand(data.communityCards.concat(data.playerCards));
+        var aiHandRank = PokerEvaluator.evalHand(data.communityCards.concat(data.aiCards));
+        console.log('community: ', data.communityCards.concat(data.aiCards));
+        console.log('community: ', data.playerCards);
+        console.log('community: ', data.aiCards);
+        console.log(aiHandRank);
+        console.log(playerHandRank);
+        var returnData = {};
+        if (playerHandRank.handType > aiHandRank.handType ||
+           (playerHandRank.handType === aiHandRank.handType
+            && playerHandRank.handRank > aiHandRank.handRank)) {
+            console.log('Win for the Player'); //inform AI about this.
+            socket.emit('playerwin', playerHandRank);
+        }
+        else if (playerHandRank.handType < aiHandRank.handType ||
+                (playerHandRank.handType === aiHandRank.handType
+             && playerHandRank.handRank < aiHandRank.handRank)) {
+            console.log('Win for the AI!!!!');
+            socket.emit('aiwin', aiHandRank);
+
+        } else { //its a draw
+            console.log('Its A draww. What are the odds?');
+            socket.emit('playeraidraw', playerHandRank);
+        }
     });
 });
 

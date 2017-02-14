@@ -21,24 +21,9 @@ function Cards($rootScope) {
     }
 
     function getCardValue(cardInt) {
-        var cardSuit = cardInt % 4;
+        var cardSuit = Math.floor(cardInt / 13);
         var cardNum = cardInt % 13;
-        var cardObj = {suit: '', value: ''};
-        switch(cardSuit) {
-            case 0:
-                cardObj.suit = 'hearts';
-                break;
-            case 1:
-                cardObj.suit = 'clubs';
-                break;
-            case 2:
-                cardObj.suit = 'diamonds';
-                break;
-            case 3:
-                cardObj.suit = 'spades';
-                break;
-        }
-
+        var cardObj = {suit: '', value: '', evalValue: ''};
         switch(cardNum) {
             case 0:
                 cardObj.value = 'ace'
@@ -56,6 +41,52 @@ function Cards($rootScope) {
                 cardNum++;
                 cardObj.value = '' + cardNum;
         }
+
+        switch(cardNum) {
+            case 0:
+                cardObj.value = 'ace';
+                cardObj.evalValue = 'A';
+                break;
+            case 9:
+                cardObj.value = '10';
+                cardObj.evalValue = 'T';
+            case 10:
+                cardObj.value = 'jack';
+                cardObj.evalValue = 'J';
+                break;
+            case 11:
+                cardObj.value = 'queen';
+                cardObj.evalValue = 'Q';
+                break;
+            case 12:
+                cardObj.value = 'king';
+                cardObj.evalValue = 'K';
+                break;
+            default:
+                cardNum++;
+                cardObj.value = '' + cardNum;
+                cardObj.evalValue = '' + cardNum;
+        }
+
+        switch(cardSuit) {
+            case 0:
+                cardObj.suit = 'hearts';
+                cardObj.evalValue = cardObj.evalValue + 'h';
+                break;
+            case 1:
+                cardObj.suit = 'clubs';
+                cardObj.evalValue = cardObj.evalValue + 'c';
+                break;
+            case 2:
+                cardObj.suit = 'diamonds';
+                cardObj.evalValue = cardObj.evalValue + 'd';
+                break;
+            case 3:
+                cardObj.suit = 'spades';
+                cardObj.evalValue = cardObj.evalValue + 's';
+                break;
+        }
+
         return cardObj;
     }
 

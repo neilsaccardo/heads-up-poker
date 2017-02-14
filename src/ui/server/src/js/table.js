@@ -1,9 +1,11 @@
-function TableController($scope, cards, socket) {
+function TableController($scope, cards, socket, $timeout) {
     var ctrl = this;
     ctrl.player = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
     ctrl.aiplayer = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
+    ctrl.hideAICards = true;
     ctrl.communityCards = []; //empty
     ctrl.isPlayerDealer = true;
+
     ctrl.playerStackSize = ctrl.stackSize | 4000;
     ctrl.aiStackSize = ctrl.stackSize | 4000;
     ctrl.potSize = 0;
@@ -17,9 +19,11 @@ function TableController($scope, cards, socket) {
     console.log(cardtest);
 
     ctrl.newGame = function() {
+        console.log('NEW GAME');
         ctrl.isPlayerDealer = !ctrl.isPlayerDealer;
         ctrl.isPlayerTurn = !ctrl.isPlayerDealer;
         ctrl.checkBetOptions = !ctrl.isPlayerTurn;
+        ctrl.hideAICards = true;
         pokerStage = 0;
         ctrl.potSize = 0;
         ctrl.communityCards = [];
@@ -87,7 +91,6 @@ function TableController($scope, cards, socket) {
         ctrl.addPotToStackAI();
         console.log('I HAVE FOLDED');
         ctrl.newGame();
-        console.log('NEW GAME');
     }
 
     ctrl.raise = function() {
@@ -119,11 +122,12 @@ function TableController($scope, cards, socket) {
     }
     ctrl.continueGame = function() {
         if(ctrl.isPlayerDealer) {
+            console.log('Player is small blind.');
             ctrl.isPlayerTurn = true;
             ctrl.checkBetOptions = false;
             //wait for them to complete an action.
         } else {
-            console.log('WE are here');
+            console.log('AI is small blind.');
             socket.emit('startgame', {data: 'sample'});
             //send an event for ai to start the hand.
         }
@@ -204,13 +208,46 @@ function TableController($scope, cards, socket) {
         } else if (pokerStage === 1) {
             console.log('TURN')
             ctrl.turn();
-        } else if(pokerStage === 2){
+        } else if (pokerStage === 2){
             console.log('RIVER')
             ctrl.river();
+        } else if (pokerStage === 3) {
+            //showdown (show ai hand). need to evaluate hands.
+            console.log('SHOWDOWN');
+            ctrl.hideAICards = false;
+            ctrl.isPlayerTurn = false;
+            var communityCardsEvalValues = [];
+            for (var i = 0; i < ctrl.communityCards.length; i++) {
+                communityCardsEvalValues.push(ctrl.communityCards[i].evalValue);
+            }
+            socket.emit('evaluate hands', { playerCards: [ctrl.player.cardOne.evalValue, ctrl.player.cardTwo.evalValue],
+                                            aiCards: [ctrl.aiplayer.cardOne.evalValue, ctrl.aiplayer.cardTwo.evalValue],
+                                            communityCards: communityCardsEvalValues});
         }
 //        ctrl.checkBetOptions = !ctrl.isPlayerDealer;
         pokerStage++;
     }
+
+    socket.on('playerwin', function(data) {
+        console.log('The player has won the hand!! ', data.handName);
+        $timeout(function () {
+                    ctrl.newGame();
+                }, 2000);
+    });
+
+    socket.on('aiwin', function(data) {
+        console.log('The AI has won the hand!! ', data.handName);
+        $timeout(function () {
+                    ctrl.newGame();
+                }, 2000);
+    });
+
+    socket.on('playeraidraw', function(data) {
+        console.log('There was a draw this hand ', data.handName);
+        $timeout(function () {
+            ctrl.newGame();
+        }, 2000);
+    });
 
     ctrl.newGame();
 //    ctrl.flop();
