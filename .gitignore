@@ -12,3 +12,6 @@ build/
 
 # Ignore npm modules
 node_modules/
+
+# Ignore test reports etc from maven
+target/
