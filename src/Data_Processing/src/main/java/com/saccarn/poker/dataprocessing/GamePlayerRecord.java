@@ -16,6 +16,23 @@ public class GamePlayerRecord {
 
     private LinkedList<LinkedList> playerActionsPreFlop = new LinkedList<>();
     private LinkedList<LinkedList> playerActionsFlop = new LinkedList<>();
+
+    public LinkedList<LinkedList> getPlayerActionsPreFlop() {
+        return playerActionsPreFlop;
+    }
+
+    public LinkedList<LinkedList> getPlayerActionsFlop() {
+        return playerActionsFlop;
+    }
+
+    public LinkedList<LinkedList> getPlayerActionsTurn() {
+        return playerActionsTurn;
+    }
+
+    public LinkedList<LinkedList> getPlayerActionsRiver() {
+        return playerActionsRiver;
+    }
+
     private LinkedList<LinkedList> playerActionsTurn = new LinkedList<>();
     private LinkedList<LinkedList> playerActionsRiver = new LinkedList<>();
 
@@ -28,6 +45,10 @@ public class GamePlayerRecord {
     private int numBetRaisesTurnPos1 = 0;
     private int numBetRaisesRiverPos1 = 0;
     private int numBetRaisesTotalPos1 = 0;
+
+    public List<String> getPlayerNames() {
+        return playerNames;
+    }
 
     public int getNumBetRaisesPreFlopPos1() {
         return numBetRaisesPreFlopPos1;
@@ -75,6 +96,14 @@ public class GamePlayerRecord {
     private int numBetRaisesRiverPos2 = 0;
     private int numBetRaisesTotalPos2 = 0;
 
+    public LinkedList<String> getCardPairPlayerOne() {
+        return cardPairPlayerOne;
+    }
+
+    public LinkedList<String> getCardPairPlayerTwo() {
+        return cardPairPlayerTwo;
+    }
+
     public GamePlayerRecord() {
         mappedActions.put("-", PokerAction.NO_ACTION);
         mappedActions.put("B", PokerAction.BIG_BLIND);
@@ -108,7 +137,7 @@ public class GamePlayerRecord {
         }
     }
 
-    public void addPlayerAction(String playerName, String charAction, LinkedList stageOfPlay) {
+    private void addPlayerAction(String playerName, String charAction, LinkedList stageOfPlay) {
         PokerAction action = mappedActions.get(charAction);
         if (action != null) {
             addPlayerAction(playerName, action, stageOfPlay);
@@ -139,6 +168,9 @@ public class GamePlayerRecord {
     }
 
     public void doPreComputations() {
+        if (playerNames.size() == 0) {
+            return;
+        }
         doPreFlopPreComputations();
         doFlopPreComputations();
         doTurnComputations();
