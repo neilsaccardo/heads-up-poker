@@ -27,6 +27,46 @@ public class GamePlayerRecord {
     private int numBetRaisesRiverPos1 = 0;
     private int numBetRaisesTotalPos1 = 0;
 
+    public int getNumBetRaisesPreFlopPos1() {
+        return numBetRaisesPreFlopPos1;
+    }
+
+    public int getNumBetRaisesFlopPos1() {
+        return numBetRaisesFlopPos1;
+    }
+
+    public int getNumBetRaisesTurnPos1() {
+        return numBetRaisesTurnPos1;
+    }
+
+    public int getNumBetRaisesRiverPos1() {
+        return numBetRaisesRiverPos1;
+    }
+
+    public int getNumBetRaisesTotalPos1() {
+        return numBetRaisesTotalPos1;
+    }
+
+    public int getNumBetRaisesPreFlopPos2() {
+        return numBetRaisesPreFlopPos2;
+    }
+
+    public int getNumBetRaisesFlopPos2() {
+        return numBetRaisesFlopPos2;
+    }
+
+    public int getNumBetRaisesTurnPos2() {
+        return numBetRaisesTurnPos2;
+    }
+
+    public int getNumBetRaisesRiverPos2() {
+        return numBetRaisesRiverPos2;
+    }
+
+    public int getNumBetRaisesTotalPos2() {
+        return numBetRaisesTotalPos2;
+    }
+
     private int numBetRaisesPreFlopPos2 = 0;
     private int numBetRaisesFlopPos2 = 0;
     private int numBetRaisesTurnPos2 = 0;
@@ -101,8 +141,12 @@ public class GamePlayerRecord {
         doFlopPreComputations();
         doTurnComputations();
         doRiverComputations();
-        System.out.println(playerNames.get(0) + "Player 1bet/raises: " + numBetRaisesPreFlopPos1);
-        System.out.println(playerNames.get(1)+ " Player 2bet/raises: " + numBetRaisesPreFlopPos2);
+        numBetRaisesTotalPos1 = numBetRaisesPreFlopPos1 + numBetRaisesFlopPos1 + numBetRaisesTurnPos1 + numBetRaisesRiverPos1;
+        numBetRaisesTotalPos2 = numBetRaisesPreFlopPos2 + numBetRaisesFlopPos2 + numBetRaisesTurnPos2 + numBetRaisesRiverPos2;
+        System.out.println(playerNames.get(0) + " Player 1bet/raises preflop: " + numBetRaisesPreFlopPos1);
+        System.out.println(playerNames.get(1)+ " Player 2bet/raises preflop: " + numBetRaisesPreFlopPos2);
+        System.out.println(playerNames.get(0) + " Player 1bet/raises: " + numBetRaisesTotalPos1);
+        System.out.println(playerNames.get(1)+ " Player 2bet/raises: " + numBetRaisesTotalPos2);
     }
 
     private void doRiverComputations() {
