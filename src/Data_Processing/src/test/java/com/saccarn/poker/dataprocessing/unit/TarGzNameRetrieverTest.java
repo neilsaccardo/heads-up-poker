@@ -4,7 +4,10 @@ import com.saccarn.poker.dataprocessing.TarGzNameRetriever;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Neil on 15/02/2017.
@@ -12,8 +15,11 @@ import java.net.MalformedURLException;
 public class TarGzNameRetrieverTest {
 
     @Test
-    public void getFileNamesByStringPattern() throws MalformedURLException {
+    public void getFileNamesByStringPattern() throws IOException {
         TarGzNameRetriever tgnr = new TarGzNameRetriever();
-        Assert.assertEquals(true, true);
+        List actualList = tgnr.getFileNamesByStringPattern("nolimit\\.\\d{6}\\.tgz");
+        String [] expectedListAsArray = {"nolimit.199505.tgz", "nolimit.199506.tgz", "nolimit.199507.tgz", "nolimit.199508.tgz", "nolimit.199509.tgz", "nolimit.199510.tgz", "nolimit.199511.tgz", "nolimit.199512.tgz", "nolimit.199601.tgz", "nolimit.199612.tgz", "nolimit.199701.tgz" } ;
+        List expectedList = Arrays.asList(expectedListAsArray);
+        Assert.assertEquals(actualList, expectedList);
     }
 }

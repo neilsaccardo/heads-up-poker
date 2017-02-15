@@ -79,7 +79,8 @@ public class TarDownloader {
         Pattern p = Pattern.compile("7stud\\.\\d{6}\\.tgz");
         TarGzNameRetriever tgzRetriever = new TarGzNameRetriever();
         tgzRetriever.getFileNamesByStringPattern("nolimit\\.\\d{6}\\.tgz");//Pattern("7stud\\.\\d{6}\\.tgz");
+        System.out.println(tgzRetriever.getFileNamesByStringPattern("nolimit\\.\\d{6}\\.tgz"));
 //
-        new TarDownloader().retrieveGameData("nolimit\\.\\d{6}\\.tgz");
+        //new TarDownloader().retrieveGameData("nolimit\\.\\d{6}\\.tgz");
     }
 }
