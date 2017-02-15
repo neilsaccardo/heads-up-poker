@@ -1,3 +1,5 @@
+package com.saccarn.poker.dataprocessing;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -22,11 +24,16 @@ public class GameAnalyser {
             GameMaker gm = new GameMaker(new File(fs[i], "hroster"));
             gm.readAllGames();
         }
+    }
 
+    public void analyseTest() throws FileNotFoundException {
+        File f = new File(dir, "199505\\");
+        GameMaker gm = new GameMaker(new File(f, "hroster"));
+        gm.readAllGames();
     }
 
     public static void main(String [] args) throws FileNotFoundException {
         GameAnalyser ga = new GameAnalyser();
-        ga.analyse();
+        ga.analyseTest();
     }
 }

@@ -1,3 +1,5 @@
+package com.saccarn.poker.dataprocessing;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.List;
  */
 public class GamePlayerRecord {
     private LinkedList<LinkedList> playerActions = new LinkedList<>();
-    private HashMap<String,PokerAction> mappedActions = new HashMap<>();
+    private HashMap<String, PokerAction> mappedActions = new HashMap<>();
     private HashMap<PokerStage, LinkedList> mappedStagesToList = new HashMap<>();
     private LinkedList<String> cardPairPlayerOne = new LinkedList<>();
     private LinkedList<String> cardPairPlayerTwo = new LinkedList<>();

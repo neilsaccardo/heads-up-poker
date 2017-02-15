@@ -1,3 +1,5 @@
+package com.saccarn.poker.dataprocessing;
+
 import sun.misc.Regexp;
 
 import java.net.MalformedURLException;

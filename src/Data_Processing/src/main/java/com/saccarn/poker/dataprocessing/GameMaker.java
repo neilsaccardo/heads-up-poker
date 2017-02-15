@@ -1,3 +1,5 @@
+package com.saccarn.poker.dataprocessing;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -37,7 +39,9 @@ public class GameMaker {
             }
             inHroster.nextLine();
         }
-        System.out.println(gprList.size());
+        System.out.println(gprList.get(6));
+//        System.out.println();
+        gprList.get(6).doPreComputations();
     }
 
     public GamePlayerRecord readGame(String gameId, int numPlayers) throws FileNotFoundException {
