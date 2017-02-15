@@ -5,7 +5,7 @@
 ## Blog Entry  - 14/02/17
 
 I have continued working on the front end side of things, fixing up little bugs and making slight refactors. Here is what the UI currently looks like: 
-![Early UI] (https://gitlab.computing.dcu.ie/saccarn2/2017-ca400-saccarn2/edit/master/docs/blog/images/earlyui.png)
+![Early UI] (https://gitlab.computing.dcu.ie/saccarn2/2017-ca400-saccarn2/raw/master/docs/blog/images/earlyui.png)
 For the time being, I am happy enough with how the UI looks although there still are some issues, the key one being the lack of an input method when wanting to bet or raise a certain amount of chips. I dont view this as particularly pressing for the moment though.
 
 I have also decided to use a node module called [Poker-Evaluator] (https://www.npmjs.com/package/poker-evaluator) to evaluate a hand in poker, and to help determine a winner of a hand should it go down to the showdown stage.
