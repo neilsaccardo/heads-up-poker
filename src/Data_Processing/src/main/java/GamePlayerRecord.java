@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +18,8 @@ public class GamePlayerRecord {
     private LinkedList<LinkedList> playerActionsRiver = new LinkedList<>();
 
     private List<String> playerNames = new LinkedList<>();
+    private final int playerIndexInList = 0;
+    private final int actionIndexInList = 1;
 
     private int numBetRaisesPreFlopPos1 = 0;
     private int numBetRaisesFlopPos1 = 0;
@@ -49,18 +50,6 @@ public class GamePlayerRecord {
         mappedStagesToList.put(PokerStage.RIVER, playerActionsRiver);
     }
 
-    private void addPlayerAction(String playerName, PokerAction action) {
-        LinkedList l = new LinkedList();
-        l.add(playerName);
-        l.add(action);
-        if(action == PokerAction.ALL_IN) {
-            playerActions.remove(playerActions.size()-2);
-            playerActions.add(playerActions.size()-1, l);
-        } else {
-            playerActions.add(l);
-        }
-    }
-
     private void addPlayerAction(String playerName, PokerAction action, LinkedList stageOfPlay) {
         LinkedList l = new LinkedList();
         l.add(playerName);
@@ -77,16 +66,6 @@ public class GamePlayerRecord {
         }
     }
 
-    public void addPlayerAction(String playerName, String charAction) {
-        PokerAction action = mappedActions.get(charAction);
-        if (action != null) {
-            addPlayerAction(playerName, action);
-        }
-        else {
-            //HANDLE ERROR
-        }
-    }
-
     public void addPlayerAction(String playerName, String charAction, LinkedList stageOfPlay) {
         PokerAction action = mappedActions.get(charAction);
         if (action != null) {
@@ -95,24 +74,6 @@ public class GamePlayerRecord {
         else {
             //HANDLE ERROR
         }
-    }
-
-    public void addPlayerActionPreFlop(String playerName, String charAction) {
-        addPlayerAction(playerName, charAction, playerActionsPreFlop);
-    }
-
-    public void addPlayerActionFlop(String playerName, String charAction) {
-        System.out.println("FLOP");
-        addPlayerAction(playerName, charAction, playerActionsFlop);
-        System.out.println(playerActionsFlop);
-    }
-
-    public void addPlayerActionTurn(String playerName, String charAction) {
-        addPlayerAction(playerName, charAction, playerActionsTurn);
-    }
-
-    public void addPlayerActionRiver(String playerName, String charAction) {
-        addPlayerAction(playerName, charAction, playerActionsRiver);
     }
 
     public void addPlayerAction(String playerName, String charAction, PokerStage stage) {
@@ -136,20 +97,18 @@ public class GamePlayerRecord {
     }
 
     public void doPreComputations() {
-        int playerIndexInList = 0;
-        int actionIndexInList = 1;
         doPreFlopPreComputations();
         doFlopPreComputations();
         doTurnComputations();
         doRiverComputations();
-        System.out.println(playerNames.get(0) + "Player 1bet/raises: " + numBetRaisesFlopPos1);
+        System.out.println(playerNames.get(0) + "Player 1bet/raises: " + numBetRaisesPreFlopPos1);
         System.out.println(playerNames.get(1)+ " Player 2bet/raises: " + numBetRaisesPreFlopPos2);
     }
 
     private void doRiverComputations() {
         for (int i = 0; i < playerActionsRiver.size(); i++) {
             LinkedList list = playerActionsRiver.get(i);
-            if(list.get(1) == PokerAction.BET || list.get(1) == PokerAction.RAISE) {
+            if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
                 //increment appropriate thing
                 if (i % 2 == 0) { //player 2
                     numBetRaisesRiverPos1++;
@@ -164,7 +123,7 @@ public class GamePlayerRecord {
     private void doTurnComputations() {
         for (int i = 0; i < playerActionsTurn.size(); i++) {
             LinkedList list = playerActionsTurn.get(i);
-            if(list.get(1) == PokerAction.BET || list.get(1) == PokerAction.RAISE) {
+            if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
                 //increment appropriate thing
                 if (i % 2 == 0) { //player 2
                     numBetRaisesTurnPos1++;
@@ -180,7 +139,7 @@ public class GamePlayerRecord {
     private void doFlopPreComputations() {
         for (int i = 0; i < playerActionsFlop.size(); i++) {
             LinkedList list = playerActionsFlop.get(i);
-            if(list.get(1) == PokerAction.BET || list.get(1) == PokerAction.RAISE) {
+            if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
                 //increment appropriate thing
                 if (i % 2 == 0) { //player 2
                     numBetRaisesFlopPos1++;
@@ -194,7 +153,7 @@ public class GamePlayerRecord {
     private void doPreFlopPreComputations() {
         for (int i = 0; i < playerActionsPreFlop.size(); i++) {
             LinkedList list = playerActionsPreFlop.get(i);
-            if(list.get(1) == PokerAction.BET || list.get(1) == PokerAction.RAISE) {
+            if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
                 //increment appropriate thing
                 if (i % 2 == 0) { //player 2
                     numBetRaisesFlopPos1++;
