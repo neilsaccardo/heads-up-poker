@@ -6,9 +6,18 @@ import java.io.FileNotFoundException;
  */
 public class GameAnalyser {
 
+    private File dir;
+
+    public GameAnalyser(File dir0) {
+        dir = dir0;
+    }
+
+    public GameAnalyser() {
+        dir = new File("C:\\Data\\test\\nolimit\\");
+    }
+
     public void analyse() throws FileNotFoundException {
-        File f = new File("C:\\Data\\test\\nolimit\\");
-        File [] fs = f.listFiles();
+        File [] fs = dir.listFiles();
         for(int i = 0; i < fs.length; i++) {
             GameMaker gm = new GameMaker(new File(fs[i], "hroster"));
             gm.readAllGames();

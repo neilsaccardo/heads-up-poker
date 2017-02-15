@@ -11,7 +11,6 @@ public class PlayerActions {
     private File pdb = new File("C:\\Data\\pdb\\");
     private HashMap<Integer, PokerStage> mappedIntegersToPokerStage = new HashMap<>();
 
-
     public PlayerActions(File pdbFilePath) {
         pdb = pdbFilePath;
         mappedIntegersToPokerStage.put(4, PokerStage.PREFLOP);
@@ -23,7 +22,7 @@ public class PlayerActions {
 
 
 
-    public void getAction(String name1, String name2, String gameID) throws FileNotFoundException {
+    public GamePlayerRecord getAction(String name1, String name2, String gameID) throws FileNotFoundException {
         Scanner inPlayerOne = new Scanner(new File(pdb, "pdb." + name1));
         Scanner inPlayerTwo = new Scanner(new File(pdb, "pdb." + name2));
         String strGameID = gameID + "";
@@ -35,7 +34,7 @@ public class PlayerActions {
         inPlayerOne.close();
         if(!playerOneLine.contains(strGameID)) {
             System.out.println("ERror finding game for this player.");
-            return;
+            return null;
         }
         while(inPlayerTwo.hasNextLine() && (!playerTwoLine.contains(strGameID))) {
             playerTwoLine = inPlayerTwo.nextLine();
@@ -43,27 +42,27 @@ public class PlayerActions {
         inPlayerTwo.close();
         if(!playerTwoLine.contains(strGameID)) {
             System.out.println("ERror finding game for this player.");
-            return;
+            return null;
         }
-        System.out.println(playerOneLine);
-        System.out.println(playerTwoLine);
-        addActions(playerOneLine, playerTwoLine);
+//        System.out.println(playerOneLine);
+//        System.out.println(playerTwoLine);
+        return addActions(playerOneLine, playerTwoLine);
     }
 
-    private void addActions(String playerOneLine, String playerTwoLine) {
+    private GamePlayerRecord addActions(String playerOneLine, String playerTwoLine) {
         String [] playerOneList = playerOneLine.trim().split("\\s+");
         String [] playerTwoList = playerTwoLine.trim().split("\\s+");
 //        for (int i = 0; i < playerOneList.length; i++) {
 //            System.out.println(i + " : " + playerOneList[i]);
 //        }
         if(playerOneList[3].equals("1")) {
-            addActionsToRecord(playerOneList, playerTwoList);
+            return addActionsToRecord(playerOneList, playerTwoList);
         } else {
-            addActionsToRecord(playerTwoList, playerOneList);
+            return addActionsToRecord(playerTwoList, playerOneList);
         }
     }
 
-    private void addActionsToRecord(String[] playerOneList, String[] playerTwoList) {
+    private GamePlayerRecord addActionsToRecord(String[] playerOneList, String[] playerTwoList) {
         GamePlayerRecord gpr = new GamePlayerRecord();
         for (int i = 4; i < 8; i++) {
             String [] charsPlayerOne = playerOneList[i].split("");
@@ -85,6 +84,7 @@ public class PlayerActions {
             gpr.addCardsPlayerOne(playerOneList[11], playerOneList[12]);
             gpr.addCardsPlayerTwo(playerTwoList[11], playerTwoList[12]);
         }
-        System.out.println(gpr);
+//        System.out.println(gpr);
+        return gpr;
     }
 }

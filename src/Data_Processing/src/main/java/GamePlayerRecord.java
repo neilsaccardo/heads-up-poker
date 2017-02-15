@@ -52,7 +52,7 @@ public class GamePlayerRecord {
         l.add(playerName);
         l.add(action);
         if(action == PokerAction.ALL_IN) {
-            System.out.println("WE'RE HERE: " + stageOfPlay);
+//            System.out.println("WE'RE HERE: " + stageOfPlay);
             stageOfPlay.remove(stageOfPlay.size() - 2);
             stageOfPlay.add(stageOfPlay.size() - 1, l);
         } else {
