@@ -39,9 +39,9 @@ public class GameMaker {
             }
             inHroster.nextLine();
         }
-        System.out.println(gprList.get(6));
-//        System.out.println();
-        gprList.get(6).doPreComputations();
+//        System.out.println(gprList.get(6));
+////        System.out.println();
+//        gprList.get(6).doPreComputations();
     }
 
     public GamePlayerRecord readGame(String gameId, int numPlayers) throws FileNotFoundException {

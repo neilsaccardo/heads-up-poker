@@ -17,6 +17,21 @@ public class GamePlayerRecord {
     private LinkedList<LinkedList> playerActionsPreFlop = new LinkedList<>();
     private LinkedList<LinkedList> playerActionsFlop = new LinkedList<>();
 
+    private LinkedList<LinkedList> playerActionsTurn = new LinkedList<>();
+    private LinkedList<LinkedList> playerActionsRiver = new LinkedList<>();
+
+    private List<String> playerNames = new LinkedList<>();
+    private final int playerIndexInList = 0;
+    private final int actionIndexInList = 1;
+
+    private Player playerOne = new Player();
+    private Player playerTwo = new Player();
+
+
+    public List<String> getPlayerNames() {
+        return playerNames;
+    }
+
     public LinkedList<LinkedList> getPlayerActionsPreFlop() {
         return playerActionsPreFlop;
     }
@@ -33,68 +48,13 @@ public class GamePlayerRecord {
         return playerActionsRiver;
     }
 
-    private LinkedList<LinkedList> playerActionsTurn = new LinkedList<>();
-    private LinkedList<LinkedList> playerActionsRiver = new LinkedList<>();
-
-    private List<String> playerNames = new LinkedList<>();
-    private final int playerIndexInList = 0;
-    private final int actionIndexInList = 1;
-
-    private int numBetRaisesPreFlopPos1 = 0;
-    private int numBetRaisesFlopPos1 = 0;
-    private int numBetRaisesTurnPos1 = 0;
-    private int numBetRaisesRiverPos1 = 0;
-    private int numBetRaisesTotalPos1 = 0;
-
-    public List<String> getPlayerNames() {
-        return playerNames;
+    public Player getPlayerOne() {
+        return playerOne;
     }
 
-    public int getNumBetRaisesPreFlopPos1() {
-        return numBetRaisesPreFlopPos1;
+    public Player getPlayerTwo() {
+        return playerTwo;
     }
-
-    public int getNumBetRaisesFlopPos1() {
-        return numBetRaisesFlopPos1;
-    }
-
-    public int getNumBetRaisesTurnPos1() {
-        return numBetRaisesTurnPos1;
-    }
-
-    public int getNumBetRaisesRiverPos1() {
-        return numBetRaisesRiverPos1;
-    }
-
-    public int getNumBetRaisesTotalPos1() {
-        return numBetRaisesTotalPos1;
-    }
-
-    public int getNumBetRaisesPreFlopPos2() {
-        return numBetRaisesPreFlopPos2;
-    }
-
-    public int getNumBetRaisesFlopPos2() {
-        return numBetRaisesFlopPos2;
-    }
-
-    public int getNumBetRaisesTurnPos2() {
-        return numBetRaisesTurnPos2;
-    }
-
-    public int getNumBetRaisesRiverPos2() {
-        return numBetRaisesRiverPos2;
-    }
-
-    public int getNumBetRaisesTotalPos2() {
-        return numBetRaisesTotalPos2;
-    }
-
-    private int numBetRaisesPreFlopPos2 = 0;
-    private int numBetRaisesFlopPos2 = 0;
-    private int numBetRaisesTurnPos2 = 0;
-    private int numBetRaisesRiverPos2 = 0;
-    private int numBetRaisesTotalPos2 = 0;
 
     public LinkedList<String> getCardPairPlayerOne() {
         return cardPairPlayerOne;
@@ -171,19 +131,21 @@ public class GamePlayerRecord {
         if (playerNames.size() == 0) {
             return;
         }
+        playerOne.setName(playerNames.get(0));
+        playerTwo.setName(playerNames.get(1));
         doPreFlopPreComputations();
         doFlopPreComputations();
         doTurnComputations();
         doRiverComputations();
-        numBetRaisesTotalPos1 = numBetRaisesPreFlopPos1 + numBetRaisesFlopPos1 + numBetRaisesTurnPos1 + numBetRaisesRiverPos1;
-        numBetRaisesTotalPos2 = numBetRaisesPreFlopPos2 + numBetRaisesFlopPos2 + numBetRaisesTurnPos2 + numBetRaisesRiverPos2;
-        System.out.println(playerNames.get(0) + " Player 1bet/raises preflop: " + numBetRaisesPreFlopPos1);
-        System.out.println(playerNames.get(1)+ " Player 2bet/raises preflop: " + numBetRaisesPreFlopPos2);
-        System.out.println(playerNames.get(0) + " Player 1bet/raises: " + numBetRaisesTotalPos1);
-        System.out.println(playerNames.get(1)+ " Player 2bet/raises: " + numBetRaisesTotalPos2);
+//        System.out.println(playerNames.get(0) + " Player 1bet/raises preflop: " + numBetRaisesPreFlopPos1);
+//        System.out.println(playerNames.get(1)+ " Player 2bet/raises preflop: " + numBetRaisesPreFlopPos2);
+//        System.out.println(playerNames.get(0) + " Player 1bet/raises: " + numBetRaisesTotalPos1);
+//        System.out.println(playerNames.get(1)+ " Player 2bet/raises: " + numBetRaisesTotalPos2);
     }
 
     private void doRiverComputations() {
+        int numBetRaisesRiverPos1 = 0;
+        int numBetRaisesRiverPos2 = 0;
         for (int i = 0; i < playerActionsRiver.size(); i++) {
             LinkedList list = playerActionsRiver.get(i);
             if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
@@ -195,10 +157,13 @@ public class GamePlayerRecord {
                 }
             }
         }
-
+        playerOne.setNumBetRaisesRiver(numBetRaisesRiverPos1);
+        playerTwo.setNumBetRaisesRiver(numBetRaisesRiverPos2);
     }
 
     private void doTurnComputations() {
+        int numBetRaisesTurnPos1 = 0;
+        int numBetRaisesTurnPos2 = 0;
         for (int i = 0; i < playerActionsTurn.size(); i++) {
             LinkedList list = playerActionsTurn.get(i);
             if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
@@ -210,11 +175,13 @@ public class GamePlayerRecord {
                 }
             }
         }
-
-
+        playerOne.setNumBetRaisesTurn(numBetRaisesTurnPos1);
+        playerTwo.setNumBetRaisesTurn(numBetRaisesTurnPos2);
     }
 
     private void doFlopPreComputations() {
+        int numBetRaisesFlopPos1 = 0;
+        int numBetRaisesFlopPos2 = 0;
         for (int i = 0; i < playerActionsFlop.size(); i++) {
             LinkedList list = playerActionsFlop.get(i);
             if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
@@ -226,19 +193,25 @@ public class GamePlayerRecord {
                 }
             }
         }
+        playerOne.setNumBetRaisesFlop(numBetRaisesFlopPos1);
+        playerTwo.setNumBetRaisesFlop(numBetRaisesFlopPos2);
     }
 
     private void doPreFlopPreComputations() {
+        int numBetRaisesPreFlopPos1 = 0;
+        int numBetRaisesPreFlopPos2 = 0;
         for (int i = 0; i < playerActionsPreFlop.size(); i++) {
             LinkedList list = playerActionsPreFlop.get(i);
             if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
                 //increment appropriate thing
                 if (i % 2 == 0) { //player 2
-                    numBetRaisesFlopPos1++;
+                    numBetRaisesPreFlopPos1++;
                 } else {
                     numBetRaisesPreFlopPos2++;
                 }
             }
         }
+        playerOne.setNumBetRaisesPreFlop(numBetRaisesPreFlopPos1);
+        playerTwo.setNumBetRaisesPreFlop(numBetRaisesPreFlopPos2);
     }
 }
