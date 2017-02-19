@@ -19,7 +19,10 @@ public class TarGzNameRetrieverTest {
     public void testGetFileNamesByStringPatternUsingNoLimitPattern() throws IOException {
         TarGzNameRetriever tgnr = new TarGzNameRetriever();
         List actualList = tgnr.getFileNamesByStringPattern("nolimit\\.\\d{6}\\.tgz");
-        String [] expectedListAsArray = {"nolimit.199505.tgz", "nolimit.199506.tgz", "nolimit.199507.tgz", "nolimit.199508.tgz", "nolimit.199509.tgz", "nolimit.199510.tgz", "nolimit.199511.tgz", "nolimit.199512.tgz", "nolimit.199601.tgz", "nolimit.199612.tgz", "nolimit.199701.tgz" } ;
+        String [] expectedListAsArray = {"nolimit.199505.tgz", "nolimit.199506.tgz", "nolimit.199507.tgz"
+                , "nolimit.199508.tgz", "nolimit.199509.tgz", "nolimit.199510.tgz", "nolimit.199511.tgz"
+                , "nolimit.199512.tgz", "nolimit.199601.tgz", "nolimit.199612.tgz", "nolimit.199701.tgz" };
+
         List expectedList = Arrays.asList(expectedListAsArray);
         Assert.assertEquals(actualList, expectedList);
     }
@@ -28,8 +31,6 @@ public class TarGzNameRetrieverTest {
         TarGzNameRetriever tgnr = new TarGzNameRetriever();
         List actualEmptyList = tgnr.getFileNamesByStringPattern("incorrectvalue");
         List expectedEmptyList = new LinkedList();
-
         Assert.assertEquals(actualEmptyList.size(), expectedEmptyList.size());
-
     }
 }

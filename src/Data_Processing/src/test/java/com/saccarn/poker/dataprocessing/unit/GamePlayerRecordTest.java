@@ -1,6 +1,7 @@
 package com.saccarn.poker.dataprocessing.unit;
 
 import com.saccarn.poker.dataprocessing.GamePlayerRecord;
+import com.saccarn.poker.dataprocessing.Player;
 import com.saccarn.poker.dataprocessing.PokerAction;
 import com.saccarn.poker.dataprocessing.PokerStage;
 import org.junit.Assert;
@@ -15,45 +16,54 @@ import java.util.List;
  */
 public class GamePlayerRecordTest {
 
-    @Ignore
     @Test
     public void testPreFlopPreComputationValuesWhenNothingHasBeenAddedToGamePlayerRecord() {
         GamePlayerRecord gpr = new GamePlayerRecord();
         gpr.doPreComputations();
-//        Assert.assertEquals(0, gpr.getNumBetRaisesPreFlopPos1());
-//        Assert.assertEquals(0, gpr.getNumBetRaisesPreFlopPos2());
+        Player p1 = gpr.getPlayerOne();
+        Player p2 = gpr.getPlayerTwo();
+        Assert.assertEquals(0, p1.getNumBetRaisesPreFlop());
+        Assert.assertEquals(0, p2.getNumBetRaisesPreFlop());
     }
-    @Ignore
+
     @Test
     public void  testFlopPreComputationValuesWhenNothingHasBeenAddedToGamePlayerRecord() {
         GamePlayerRecord gpr = new GamePlayerRecord();
         gpr.doPreComputations();
-//        Assert.assertEquals(0, gpr.getNumBetRaisesFlopPos1());
-//        Assert.assertEquals(0, gpr.getNumBetRaisesFlopPos2());
+        Player p1 = gpr.getPlayerOne();
+        Player p2 = gpr.getPlayerTwo();
+        Assert.assertEquals(0, p1.getNumBetRaisesFlop());
+        Assert.assertEquals(0, p2.getNumBetRaisesFlop());
     }
-    @Ignore
+
     @Test
     public void testTurnPreComputationValuesWhenNothingHasBeenAddedToGamePlayerRecord() {
         GamePlayerRecord gpr = new GamePlayerRecord();
         gpr.doPreComputations();
-//        Assert.assertEquals(0, gpr.getNumBetRaisesTurnPos1());
-//        Assert.assertEquals(0, gpr.getNumBetRaisesTurnPos2());
+        Player p1 = gpr.getPlayerOne();
+        Player p2 = gpr.getPlayerTwo();
+        Assert.assertEquals(0, p1.getNumBetRaisesTurn());
+        Assert.assertEquals(0, p2.getNumBetRaisesTurn());
     }
-    @Ignore
+
     @Test
     public void testRiverPreComputationValuesWhenNothingHasBeenAddedToGamePlayerRecord() {
         GamePlayerRecord gpr = new GamePlayerRecord();
         gpr.doPreComputations();
-//        Assert.assertEquals(0, gpr.getNumBetRaisesRiverPos1());
-//        Assert.assertEquals(0, gpr.getNumBetRaisesRiverPos2());
+        Player p1 = gpr.getPlayerOne();
+        Player p2 = gpr.getPlayerTwo();
+        Assert.assertEquals(0, p1.getNumBetRaisesRiver());
+        Assert.assertEquals(0, p2.getNumBetRaisesRiver());
     }
-    @Ignore
+
     @Test
     public void testTotalPreComputationValuesWhenNothingHasBeenAddedToGamePlayerRecord() {
         GamePlayerRecord gpr = new GamePlayerRecord();
         gpr.doPreComputations();
-//        Assert.assertEquals(0, gpr.getNumBetRaisesTotalPos1());
-//        Assert.assertEquals(0, gpr.getNumBetRaisesTotalPos2());
+        Player p1 = gpr.getPlayerOne();
+        Player p2 = gpr.getPlayerTwo();
+        Assert.assertEquals(0, p1.getTotalNumBetRaises());
+        Assert.assertEquals(0, p2.getTotalNumBetRaises());
     }
 
     @Test
