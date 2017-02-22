@@ -2,6 +2,7 @@ package com.saccarn.poker.dataprocessing;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 /**
  * Created by Neil on 06/02/2017.
@@ -26,10 +27,10 @@ public class GameAnalyser {
         }
     }
 
-    public void analyseTest() throws FileNotFoundException {
+    public List<GamePlayerRecord> analyseTest() throws FileNotFoundException {
         File f = new File(dir, "199505\\");
         GameMaker gm = new GameMaker(new File(f, "hroster"));
-        gm.readAllGames();
+        return gm.readAllGames();
     }
 
     public static void main(String [] args) throws FileNotFoundException {

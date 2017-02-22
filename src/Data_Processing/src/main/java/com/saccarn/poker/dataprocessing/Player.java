@@ -10,6 +10,8 @@ public class Player {
     private int numBetRaisesRiver = 0;
     private int numBetRaisesFlop = 0;
     private int numBetRaisesPreFlop = 0;
+    private int totalActions = 0;
+    private boolean winner = false;
 
     public int getNumBetRaisesTurn() {
         return numBetRaisesTurn;
@@ -48,7 +50,33 @@ public class Player {
                 numBetRaisesRiver + numBetRaisesPreFlop;
     }
 
+    public double getNumBetRaiseToTotalActionRatio() {
+        return (double)getTotalNumBetRaises() / (double)getTotalActions();
+    }
+
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getName() {return name;}
+
+    public void setWinner() {
+        winner = true;
+    }
+    public void setLoser() {
+        winner = false;
+    }
+
+    public boolean isWinner() {
+        return winner;
+    }
+
+    public void setTotalActions(int totalActions) {
+        this.totalActions = totalActions;
+    }
+
+    public int getTotalActions() {
+        return totalActions;
+    }
+
 }

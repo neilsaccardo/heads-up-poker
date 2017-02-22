@@ -30,18 +30,18 @@ public class GameMaker {
         pdb = new File(hroster.getParentFile(), "pdb");
     }
 
-    public void readAllGames() throws FileNotFoundException {
+    public List<GamePlayerRecord> readAllGames() throws FileNotFoundException {
         while(inHroster.hasNextLine()) {
             String gameId = inHroster.next();
             int numPlayers = Integer.parseInt(inHroster.next());
             if (numPlayers == 2) {
-                gprList.add(readGame(gameId, numPlayers));
+                GamePlayerRecord gpr = readGame(gameId, numPlayers);
+                gpr.doPreComputations();
+                gprList.add(gpr);
             }
             inHroster.nextLine();
         }
-//        System.out.println(gprList.get(6));
-////        System.out.println();
-//        gprList.get(6).doPreComputations();
+        return gprList;
     }
 
     public GamePlayerRecord readGame(String gameId, int numPlayers) throws FileNotFoundException {
