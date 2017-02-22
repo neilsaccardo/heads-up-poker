@@ -37,13 +37,10 @@ public class DataLoader {
         int id = 1;
         MongoClient client = new MongoClient();
         MongoDatabase database = client.getDatabase("test1");
-        MongoCollection<Document> collection = database.getCollection("mycoll");
         MongoCollection<Document> playerCollection = database.getCollection("players");
 
         for (GamePlayerRecord gpr : gprs) {
             Document doc = new Document();
-            Document player1Doc = new Document();
-            Document player2Doc = new Document();
             List<Document> p1List = new LinkedList<>();
             List<Document> p2List = new LinkedList<>();
             doc.put("id", id);
