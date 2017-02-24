@@ -1,6 +1,7 @@
 package com.saccarn.poker.dbprocessor;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.saccarn.poker.dataprocessing.GameAnalyser;
@@ -9,8 +10,7 @@ import com.saccarn.poker.dataprocessing.Player;
 import org.bson.*;
 
 import java.io.FileNotFoundException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Neil on 21/02/2017.
@@ -111,9 +111,39 @@ public class DataLoader {
         return playerDoc;
     }
 
+
+    public Map<String, Vector<Integer>> retrieveVectorsForEveryPlayer() {
+        Map<String, Vector<Integer>> mappedVectors = new HashMap<>();
+        MongoClient client = new MongoClient();
+        MongoDatabase database = client.getDatabase("test1");
+        MongoCollection<Document> playerCollection = database.getCollection("players");
+        FindIterable<Document> playerDocs = playerCollection.find();
+        for (Document doc : playerDocs) {
+            String playerName = (String) doc.get("name");
+            int totalActions = (int) doc.get("totalActions");
+            int totalBetRaises = (int) doc.get("totalBetRaises");
+            int preFlopBetRaises = (int) doc.get("preFlopBetRaises");
+            int flopBetRaises = (int) doc.get("flopBetRaises");
+            int turnBetRaises = (int) doc.get("turnBetRaises");
+            int riverBetRaises = (int) doc.get("riverBetRaises");
+            Vector<Integer> v = new Vector<>();
+            v.add(totalActions);
+            v.add(totalBetRaises);
+            v.add(preFlopBetRaises);
+            v.add(flopBetRaises);
+            v.add(turnBetRaises);
+            v.add(riverBetRaises);
+            mappedVectors.put(playerName, v);
+        }
+        System.out.println(mappedVectors);
+        return mappedVectors;
+    }
+
+
     public static  void main(String [] args) throws InterruptedException {
         DataLoader dl = new DataLoader();
-        dl.loadDataIntoMongo();
+//        dl.loadDataIntoMongo();
+        dl.retrieveVectorsForEveryPlayer();
         try {
             Thread.sleep(300);
             System.out.println("dsdsds2");
