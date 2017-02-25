@@ -43,6 +43,22 @@ public class Matrix {
         return  matrix.get(y).get(x);
     }
 
+    public void setValue(int x, int y, double v) {
+        if (x > dimension || matrix.size() < y) {
+            throw new IndexOutOfBoundsException();
+        }
+        matrix.get(y).set(x, v);
+        matrix.get(x).set(y, v);
+    }
+
+    public int xDimensionSize() {
+        return dimension;
+    }
+
+    public int yDimensionSize() {
+        return matrix.size();
+    }
+
     public static void main(String [] args) {
 
         Matrix m = new Matrix(3);
