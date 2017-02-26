@@ -23,9 +23,7 @@ public class PlayerTypeClusterer {
         Set<String> pvSet = playerVectors.keySet();
         int i = 0;
         for(String s1 : pvSet) {
-//            List li = new LinkedList<>();
             List liCluster = new LinkedList<>();
-//            li.add(s1);
             liCluster.add(i);
             mappedIdsToNames.put(i, s1);
             mappedIDsToClusters.put(i, liCluster);
@@ -48,12 +46,18 @@ public class PlayerTypeClusterer {
         getNClusters(n);
     }
 
-    public void computeClusterCentroids() {
+    public List<Vector<Double>> computeClusterCentroids() {
         Set<Integer> clusterIDs = mappedIDsToClusters.keySet();
+        List<Vector<Double>> clusterCentroids = new LinkedList<>();
         for (Integer id : clusterIDs) {
             List<Integer> li = mappedIDsToClusters.get(id);
-            computeCentroid(li);
+            clusterCentroids.add(computeCentroid(li));
         }
+        return clusterCentroids;
+    }
+
+    public void saveCentroidsIntoDB(List<Vector<Double>> centroids) {
+        new DataLoader().saveClusterCentroids(centroids);
     }
 
     private Vector<Double> computeCentroid(List<Integer> li) {
@@ -74,7 +78,6 @@ public class PlayerTypeClusterer {
         for (int i = 0; i < centroidVector.size(); i++) {
             centroidVector.add(i, centroidVector.get(i) / li.size());
         }
-
         return centroidVector;
     }
 
@@ -121,12 +124,10 @@ public class PlayerTypeClusterer {
 
     public Point getMinDistPointFromMatrix() {
         double minDist = Double.MAX_VALUE;
-        System.out.println(minDist);
         int x = 0, y = 0;
         for (int i = 0; i < mappedIdsToNames.size(); i++) {
             for (int j = i; j < mappedIdsToNames.size(); j++) {
                 if (distMatrix.getValue(i, j) < minDist && distMatrix.getValue(i, j) != 0) {
-                    System.out.println("HERE minDist is " + distMatrix.getValue(i, j));
                     minDist = distMatrix.getValue(i, j);
                     x = i;
                     y = j;

@@ -24,6 +24,32 @@ public class DataLoader {
     }
 
 
+    public void saveClusterCentroids(List<Vector<Double>> clusterCentroids) {
+        MongoClient client = new MongoClient();
+        MongoDatabase database = client.getDatabase("test1");
+        MongoCollection<Document> playerCollection = database.getCollection("clusters");
+        Map<Integer, String> docObjectKeys = fillDocObjectMap();
+
+        for (int i = 0; i < clusterCentroids.size(); i++) {
+            Document docCluster = new Document();
+            for (int j = 0; j < clusterCentroids.get(i).size(); j++) {
+                docCluster.put(docObjectKeys.get(i), clusterCentroids.get(i));
+            }
+            playerCollection.insertOne(docCluster);
+        }
+    }
+
+    private Map<Integer, String> fillDocObjectMap() {
+        Map<Integer, String> docObjectKeys = new HashMap<>();
+        docObjectKeys.put(0, "totalActions");
+        docObjectKeys.put(1, "totalBetRaises");
+        docObjectKeys.put(2, "preFlopBetRaises");
+        docObjectKeys.put(3, "flopBetRaises");
+        docObjectKeys.put(4, "turnBetRaises");
+        docObjectKeys.put(5, "riverBetRaises");
+        return docObjectKeys;
+    }
+
     public void loadDataIntoMongo() throws InterruptedException {
         List<GamePlayerRecord> gprs;
         try {
@@ -119,20 +145,12 @@ public class DataLoader {
         MongoCollection<Document> playerCollection = database.getCollection("players");
         FindIterable<Document> playerDocs = playerCollection.find();
         for (Document doc : playerDocs) {
-            String playerName = (String) doc.get("name");
-            int totalActions = (int) doc.get("totalActions");
-            int totalBetRaises = (int) doc.get("totalBetRaises");
-            int preFlopBetRaises = (int) doc.get("preFlopBetRaises");
-            int flopBetRaises = (int) doc.get("flopBetRaises");
-            int turnBetRaises = (int) doc.get("turnBetRaises");
-            int riverBetRaises = (int) doc.get("riverBetRaises");
+            Map<Integer, String> docObjectKeys = fillDocObjectMap();
             Vector<Integer> v = new Vector<>();
-            v.add(totalActions);
-            v.add(totalBetRaises);
-            v.add(preFlopBetRaises);
-            v.add(flopBetRaises);
-            v.add(turnBetRaises);
-            v.add(riverBetRaises);
+            String playerName = (String) doc.get("name");
+            for (int i = 0; i < docObjectKeys.size(); i++) {
+                v.add((int) doc.get(docObjectKeys.get(i)));
+            }
             mappedVectors.put(playerName, v);
         }
         System.out.println(mappedVectors);
