@@ -1,9 +1,5 @@
 package com.saccarn.poker.dbprocessor;
 
-import com.saccarn.poker.dataprocessing.Player;
-import sun.awt.image.ImageWatched;
-
-import java.awt.geom.Point2D;
 import java.util.*;
 
 /**
@@ -11,25 +7,27 @@ import java.util.*;
  */
 public class PlayerTypeClusterer {
 
-    private Map<Integer, List<String>> mappedIdsToNames = new HashMap<>();
+    private Map<Integer, String> mappedIdsToNames = new HashMap<>();
     private Map<Integer, List<Integer>> mappedIDsToClusters = new HashMap<>();
     private Matrix distMatrix;
+    private Map<String, Vector<Integer>> playerVectors = new HashMap<>();
 
-    public Map<String, Vector<Integer>> getPlayerVectors() {
+
+    private Map<String, Vector<Integer>> getPlayerVectors() {
         return new DataLoader().retrieveVectorsForEveryPlayer();
     }
 
     public void computeDistanceMatrix() {
-        Map<String, Vector<Integer>> playerVectors = getPlayerVectors();
+        playerVectors = getPlayerVectors();
         distMatrix= new Matrix(playerVectors.size());
         Set<String> pvSet = playerVectors.keySet();
         int i = 0;
         for(String s1 : pvSet) {
-            List li = new LinkedList<>();
+//            List li = new LinkedList<>();
             List liCluster = new LinkedList<>();
-            li.add(s1);
+//            li.add(s1);
             liCluster.add(i);
-            mappedIdsToNames.put(i, li);
+            mappedIdsToNames.put(i, s1);
             mappedIDsToClusters.put(i, liCluster);
             i++;
             for (String s2 : pvSet) {
@@ -37,9 +35,48 @@ public class PlayerTypeClusterer {
             }
         }
         distMatrix.print();
-        getNClusters(2);
     }
 
+
+    public void getClusters() {
+        computeDistanceMatrix();
+        getNClusters(4);
+    }
+
+    public void getClusters(int n) {
+        computeDistanceMatrix();
+        getNClusters(n);
+    }
+
+    public void computeClusterCentroids() {
+        Set<Integer> clusterIDs = mappedIDsToClusters.keySet();
+        for (Integer id : clusterIDs) {
+            List<Integer> li = mappedIDsToClusters.get(id);
+            computeCentroid(li);
+        }
+    }
+
+    private Vector<Double> computeCentroid(List<Integer> li) {
+        Vector<Double> centroidVector = new Vector<>();
+        for (int i = 0; i < li.size(); i++) {
+            String name = mappedIdsToNames.get(li.get(i));
+            Vector<Integer> playerVector = playerVectors.get(name);
+            if (centroidVector.size() == 0) {
+                for (int j = 0; j < playerVector.size(); j++) {
+                    centroidVector.add(0.0 + playerVector.get(j));
+                }
+            } else {
+                for (int j = 0; j < playerVector.size(); j++) {
+                    centroidVector.add(j, centroidVector.get(j) + playerVector.get(j));
+                }
+            }
+        }
+        for (int i = 0; i < centroidVector.size(); i++) {
+            centroidVector.add(i, centroidVector.get(i) / li.size());
+        }
+
+        return centroidVector;
+    }
 
     public void getNClusters(int n) {
         if (n > mappedIDsToClusters.size()) {
@@ -110,6 +147,6 @@ public class PlayerTypeClusterer {
 
     public static void main(String [] args) {
         PlayerTypeClusterer ptc = new PlayerTypeClusterer();
-        ptc.computeDistanceMatrix();
+        ptc.getClusters();
     }
 }
