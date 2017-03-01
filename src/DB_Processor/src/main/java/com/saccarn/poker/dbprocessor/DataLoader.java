@@ -9,6 +9,7 @@ import com.saccarn.poker.dataprocessing.GamePlayerRecord;
 import com.saccarn.poker.dataprocessing.Player;
 import org.bson.*;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -19,7 +20,7 @@ public class DataLoader {
 
     private List<GamePlayerRecord> getListOfRecords() throws FileNotFoundException {
         GameAnalyser ga = new GameAnalyser();
-        List<GamePlayerRecord> gprs = ga.analyseTest();
+        List<GamePlayerRecord> gprs = ga.analyse();
         return gprs;
     }
 
@@ -160,7 +161,7 @@ public class DataLoader {
 
     public static  void main(String [] args) throws InterruptedException {
         DataLoader dl = new DataLoader();
-//        dl.loadDataIntoMongo();
+        dl.loadDataIntoMongo();
         dl.retrieveVectorsForEveryPlayer();
         try {
             Thread.sleep(300);
