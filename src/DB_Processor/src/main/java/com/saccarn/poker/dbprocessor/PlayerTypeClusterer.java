@@ -10,9 +10,9 @@ public class PlayerTypeClusterer {
     private Map<Integer, String> mappedIdsToNames = new HashMap<>();
     private Map<Integer, List<Integer>> mappedIDsToClusters = new HashMap<>();
     private Matrix distMatrix;
-    private Map<String, Vector<Integer>> playerVectors = new HashMap<>();
+    private Map<String, Vector<Double>> playerVectors = new HashMap<>();
 
-    private Map<String, Vector<Integer>> getPlayerVectors() {
+    private Map<String, Vector<Double>> getPlayerVectors() {
         return new DataLoader().retrieveVectorsForEveryPlayer();
     }
 
@@ -65,7 +65,7 @@ public class PlayerTypeClusterer {
         Vector<Double> centroidVector = new Vector<>();
         for (int i = 0; i < li.size(); i++) {
             String name = mappedIdsToNames.get(li.get(i));
-            Vector<Integer> playerVector = playerVectors.get(name);
+            Vector<Double> playerVector = playerVectors.get(name);
             if (centroidVector.size() == 0) {
                 for (int j = 0; j < playerVector.size(); j++) {
                     centroidVector.add(0.0 + playerVector.get(j));
@@ -165,7 +165,7 @@ public class PlayerTypeClusterer {
         return new Point(x, y);
     }
 
-    public double computeDistance(Vector<Integer> xVector, Vector<Integer> yVector) {
+    public double computeDistance(Vector<Double> xVector, Vector<Double> yVector) {
         int dist = 0;
         for (int i = 0; i < xVector.size(); i++) { //manhattan distance
             dist += Math.abs(xVector.get(i) - yVector.get(i));

@@ -160,8 +160,11 @@ public class GamePlayerRecord {
             }
             if (list.get(actionIndexInList) != PokerAction.NO_ACTION ) {
                 incrementTotalActions(i);
-                numTotalActionsRiverPos1++;
-                numTotalActionsRiverPos2++;
+                if (i % 2 == 0) {
+                    numTotalActionsRiverPos1++;
+                } else {
+                    numTotalActionsRiverPos2++;
+                }
             }
         }
         playerOne.setNumBetRaisesRiver(numBetRaisesRiverPos1);
@@ -187,8 +190,11 @@ public class GamePlayerRecord {
             }
             if (list.get(actionIndexInList) != PokerAction.NO_ACTION ) {
                 incrementTotalActions(i);
-                numTotalActionsTurnPos1++;
-                numTotalActionsTurnPos2++;
+                if (i % 2 == 0) {
+                    numTotalActionsTurnPos1++;
+                } else {
+                    numTotalActionsTurnPos2++;
+                }
             }
         }
         playerOne.setNumBetRaisesTurn(numBetRaisesTurnPos1);
@@ -223,8 +229,11 @@ public class GamePlayerRecord {
             }
             if (list.get(actionIndexInList) != PokerAction.NO_ACTION ) {
                 incrementTotalActions(i);
-                numTotalActionsFlopPos1++;
-                numTotalActionsFlopPos2++;
+                if (i % 2 == 0) {
+                    numTotalActionsFlopPos1++;
+                } else {
+                    numTotalActionsFlopPos2++;
+                }
             }
         }
         playerOne.setNumBetRaisesFlop(numBetRaisesFlopPos1);
@@ -250,14 +259,17 @@ public class GamePlayerRecord {
             }
             if (list.get(actionIndexInList) != PokerAction.NO_ACTION ) {
                 incrementTotalActions(i);
-                numTotalActionsPreFlopPos1++;
-                numTotalActionsPreFlopPos2++;
+                if (i % 2 == 0) {
+                    numTotalActionsPreFlopPos1++;
+                } else {
+                    numTotalActionsPreFlopPos2++;
+                }
             }
         }
         playerOne.setNumBetRaisesPreFlop(numBetRaisesPreFlopPos1);
         playerTwo.setNumBetRaisesPreFlop(numBetRaisesPreFlopPos2);
-        playerOne.setTotalNumActionsPreFlop(numTotalActionsPreFlopPos1);
-        playerTwo.setTotalNumActionsPreFlop(numTotalActionsPreFlopPos2);
+        playerOne.setTotalNumActionsPreFlop(--numTotalActionsPreFlopPos1);
+        playerTwo.setTotalNumActionsPreFlop(--numTotalActionsPreFlopPos2); //remove one for small/big blind
     }
 
     public void setPlayerOneWinner() {
