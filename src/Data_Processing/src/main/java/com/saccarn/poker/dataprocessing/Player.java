@@ -11,7 +11,28 @@ public class Player {
     private int numBetRaisesFlop = 0;
     private int numBetRaisesPreFlop = 0;
     private int totalActions = 0;
+    private int totalNumActionsFlop = 0;
+    private int totalNumActionsPreFlop = 0;
+    private int totalNumActionsTurn = 0;
+    private int totalNumActionsRiver = 0;
     private boolean winner = false;
+
+    public int getTotalNumActionsFlop() {
+        return totalNumActionsFlop;
+    }
+
+    public int getTotalNumActionsPreFlop() {
+        return totalNumActionsPreFlop;
+    }
+
+    public int getTotalNumActionsTurn() {
+        return totalNumActionsTurn;
+    }
+
+    public int getTotalNumActionsRiver() {
+        return totalNumActionsRiver;
+    }
+
 
     public int getNumBetRaisesTurn() {
         return numBetRaisesTurn;
@@ -79,4 +100,19 @@ public class Player {
         return totalActions;
     }
 
+    public void setTotalNumActionsFlop(int totalNumActionsFlop) {
+        this.totalNumActionsFlop = totalNumActionsFlop;
+    }
+
+    public void setTotalNumActionsPreFlop(int totalNumActionsPreFlop) {
+        this.totalNumActionsPreFlop = totalNumActionsPreFlop;
+    }
+
+    public void setTotalNumActionsTurn(int totalNumActionsTurn) {
+        this.totalNumActionsTurn = totalNumActionsTurn;
+    }
+
+    public void setTotalNumActionsRiver(int totalNumActionsRiver) {
+        this.totalNumActionsRiver = totalNumActionsRiver;
+    }
 }

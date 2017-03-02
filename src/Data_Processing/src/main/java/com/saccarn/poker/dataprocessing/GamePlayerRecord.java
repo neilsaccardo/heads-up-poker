@@ -146,6 +146,8 @@ public class GamePlayerRecord {
     private void doRiverComputations() {
         int numBetRaisesRiverPos1 = 0;
         int numBetRaisesRiverPos2 = 0;
+        int numTotalActionsRiverPos1 = 0;
+        int numTotalActionsRiverPos2 = 0;
         for (int i = 0; i < playerActionsRiver.size(); i++) {
             LinkedList list = playerActionsRiver.get(i);
             if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
@@ -158,15 +160,21 @@ public class GamePlayerRecord {
             }
             if (list.get(actionIndexInList) != PokerAction.NO_ACTION ) {
                 incrementTotalActions(i);
+                numTotalActionsRiverPos1++;
+                numTotalActionsRiverPos2++;
             }
         }
         playerOne.setNumBetRaisesRiver(numBetRaisesRiverPos1);
         playerTwo.setNumBetRaisesRiver(numBetRaisesRiverPos2);
+        playerOne.setTotalNumActionsRiver(numTotalActionsRiverPos1);
+        playerTwo.setTotalNumActionsRiver(numTotalActionsRiverPos2);
     }
 
     private void doTurnComputations() {
         int numBetRaisesTurnPos1 = 0;
         int numBetRaisesTurnPos2 = 0;
+        int numTotalActionsTurnPos1 = 0;
+        int numTotalActionsTurnPos2 = 0;
         for (int i = 0; i < playerActionsTurn.size(); i++) {
             LinkedList list = playerActionsTurn.get(i);
             if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
@@ -179,10 +187,14 @@ public class GamePlayerRecord {
             }
             if (list.get(actionIndexInList) != PokerAction.NO_ACTION ) {
                 incrementTotalActions(i);
+                numTotalActionsTurnPos1++;
+                numTotalActionsTurnPos2++;
             }
         }
         playerOne.setNumBetRaisesTurn(numBetRaisesTurnPos1);
         playerTwo.setNumBetRaisesTurn(numBetRaisesTurnPos2);
+        playerOne.setTotalNumActionsTurn(numTotalActionsTurnPos1);
+        playerTwo.setTotalNumActionsTurn(numTotalActionsTurnPos2);
     }
 
     private void incrementTotalActions(int i) {
@@ -197,6 +209,8 @@ public class GamePlayerRecord {
     private void doFlopPreComputations() {
         int numBetRaisesFlopPos1 = 0;
         int numBetRaisesFlopPos2 = 0;
+        int numTotalActionsFlopPos1 = 0;
+        int numTotalActionsFlopPos2 = 0;
         for (int i = 0; i < playerActionsFlop.size(); i++) {
             LinkedList list = playerActionsFlop.get(i);
             if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
@@ -209,15 +223,21 @@ public class GamePlayerRecord {
             }
             if (list.get(actionIndexInList) != PokerAction.NO_ACTION ) {
                 incrementTotalActions(i);
+                numTotalActionsFlopPos1++;
+                numTotalActionsFlopPos2++;
             }
         }
         playerOne.setNumBetRaisesFlop(numBetRaisesFlopPos1);
         playerTwo.setNumBetRaisesFlop(numBetRaisesFlopPos2);
+        playerOne.setTotalNumActionsFlop(numTotalActionsFlopPos1);
+        playerTwo.setTotalNumActionsFlop(numTotalActionsFlopPos2);
     }
 
     private void doPreFlopPreComputations() {
         int numBetRaisesPreFlopPos1 = 0;
         int numBetRaisesPreFlopPos2 = 0;
+        int numTotalActionsPreFlopPos1 = 0;
+        int numTotalActionsPreFlopPos2 = 0;
         for (int i = 0; i < playerActionsPreFlop.size(); i++) {
             LinkedList list = playerActionsPreFlop.get(i);
             if(list.get(actionIndexInList) == PokerAction.BET || list.get(actionIndexInList) == PokerAction.RAISE) {
@@ -230,10 +250,14 @@ public class GamePlayerRecord {
             }
             if (list.get(actionIndexInList) != PokerAction.NO_ACTION ) {
                 incrementTotalActions(i);
+                numTotalActionsPreFlopPos1++;
+                numTotalActionsPreFlopPos2++;
             }
         }
         playerOne.setNumBetRaisesPreFlop(numBetRaisesPreFlopPos1);
         playerTwo.setNumBetRaisesPreFlop(numBetRaisesPreFlopPos2);
+        playerOne.setTotalNumActionsPreFlop(numTotalActionsPreFlopPos1);
+        playerTwo.setTotalNumActionsPreFlop(numTotalActionsPreFlopPos2);
     }
 
     public void setPlayerOneWinner() {
