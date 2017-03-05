@@ -107,7 +107,7 @@ public class PlayerTypeClusterer {
         List<Integer> listOfMergedVectors = new LinkedList<>();
         for (int i = 0; i < distMatrix.xDimensionSize(); i++) {
             for (int j = i; j < distMatrix.yDimensionSize(); j++) {
-                if(distMatrix.getValue(i, j) == 0 && i != j && (!listOfMergedVectors.contains(j))) {
+                if(distMatrix.getValue(i, j) == 0.0 && i != j && (!listOfMergedVectors.contains(j))) {
                     updateMatrix(new Point(i, j));
                     if (i < j) {
                         updateMapIdToClusters(i, j);
@@ -166,7 +166,7 @@ public class PlayerTypeClusterer {
     }
 
     public double computeDistance(Vector<Double> xVector, Vector<Double> yVector) {
-        int dist = 0;
+        double dist = 0;
         for (int i = 0; i < xVector.size(); i++) { //manhattan distance
             dist += Math.abs(xVector.get(i) - yVector.get(i));
         }
