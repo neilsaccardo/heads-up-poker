@@ -40,6 +40,7 @@ public class PlayerTypeClusterer {
         computeDistanceMatrix();
         mergeVectorsWhereDistanceIsZero();
         getNClusters(4);
+        computeClusterCentroids();
     }
 
     public void getClusters(int n) {
@@ -54,6 +55,7 @@ public class PlayerTypeClusterer {
             List<Integer> li = mappedIDsToClusters.get(id);
             clusterCentroids.add(computeCentroid(li));
         }
+        System.out.println("Centroids : " + clusterCentroids);
         return clusterCentroids;
     }
 
@@ -72,14 +74,15 @@ public class PlayerTypeClusterer {
                 }
             } else {
                 for (int j = 0; j < playerVector.size(); j++) {
-                    centroidVector.add(j, centroidVector.get(j) + playerVector.get(j));
+                    centroidVector.set(j, centroidVector.get(j) + playerVector.get(j));
                 }
             }
         }
         for (int i = 0; i < centroidVector.size(); i++) {
-            centroidVector.add(i, centroidVector.get(i) / li.size());
+            centroidVector.set(i, centroidVector.get(i) / li.size());
         }
         return centroidVector;
+
     }
 
     public void getNClusters(int n) {
@@ -167,10 +170,17 @@ public class PlayerTypeClusterer {
 
     public double computeDistance(Vector<Double> xVector, Vector<Double> yVector) {
         double dist = 0;
-        for (int i = 0; i < xVector.size(); i++) { //manhattan distance
-            dist += Math.abs(xVector.get(i) - yVector.get(i));
+
+        for ( int i = 0; i < xVector.size(); i++) {
+            dist = (yVector.get(i) - xVector.get(i)) * (yVector.get(i) - xVector.get(i));
         }
-        return dist;
+        return Math.sqrt(dist);
+
+//
+//        for (int i = 0; i < xVector.size(); i++) { //manhattan distance
+//            dist += (Math.abs(xVector.get(i) - yVector.get(i)));
+//        }
+//        return dist;
     }
 
     public static void main(String [] args) {
