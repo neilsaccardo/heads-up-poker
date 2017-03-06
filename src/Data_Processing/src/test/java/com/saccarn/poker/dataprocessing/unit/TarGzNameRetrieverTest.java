@@ -2,6 +2,7 @@ package com.saccarn.poker.dataprocessing.unit;
 
 import com.saccarn.poker.dataprocessing.TarGzNameRetriever;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class TarGzNameRetrieverTest {
 
-    @Test
+    @Ignore @Test
     public void testGetFileNamesByStringPatternUsingNoLimitPattern() throws IOException {
         TarGzNameRetriever tgnr = new TarGzNameRetriever();
         List actualList = tgnr.getFileNamesByStringPattern("nolimit\\.\\d{6}\\.tgz");
@@ -26,7 +27,7 @@ public class TarGzNameRetrieverTest {
         List expectedList = Arrays.asList(expectedListAsArray);
         Assert.assertEquals(actualList, expectedList);
     }
-    @Test
+    @Ignore @Test
     public void testGetFileNamesByStringPatternUsingNonsensePattern() throws IOException {
         TarGzNameRetriever tgnr = new TarGzNameRetriever();
         List actualEmptyList = tgnr.getFileNamesByStringPattern("incorrectvalue");

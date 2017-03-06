@@ -166,6 +166,13 @@ public class GamePlayerRecord {
                     numTotalActionsRiverPos2++;
                 }
             }
+            if (list.get(actionIndexInList) == PokerAction.FOLD) {
+                if (i % 2 == 0) {
+                    playerOne.setFoldAtRiver(1);
+                } else {
+                    playerTwo.setFoldAtRiver(1);
+                }
+            }
         }
         playerOne.setNumBetRaisesRiver(numBetRaisesRiverPos1);
         playerTwo.setNumBetRaisesRiver(numBetRaisesRiverPos2);
@@ -194,6 +201,13 @@ public class GamePlayerRecord {
                     numTotalActionsTurnPos1++;
                 } else {
                     numTotalActionsTurnPos2++;
+                }
+            }
+            if (list.get(actionIndexInList) == PokerAction.FOLD) {
+                if (i % 2 == 0) {
+                    playerOne.setFoldAtTurn(1);
+                } else {
+                    playerTwo.setFoldAtTurn(1);
                 }
             }
         }
@@ -235,6 +249,13 @@ public class GamePlayerRecord {
                     numTotalActionsFlopPos2++;
                 }
             }
+            if (list.get(actionIndexInList) == PokerAction.FOLD) {
+                if (i % 2 == 0) {
+                    playerOne.setFoldAtFlop(1);
+                } else {
+                    playerTwo.setFoldAtFlop(1);
+                }
+            }
         }
         playerOne.setNumBetRaisesFlop(numBetRaisesFlopPos1);
         playerTwo.setNumBetRaisesFlop(numBetRaisesFlopPos2);
@@ -263,6 +284,14 @@ public class GamePlayerRecord {
                     numTotalActionsPreFlopPos1++;
                 } else {
                     numTotalActionsPreFlopPos2++;
+                }
+            }
+
+            if (list.get(actionIndexInList) == PokerAction.FOLD) {
+                if (i % 2 == 0) {
+                    playerOne.setFoldAtPreFlop(1);
+                } else {
+                    playerTwo.setFoldAtPreFlop(1);
                 }
             }
         }

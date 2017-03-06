@@ -17,6 +17,17 @@ public class Player {
     private int totalNumActionsRiver = 0;
     private boolean winner = false;
 
+    private int foldAtPreFlop = 0;
+    private int foldAtFlop = 0;
+    private int foldAtRiver = 0;
+    private int foldAtTurn = 0;
+
+    private int reachedPreFlop = 0;
+    private int reachedFlop = 0;
+    private int reachedTurn = 0;
+    private int reachedRiver = 0;
+
+
     public int getTotalNumActionsFlop() {
         return totalNumActionsFlop;
     }
@@ -115,4 +126,73 @@ public class Player {
     public void setTotalNumActionsRiver(int totalNumActionsRiver) {
         this.totalNumActionsRiver = totalNumActionsRiver;
     }
+
+    public void setWinner(boolean winner) {
+        this.winner = winner;
+    }
+
+    public int getFoldAtPreFlop() {
+        return foldAtPreFlop;
+    }
+
+    public void setFoldAtPreFlop(int foldAtPreFlop) {
+        this.foldAtPreFlop = foldAtPreFlop;
+    }
+
+    public int getFoldAtFlop() {
+        return foldAtFlop;
+    }
+
+    public void setFoldAtFlop(int foldAtFlop) {
+        this.foldAtFlop = foldAtFlop;
+    }
+
+    public int getFoldAtRiver() {
+        return foldAtRiver;
+    }
+
+    public void setFoldAtRiver(int foldAtRiver) {
+        this.foldAtRiver = foldAtRiver;
+    }
+
+    public int getFoldAtTurn() {
+        return foldAtTurn;
+    }
+
+    public void setFoldAtTurn(int foldAtTurn) {
+        this.foldAtTurn = foldAtTurn;
+    }
+
+    public int getReachedPreFlop() {
+        return reachedPreFlop;
+    }
+
+    public void setReachedPreFlop(int reachedPreFlop) {
+        this.reachedPreFlop = reachedPreFlop;
+    }
+
+    public int getReachedFlop() {
+        return reachedFlop;
+    }
+
+    public void setReachedFlop(int reachedFlop) {
+        this.reachedFlop = reachedFlop;
+    }
+
+    public int getReachedTurn() {
+        return reachedTurn;
+    }
+
+    public void setReachedTurn(int reachedTurn) {
+        this.reachedTurn = reachedTurn;
+    }
+
+    public int getReachedRiver() {
+        return reachedRiver;
+    }
+
+    public void setReachedRiver(int reachedRiver) {
+        this.reachedRiver = reachedRiver;
+    }
+
 }

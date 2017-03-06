@@ -46,6 +46,10 @@ public class DataLoader {
         docObjectKeysBetRaises.put(1, "flopBetActionRatio");
         docObjectKeysBetRaises.put(2, "turnBetActionRatio");
         docObjectKeysBetRaises.put(3, "riverBetActionRatio");
+        docObjectKeysBetRaises.put(4, "preFlopFoldedRatio");
+        docObjectKeysBetRaises.put(5, "flopFoldedRatio");
+        docObjectKeysBetRaises.put(6, "turnFoldedRatio");
+        docObjectKeysBetRaises.put(7, "riverFoldedRatio");
         return docObjectKeysBetRaises;
     }
 
@@ -110,6 +114,12 @@ public class DataLoader {
         int totalActionsTurn = (int) document.get("totalTurnActions");
         int totalActionsRiver = (int) document.get("totalRiverActions");
 
+        int foldedAtPreFlop = (int) document.get("foldedAtPreFlop");
+        int foldedAtFlop = (int) document.get("foldedAtFlop");
+        int foldedAtTurn = (int) document.get("foldedAtTurn");
+        int foldedAtRiver = (int) document.get("foldedAtRiver");
+        int numHandsPlayed = (int) document.get("totalHandsPlayed");
+
         document.put("numWins", (nw +1));
         document.put("totalBetRaises", totalbr + p.getTotalNumBetRaises());
         document.put("preFlopBetRaises",  pfbr + p.getNumBetRaisesPreFlop());
@@ -124,9 +134,29 @@ public class DataLoader {
         document.put("totalRiverActions", totalActionsRiver +  p.getTotalNumActionsRiver());
         document.put("name", p.getName());
 
+        document.put("foldedAtPreFlop", foldedAtPreFlop + p.getFoldAtPreFlop());
+        document.put("foldedAtFlop", foldedAtFlop + p.getFoldAtFlop());
+        document.put("foldedAtTurn", foldedAtTurn + p.getFoldAtTurn());
+        document.put("foldedAtRiver", foldedAtRiver + p.getFoldAtRiver());
+        document.put("totalHandsPlayed", numHandsPlayed + 1); //played one more hand
 
+
+        computeFoldAtStagesRatios(document);
         computeActionBetRaisesRatios(document);
         return document;
+    }
+
+    private void computeFoldAtStagesRatios(Document document) {
+        double numFoldedAtPreFlop = ((Integer) document.get("foldedAtPreFlop")).doubleValue();
+        double numFoldedAtFlop = ((Integer) document.get("foldedAtFlop")).doubleValue();
+        double numFoldedAtTurn = ((Integer) document.get("foldedAtTurn")).doubleValue();
+        double numFoldedAtRiver = (((Integer) document.get("foldedAtRiver"))).doubleValue();
+        double numHandsPlayed = (((Integer) document.get("totalHandsPlayed"))).doubleValue();
+
+        document.put("preFlopFoldedRatio", numFoldedAtPreFlop / numHandsPlayed);
+        document.put("flopFoldedRatio", numFoldedAtFlop / numHandsPlayed);
+        document.put("turnFoldedRatio", numFoldedAtTurn / numHandsPlayed);
+        document.put("riverFoldedRatio", numFoldedAtRiver / numHandsPlayed);
     }
 
     private void computeActionBetRaisesRatios(Document document) {
@@ -174,12 +204,22 @@ public class DataLoader {
         } else {
             playerDoc.put("numWins", 0);
         }
+        playerDoc.put("foldedAtPreFlop", p.getFoldAtPreFlop());
+        playerDoc.put("foldedAtFlop", p.getFoldAtFlop());
+        playerDoc.put("foldedAtTurn", p.getFoldAtTurn());
+        playerDoc.put("foldedAtRiver", p.getFoldAtRiver());
+        playerDoc.put("totalHandsPlayed", 1);
         playerDoc.put("name", p.getName());
         playerDoc.put("preFlopBetActionRatio", 0.0);
         playerDoc.put("flopBetActionRatio", 0.0);
         playerDoc.put("turnBetActionRatio", 0.0);
         playerDoc.put("riverBetActionRatio", 0.0);
+        playerDoc.put("preFlopFoldedRatio", 0.0);
+        playerDoc.put("flopFoldedRatio", 0.0);
+        playerDoc.put("turnFoldedRatio", 0.0);
+        playerDoc.put("riverFoldedRatio", 0.0);
         computeActionBetRaisesRatios(playerDoc);
+        computeFoldAtStagesRatios(playerDoc);
         return playerDoc;
     }
 
@@ -196,6 +236,7 @@ public class DataLoader {
             String playerName = (String) doc.get("name");
             System.out.println(playerName);
             for (int i = 0; i < docObjectKeys.size(); i++) {
+                System.out.println(docObjectKeys.get(i));
                 double value = (double) doc.get(docObjectKeys.get(i));
                 v.add(value);
             }
