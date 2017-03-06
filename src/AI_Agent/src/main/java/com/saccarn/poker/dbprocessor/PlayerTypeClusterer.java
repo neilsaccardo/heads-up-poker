@@ -172,7 +172,7 @@ public class PlayerTypeClusterer {
         double dist = 0;
 
         for ( int i = 0; i < xVector.size(); i++) {
-            dist = (yVector.get(i) - xVector.get(i)) * (yVector.get(i) - xVector.get(i));
+            dist = i * (yVector.get(i) - xVector.get(i)) * (yVector.get(i) - xVector.get(i));
         }
         return Math.sqrt(dist);
 
