@@ -82,11 +82,18 @@ public class PlayerActions {
                 gpr.addPlayerAction(playerTwoList[0], charsPlayerTwo[j], mappedIntegersToPokerStage.get(i));
             }
         }
-        if(playerOneList.length > 11) {
+        if(playerOneList.length > 11) { // add the cards if they are there
             gpr.addCardsPlayerOne(playerOneList[11], playerOneList[12]);
             gpr.addCardsPlayerTwo(playerTwoList[11], playerTwoList[12]);
         }
-//        System.out.println(gpr);
+
+        //set the winner of the hand. TODO - check for draw/split hands
+        if (Integer.parseInt(playerOneList[10].trim()) > Integer.parseInt(playerTwoList[10].trim())) {
+            gpr.setPlayerOneWinner();
+        }
+        else {
+            gpr.setPlayerTwoWinner();
+        }
         return gpr;
     }
 }

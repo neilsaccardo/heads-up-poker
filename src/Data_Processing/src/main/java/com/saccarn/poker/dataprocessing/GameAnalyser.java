@@ -2,6 +2,8 @@ package com.saccarn.poker.dataprocessing;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Neil on 06/02/2017.
@@ -18,22 +20,25 @@ public class GameAnalyser {
         dir = new File("C:\\Data\\test\\nolimit\\");
     }
 
-    public void analyse() throws FileNotFoundException {
+    public List<GamePlayerRecord> analyse() throws FileNotFoundException {
         File [] fs = dir.listFiles();
+        List<GamePlayerRecord> gprs = new ArrayList<>();
         for(int i = 0; i < fs.length; i++) {
             GameMaker gm = new GameMaker(new File(fs[i], "hroster"));
-            gm.readAllGames();
+            gprs.addAll(gm.readAllGames());
         }
+        System.out.println(gprs.size());
+        return gprs;
     }
 
-    public void analyseTest() throws FileNotFoundException {
+    public List<GamePlayerRecord> analyseTest() throws FileNotFoundException {
         File f = new File(dir, "199505\\");
         GameMaker gm = new GameMaker(new File(f, "hroster"));
-        gm.readAllGames();
+        return gm.readAllGames();
     }
 
     public static void main(String [] args) throws FileNotFoundException {
         GameAnalyser ga = new GameAnalyser();
-        ga.analyseTest();
+        ga.analyse();
     }
 }
