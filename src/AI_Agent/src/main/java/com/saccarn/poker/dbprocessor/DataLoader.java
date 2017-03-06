@@ -27,8 +27,8 @@ public class DataLoader {
 
     public void saveClusterCentroids(List<Vector<Double>> clusterCentroids) {
         MongoClient client = new MongoClient();
-        MongoDatabase database = client.getDatabase("test1");
-        MongoCollection<Document> playerCollection = database.getCollection("clusters");
+        MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
+        MongoCollection<Document> playerCollection = database.getCollection(DataLoaderStrings.CLUSTER_COLLECTION);
         Map<Integer, String> docObjectKeys = fillDocObjectMap();
 
         for (int i = 0; i < clusterCentroids.size(); i++) {
@@ -42,14 +42,14 @@ public class DataLoader {
 
     private Map<Integer, String> fillDocObjectMap() {
         Map<Integer, String> docObjectKeysBetRaises = new HashMap<>();
-        docObjectKeysBetRaises.put(0, "preFlopBetActionRatio");
-        docObjectKeysBetRaises.put(1, "flopBetActionRatio");
-        docObjectKeysBetRaises.put(2, "turnBetActionRatio");
-        docObjectKeysBetRaises.put(3, "riverBetActionRatio");
-        docObjectKeysBetRaises.put(4, "preFlopFoldedRatio");
-        docObjectKeysBetRaises.put(5, "flopFoldedRatio");
-        docObjectKeysBetRaises.put(6, "turnFoldedRatio");
-        docObjectKeysBetRaises.put(7, "riverFoldedRatio");
+        docObjectKeysBetRaises.put(0, DataLoaderStrings.PRE_FLOP_BET_ACTION_RATIO);
+        docObjectKeysBetRaises.put(1, DataLoaderStrings.FLOP_BET_ACTION_RATIO);
+        docObjectKeysBetRaises.put(2, DataLoaderStrings.TURN_BET_ACTION_RATIO);
+        docObjectKeysBetRaises.put(3, DataLoaderStrings.RIVER_BET_ACTION_RATIO);
+        docObjectKeysBetRaises.put(4, DataLoaderStrings.PRE_FLOP_FOLDED_RATIO);
+        docObjectKeysBetRaises.put(5, DataLoaderStrings.FLOP_FOLDED_RATIO);
+        docObjectKeysBetRaises.put(6, DataLoaderStrings.TURN_FOLDED_RATIO);
+        docObjectKeysBetRaises.put(7, DataLoaderStrings.RIVER_FOLDED_RATIO);
         return docObjectKeysBetRaises;
     }
 
@@ -65,8 +65,8 @@ public class DataLoader {
 
         int id = 1;
         MongoClient client = new MongoClient();
-        MongoDatabase database = client.getDatabase("test1");
-        MongoCollection<Document> playerCollection = database.getCollection("players");
+        MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
+        MongoCollection<Document> playerCollection = database.getCollection(DataLoaderStrings.PLAYER_COLLECTION);
 
         for (GamePlayerRecord gpr : gprs) {
             Document doc = new Document();
@@ -82,8 +82,8 @@ public class DataLoader {
 
             Player p1 = gpr.getPlayerOne();
             Player p2 = gpr.getPlayerTwo();
-            BsonDocument p1Filter = new BsonDocument("name", new BsonString(p1.getName()));
-            BsonDocument p2Filter = new BsonDocument("name", new BsonString(p2.getName()));
+            BsonDocument p1Filter = new BsonDocument(DataLoaderStrings.NAME, new BsonString(p1.getName()));
+            BsonDocument p2Filter = new BsonDocument(DataLoaderStrings.NAME, new BsonString(p2.getName()));
             playerCollection.find(p1Filter).limit(1).into(p1List);
             playerCollection.find(p2Filter).limit(1).into(p2List);
             if (p1List.size() == 0) {
@@ -102,43 +102,43 @@ public class DataLoader {
     }
 
     private Document getUpdatedDocument(Document document, Player p) {
-        int nw = (int) document.get("numWins");
-        int totalbr = (int) document.get("totalBetRaises");
-        int pfbr = (int) document.get("preFlopBetRaises");
-        int fbr= (int) document.get("flopBetRaises");
-        int tbr = (int) document.get("turnBetRaises");
-        int rbr = (int) document.get("riverBetRaises");
-        int totalActions = (int) document.get("totalActions");
-        int totalActionsPreFlop = (int) document.get("totalPreFlopActions");
-        int totalActionsFlop = (int) document.get("totalFlopActions");
-        int totalActionsTurn = (int) document.get("totalTurnActions");
-        int totalActionsRiver = (int) document.get("totalRiverActions");
+        int nw = (int) document.get(DataLoaderStrings.NUM_WINS);
+        int totalbr = (int) document.get(DataLoaderStrings.TOTAL_BET_RAISES);
+        int pfbr = (int) document.get(DataLoaderStrings.PRE_FLOP_BET_RAISES);
+        int fbr= (int) document.get(DataLoaderStrings.FLOP_BET_RAISES);
+        int tbr = (int) document.get(DataLoaderStrings.TURN_BET_RAISES);
+        int rbr = (int) document.get(DataLoaderStrings.RIVER_BET_RAISES);
+        int totalActions = (int) document.get(DataLoaderStrings.TOTAL_ACTIONS);
+        int totalActionsPreFlop = (int) document.get(DataLoaderStrings.TOTAL_PRE_FLOP_ACTIONS);
+        int totalActionsFlop = (int) document.get(DataLoaderStrings.TOTAL_FLOP_ACTIONS);
+        int totalActionsTurn = (int) document.get(DataLoaderStrings.TOTAL_TURN_ACTIONS);
+        int totalActionsRiver = (int) document.get(DataLoaderStrings.TOTAL_RIVER_ACTIONS);
 
-        int foldedAtPreFlop = (int) document.get("foldedAtPreFlop");
-        int foldedAtFlop = (int) document.get("foldedAtFlop");
-        int foldedAtTurn = (int) document.get("foldedAtTurn");
-        int foldedAtRiver = (int) document.get("foldedAtRiver");
-        int numHandsPlayed = (int) document.get("totalHandsPlayed");
+        int foldedAtPreFlop = (int) document.get(DataLoaderStrings.FOLDED_AT_PRE_FLOP);
+        int foldedAtFlop = (int) document.get(DataLoaderStrings.FOLDED_AT_FLOP);
+        int foldedAtTurn = (int) document.get(DataLoaderStrings.FOLDED_AT_TURN);
+        int foldedAtRiver = (int) document.get(DataLoaderStrings.FOLDED_AT_RIVER);
+        int numHandsPlayed = (int) document.get(DataLoaderStrings.TOTAL_HANDS_PLAYED);
 
-        document.put("numWins", (nw +1));
-        document.put("totalBetRaises", totalbr + p.getTotalNumBetRaises());
-        document.put("preFlopBetRaises",  pfbr + p.getNumBetRaisesPreFlop());
-        document.put("flopBetRaises",  fbr + p.getNumBetRaisesFlop());
-        document.put("turnBetRaises",  tbr + p.getNumBetRaisesTurn());
-        document.put("riverBetRaises",  rbr + p.getNumBetRaisesRiver());
-        document.put("totalActions",  totalActions + p.getTotalActions());
+        document.put(DataLoaderStrings.NUM_WINS, (nw +1));
+        document.put(DataLoaderStrings.TOTAL_BET_RAISES, totalbr + p.getTotalNumBetRaises());
+        document.put(DataLoaderStrings.PRE_FLOP_BET_RAISES,  pfbr + p.getNumBetRaisesPreFlop());
+        document.put(DataLoaderStrings.FLOP_BET_RAISES,  fbr + p.getNumBetRaisesFlop());
+        document.put(DataLoaderStrings.TURN_BET_RAISES,  tbr + p.getNumBetRaisesTurn());
+        document.put(DataLoaderStrings.RIVER_BET_RAISES,  rbr + p.getNumBetRaisesRiver());
+        document.put(DataLoaderStrings.TOTAL_ACTIONS,  totalActions + p.getTotalActions());
 
-        document.put("totalPreFlopActions", totalActionsPreFlop + p.getTotalNumActionsPreFlop());
-        document.put("totalFlopActions", totalActionsFlop + p.getTotalNumActionsFlop());
-        document.put("totalTurnActions", totalActionsTurn + p.getTotalNumActionsTurn());
-        document.put("totalRiverActions", totalActionsRiver +  p.getTotalNumActionsRiver());
-        document.put("name", p.getName());
+        document.put(DataLoaderStrings.TOTAL_PRE_FLOP_ACTIONS, totalActionsPreFlop + p.getTotalNumActionsPreFlop());
+        document.put(DataLoaderStrings.TOTAL_FLOP_ACTIONS, totalActionsFlop + p.getTotalNumActionsFlop());
+        document.put(DataLoaderStrings.TOTAL_TURN_ACTIONS, totalActionsTurn + p.getTotalNumActionsTurn());
+        document.put(DataLoaderStrings.TOTAL_RIVER_ACTIONS, totalActionsRiver +  p.getTotalNumActionsRiver());
+        document.put(DataLoaderStrings.NAME, p.getName());
 
-        document.put("foldedAtPreFlop", foldedAtPreFlop + p.getFoldAtPreFlop());
-        document.put("foldedAtFlop", foldedAtFlop + p.getFoldAtFlop());
-        document.put("foldedAtTurn", foldedAtTurn + p.getFoldAtTurn());
-        document.put("foldedAtRiver", foldedAtRiver + p.getFoldAtRiver());
-        document.put("totalHandsPlayed", numHandsPlayed + 1); //played one more hand
+        document.put(DataLoaderStrings.FOLDED_AT_PRE_FLOP, foldedAtPreFlop + p.getFoldAtPreFlop());
+        document.put(DataLoaderStrings.FOLDED_AT_FLOP, foldedAtFlop + p.getFoldAtFlop());
+        document.put(DataLoaderStrings.FOLDED_AT_TURN, foldedAtTurn + p.getFoldAtTurn());
+        document.put(DataLoaderStrings.FOLDED_AT_RIVER, foldedAtRiver + p.getFoldAtRiver());
+        document.put(DataLoaderStrings.TOTAL_HANDS_PLAYED, numHandsPlayed + 1); //played one more hand
 
 
         computeFoldAtStagesRatios(document);
@@ -147,77 +147,77 @@ public class DataLoader {
     }
 
     private void computeFoldAtStagesRatios(Document document) {
-        double numFoldedAtPreFlop = ((Integer) document.get("foldedAtPreFlop")).doubleValue();
-        double numFoldedAtFlop = ((Integer) document.get("foldedAtFlop")).doubleValue();
-        double numFoldedAtTurn = ((Integer) document.get("foldedAtTurn")).doubleValue();
-        double numFoldedAtRiver = (((Integer) document.get("foldedAtRiver"))).doubleValue();
-        double numHandsPlayed = (((Integer) document.get("totalHandsPlayed"))).doubleValue();
+        double numFoldedAtPreFlop = ((Integer) document.get(DataLoaderStrings.FOLDED_AT_PRE_FLOP)).doubleValue();
+        double numFoldedAtFlop = ((Integer) document.get(DataLoaderStrings.FOLDED_AT_FLOP)).doubleValue();
+        double numFoldedAtTurn = ((Integer) document.get(DataLoaderStrings.FOLDED_AT_TURN)).doubleValue();
+        double numFoldedAtRiver = (((Integer) document.get(DataLoaderStrings.FOLDED_AT_RIVER))).doubleValue();
+        double numHandsPlayed = (((Integer) document.get(DataLoaderStrings.TOTAL_HANDS_PLAYED))).doubleValue();
 
-        document.put("preFlopFoldedRatio", numFoldedAtPreFlop / numHandsPlayed);
-        document.put("flopFoldedRatio", numFoldedAtFlop / numHandsPlayed);
-        document.put("turnFoldedRatio", numFoldedAtTurn / numHandsPlayed);
-        document.put("riverFoldedRatio", numFoldedAtRiver / numHandsPlayed);
+        document.put(DataLoaderStrings.PRE_FLOP_FOLDED_RATIO, numFoldedAtPreFlop / numHandsPlayed);
+        document.put(DataLoaderStrings.FLOP_FOLDED_RATIO, numFoldedAtFlop / numHandsPlayed);
+        document.put(DataLoaderStrings.TURN_FOLDED_RATIO, numFoldedAtTurn / numHandsPlayed);
+        document.put(DataLoaderStrings.RIVER_FOLDED_RATIO, numFoldedAtRiver / numHandsPlayed);
     }
 
     private void computeActionBetRaisesRatios(Document document) {
-        ///(double) document.get("totalPreFlopActions")
-        double preFlopBetRaises = ((Integer) document.get("preFlopBetRaises")).doubleValue();
-        double flopBetRaises = ((Integer) document.get("flopBetRaises")).doubleValue();
-        double turnBetRaises = ((Integer) document.get("turnBetRaises")).doubleValue();
-        double riverBetRaises = (((Integer) document.get("riverBetRaises"))).doubleValue();
+        ///(double) document.get(DataLoaderStrings.TOTAL_PRE_FLOP_ACTIONS)
+        double preFlopBetRaises = ((Integer) document.get(DataLoaderStrings.PRE_FLOP_BET_RAISES)).doubleValue();
+        double flopBetRaises = ((Integer) document.get(DataLoaderStrings.FLOP_BET_RAISES)).doubleValue();
+        double turnBetRaises = ((Integer) document.get(DataLoaderStrings.TURN_BET_RAISES)).doubleValue();
+        double riverBetRaises = (((Integer) document.get(DataLoaderStrings.RIVER_BET_RAISES))).doubleValue();
 
-        double totalPreFlopActions = ((Integer)document.get("totalPreFlopActions")).doubleValue();
-        double totalFlopActions = ((Integer)document.get("totalFlopActions")).doubleValue();
-        double totalTurnActions = ((Integer)document.get("totalTurnActions")).doubleValue();
-        double totalRiverActions = ((Integer)document.get("totalRiverActions")).doubleValue();
+        double totalPreFlopActions = ((Integer)document.get(DataLoaderStrings.TOTAL_PRE_FLOP_ACTIONS)).doubleValue();
+        double totalFlopActions = ((Integer)document.get(DataLoaderStrings.TOTAL_FLOP_ACTIONS)).doubleValue();
+        double totalTurnActions = ((Integer)document.get(DataLoaderStrings.TOTAL_TURN_ACTIONS)).doubleValue();
+        double totalRiverActions = ((Integer)document.get(DataLoaderStrings.TOTAL_RIVER_ACTIONS)).doubleValue();
 
         if (totalPreFlopActions != 0) { //  avoid 'divide by 0' errors!
-            document.put("preFlopBetActionRatio", preFlopBetRaises / totalPreFlopActions);
+            document.put(DataLoaderStrings.PRE_FLOP_BET_ACTION_RATIO, preFlopBetRaises / totalPreFlopActions);
         }
         if (totalFlopActions != 0) {
-            document.put("flopBetActionRatio", flopBetRaises/totalFlopActions);
+            document.put(DataLoaderStrings.FLOP_BET_ACTION_RATIO, flopBetRaises/totalFlopActions);
         }
         if (totalTurnActions != 0) {
-            document.put("turnBetActionRatio", turnBetRaises/totalTurnActions);
+            document.put(DataLoaderStrings.TURN_BET_ACTION_RATIO, turnBetRaises/totalTurnActions);
         }
         if (totalRiverActions != 0) {
-            document.put("riverBetActionRatio", riverBetRaises/totalRiverActions);
+            document.put(DataLoaderStrings.RIVER_BET_ACTION_RATIO, riverBetRaises/totalRiverActions);
         }
     }
 
     //for adding first instance of player to mongo.
     private Document addNewDocument(Player p) {
         Document playerDoc = new Document();
-        playerDoc.put("totalBetRaises", p.getTotalNumBetRaises());
-        playerDoc.put("preFlopBetRaises",  p.getNumBetRaisesPreFlop());
-        playerDoc.put("flopBetRaises",  p.getNumBetRaisesFlop());
-        playerDoc.put("turnBetRaises",  p.getNumBetRaisesTurn());
-        playerDoc.put("riverBetRaises",  p.getNumBetRaisesRiver());
-        playerDoc.put("totalActions",  p.getTotalActions());
-        playerDoc.put("totalPreFlopActions", p.getTotalNumActionsPreFlop());
-        playerDoc.put("totalFlopActions", p.getTotalNumActionsFlop());
-        playerDoc.put("totalTurnActions", p.getTotalNumActionsTurn());
-        playerDoc.put("totalRiverActions", p.getTotalNumActionsRiver());
+        playerDoc.put(DataLoaderStrings.TOTAL_BET_RAISES, p.getTotalNumBetRaises());
+        playerDoc.put(DataLoaderStrings.PRE_FLOP_BET_RAISES,  p.getNumBetRaisesPreFlop());
+        playerDoc.put(DataLoaderStrings.FLOP_BET_RAISES,  p.getNumBetRaisesFlop());
+        playerDoc.put(DataLoaderStrings.TURN_BET_RAISES,  p.getNumBetRaisesTurn());
+        playerDoc.put(DataLoaderStrings.RIVER_BET_RAISES,  p.getNumBetRaisesRiver());
+        playerDoc.put(DataLoaderStrings.TOTAL_ACTIONS,  p.getTotalActions());
+        playerDoc.put(DataLoaderStrings.TOTAL_PRE_FLOP_ACTIONS, p.getTotalNumActionsPreFlop());
+        playerDoc.put(DataLoaderStrings.TOTAL_FLOP_ACTIONS, p.getTotalNumActionsFlop());
+        playerDoc.put(DataLoaderStrings.TOTAL_TURN_ACTIONS, p.getTotalNumActionsTurn());
+        playerDoc.put(DataLoaderStrings.TOTAL_RIVER_ACTIONS, p.getTotalNumActionsRiver());
         System.out.println("Hello  " + p.getName());
         if (p.isWinner()) {
-            playerDoc.put("numWins", 1);
+            playerDoc.put(DataLoaderStrings.NUM_WINS, 1);
         } else {
-            playerDoc.put("numWins", 0);
+            playerDoc.put(DataLoaderStrings.NUM_WINS, 0);
         }
-        playerDoc.put("foldedAtPreFlop", p.getFoldAtPreFlop());
-        playerDoc.put("foldedAtFlop", p.getFoldAtFlop());
-        playerDoc.put("foldedAtTurn", p.getFoldAtTurn());
-        playerDoc.put("foldedAtRiver", p.getFoldAtRiver());
-        playerDoc.put("totalHandsPlayed", 1);
-        playerDoc.put("name", p.getName());
-        playerDoc.put("preFlopBetActionRatio", 0.0);
-        playerDoc.put("flopBetActionRatio", 0.0);
-        playerDoc.put("turnBetActionRatio", 0.0);
-        playerDoc.put("riverBetActionRatio", 0.0);
-        playerDoc.put("preFlopFoldedRatio", 0.0);
-        playerDoc.put("flopFoldedRatio", 0.0);
-        playerDoc.put("turnFoldedRatio", 0.0);
-        playerDoc.put("riverFoldedRatio", 0.0);
+        playerDoc.put(DataLoaderStrings.FOLDED_AT_PRE_FLOP, p.getFoldAtPreFlop());
+        playerDoc.put(DataLoaderStrings.FOLDED_AT_FLOP, p.getFoldAtFlop());
+        playerDoc.put(DataLoaderStrings.FOLDED_AT_TURN, p.getFoldAtTurn());
+        playerDoc.put(DataLoaderStrings.FOLDED_AT_RIVER, p.getFoldAtRiver());
+        playerDoc.put(DataLoaderStrings.TOTAL_HANDS_PLAYED, 1);
+        playerDoc.put(DataLoaderStrings.NAME, p.getName());
+        playerDoc.put(DataLoaderStrings.PRE_FLOP_BET_ACTION_RATIO, 0.0);
+        playerDoc.put(DataLoaderStrings.FLOP_BET_ACTION_RATIO, 0.0);
+        playerDoc.put(DataLoaderStrings.TURN_BET_ACTION_RATIO, 0.0);
+        playerDoc.put(DataLoaderStrings.RIVER_BET_ACTION_RATIO, 0.0);
+        playerDoc.put(DataLoaderStrings.PRE_FLOP_FOLDED_RATIO, 0.0);
+        playerDoc.put(DataLoaderStrings.FLOP_FOLDED_RATIO, 0.0);
+        playerDoc.put(DataLoaderStrings.TURN_FOLDED_RATIO, 0.0);
+        playerDoc.put(DataLoaderStrings.RIVER_FOLDED_RATIO, 0.0);
         computeActionBetRaisesRatios(playerDoc);
         computeFoldAtStagesRatios(playerDoc);
         return playerDoc;
@@ -227,13 +227,13 @@ public class DataLoader {
     public Map<String, Vector<Double>> retrieveVectorsForEveryPlayer() {
         Map<String, Vector<Double>> mappedVectors = new HashMap<>();
         MongoClient client = new MongoClient();
-        MongoDatabase database = client.getDatabase("test1");
-        MongoCollection<Document> playerCollection = database.getCollection("players");
+        MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
+        MongoCollection<Document> playerCollection = database.getCollection(DataLoaderStrings.PLAYER_COLLECTION);
         FindIterable<Document> playerDocs = playerCollection.find();
         for (Document doc : playerDocs) {
             Map<Integer, String> docObjectKeys = fillDocObjectMap();
             Vector<Double> v = new Vector<>();
-            String playerName = (String) doc.get("name");
+            String playerName = (String) doc.get(DataLoaderStrings.NAME);
             System.out.println(playerName);
             for (int i = 0; i < docObjectKeys.size(); i++) {
                 System.out.println(docObjectKeys.get(i));
@@ -247,7 +247,7 @@ public class DataLoader {
     }
 
 
-    public static  void main(String [] args) throws InterruptedException {
+    public static void main(String [] args) throws InterruptedException {
         DataLoader dl = new DataLoader();
         dl.loadDataIntoMongo();
         dl.retrieveVectorsForEveryPlayer();
