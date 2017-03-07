@@ -20,7 +20,7 @@ public class HandRankings {
     private Map<String, Double> mappedCardsToEV = new LinkedHashMap<>();
     private Map<String, Double> mappedCardsToEVPercentagePosition = new LinkedHashMap<>();
     private Map<String, Double> mappedCardsToDistribution = new LinkedHashMap<>();
-
+    private Map<String, Integer> mappedEVRankToCards = new LinkedHashMap<>();
     public void getHandRankings() {
         Document handRankingPage;
         try {
@@ -44,6 +44,7 @@ public class HandRankings {
                 mappedCardsToEV.put(cardHand, Double.parseDouble(tr.child(1).text().trim()));
                 mappedCardsToDistribution.put(cardHand, (occurrences/totalNumPocketCards));
                 mappedCardsToEVPercentagePosition.put(cardHand, (double) i);
+                mappedEVRankToCards.put(cardHand, i);
                 i++; // increment card counter
             }
         }
@@ -55,6 +56,15 @@ public class HandRankings {
     private Document getDocument() throws IOException {
         return Jsoup.connect("https://www.tightpoker.com/poker_hands.html").get();
     }
+
+    public double getEVRankOfCardPair(String card) {
+        if (mappedEVRankToCards.get(card) == null) {
+            return -1;
+        } else {
+            return  mappedEVRankToCards.get(card);
+        }
+    }
+
 
     private void calculatePercentagesForMappedCardsToEVPercentage() {
         int size = mappedCardsToEVPercentagePosition.size();
