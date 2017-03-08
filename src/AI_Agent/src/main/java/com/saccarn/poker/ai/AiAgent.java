@@ -26,8 +26,10 @@ public class AiAgent {
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
             return preFlopAction(cards, stackSize, potSize, position, theirAction, playerCluster, minBet, opponentStackSize);
         }
-
-        return "check";
+        else {
+            return "FOLD";
+        }
+//        return "CHECK";
     }
 
     private String preFlopAction(String cards, int stackSize, int potSize, int position, String theirAction, Map<String, Double> playerCluster,
@@ -44,6 +46,20 @@ public class AiAgent {
                     }
                     else {
                         return "CHECK";
+                    }
+                } else {
+                    return "FOLD";
+                }
+            } else {
+                if (randomGenerator.nextInt(randomTopLimit) < randomisationThreshold) {
+                    int randomNum = randomGenerator.nextInt(randomTopLimit);
+                    if (randomNum < randomTopLimit / 3 && stackSize > (2*minBet)) {
+                        return "RAISE2";
+                    } else if (randomNum < ((randomTopLimit / 3) * 2) && stackSize > (minBet)) {
+                        return "RAISE1";
+                    }
+                    else {
+                        return "CALL";
                     }
                 } else {
                     return "FOLD";

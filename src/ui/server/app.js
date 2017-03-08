@@ -2,18 +2,22 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app)
 var io = require('socket.io')(server);
-var PokerEvaluator = require("poker-evaluator");
+var PokerEvaluator = require('poker-evaluator');
+var net = require('net');
 
 var obj = PokerEvaluator.evalHand(["Th", "Kh", "Qh", "Jh", "9h", "3s", "5h"]);
 
 console.log(obj);
-var net = require('net');
 
 var PORT = 3500;
 var HOST = 'localhost';
 
 app.use(express.static(__dirname + '/src'));
 
+var javaServerSocket = new net.Socket();
+javaServerSocket.connect (PORT, HOST, function() {
+    console.log('HERE');
+});
 
 app.get('/', function (req, res) {
     var options = {
@@ -41,7 +45,8 @@ io.on('connection', function (socket) {
     });
 
     socket.on('testmessage', function (data) {
-        console.log(data);
+        console.log(data );
+        javaServerSocket.write('Testing, attention please\n' + data);
     });
 
     socket.on('action', function (data) {
@@ -97,5 +102,10 @@ io.on('connection', function (socket) {
     });
 });
 
+var i = 0;
+javaServerSocket.on('data', function(data) {
+   i++;
+   console.log(i + ": " + data.toString());
+});
 
-server.listen(3000)
+server.listen(3000);

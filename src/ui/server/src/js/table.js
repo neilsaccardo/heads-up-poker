@@ -26,6 +26,7 @@ function TableController($scope, cards, socket, $timeout) {
         ctrl.dealOutCards();
         ctrl.blinds();
         ctrl.continueGame();
+        socket.emit('testmessage', "oioi");
     }
     //methods to receive actions from server
     socket.on('cfr', function(data) {
