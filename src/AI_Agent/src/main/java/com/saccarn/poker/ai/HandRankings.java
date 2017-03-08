@@ -25,7 +25,7 @@ public class HandRankings {
     public HandRankings() {
         getHandRankings();
     }
-    public void getHandRankings() {
+    private void getHandRankings() {
         Document handRankingPage;
         try {
             handRankingPage = getDocument();
@@ -107,7 +107,6 @@ public class HandRankings {
             }
         }
     }
-
 
     public static void main(String [] args) throws IOException {
         HandRankings hrs = new HandRankings();
