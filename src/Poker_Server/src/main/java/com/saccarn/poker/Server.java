@@ -35,7 +35,6 @@ public class Server implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException("Error accepting client connection", e);
         }
-
         while (true) {
             BufferedReader br = null;
             try {

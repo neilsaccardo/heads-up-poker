@@ -26,7 +26,7 @@ function TableController($scope, cards, socket, $timeout) {
         ctrl.dealOutCards();
         ctrl.blinds();
         ctrl.continueGame();
-        socket.emit('testmessage', "oioi");
+        socket.emit('testmessage', {id: 'neil'});
     }
     //methods to receive actions from server
     socket.on('cfr', function(data) {
@@ -219,6 +219,11 @@ function TableController($scope, cards, socket, $timeout) {
             ctrl.addPotToStackPlayer(ctrl.potSize/2);
             ctrl.newHand();
         }, 2000);
+    });
+
+
+    socket.on('PrintToConsole', function(data) {
+        console.log(data);
     });
 
     // methods relating to distribution of cards

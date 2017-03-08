@@ -38,15 +38,20 @@ app.get('/', function (req, res) {
     });
 });
 
+var socketList = [];
 io.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
+
+    socket.on('disconnect', function() {
+    });
+
     socket.on('msg', function (data) { //testing socket communication
         console.log(data);
     });
 
     socket.on('testmessage', function (data) {
-        console.log(data );
-        javaServerSocket.write('Testing, attention please\n' + data);
+        console.log(data);
+        socketList[data.id] = socket;
+        javaServerSocket.write('Testing, attention please\n' + data.id);
     });
 
     socket.on('action', function (data) {
@@ -104,8 +109,8 @@ io.on('connection', function (socket) {
 
 var i = 0;
 javaServerSocket.on('data', function(data) {
-   i++;
-   console.log(i + ": " + data.toString());
+   socketList['neil'].emit('PrintToConsole', 'Printing to the Console I hope......');
+   console.log(i++ + ": " + data.toString());
 });
 
 server.listen(3000);
