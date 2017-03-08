@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -20,6 +21,10 @@ public class HandRankings {
     private Map<String, Double> mappedCardsToEVPercentagePosition = new LinkedHashMap<>();
     private Map<String, Double> mappedCardsToDistribution = new LinkedHashMap<>();
     private Map<String, Integer> mappedEVRankToCards = new LinkedHashMap<>();
+
+    public HandRankings() {
+        getHandRankings();
+    }
     public void getHandRankings() {
         Document handRankingPage;
         try {
@@ -35,7 +40,6 @@ public class HandRankings {
             Elements tableRows = e.select("tr");
             for (Element tr : tableRows) {
                 if(tr.child(0).is("th")) {
-                    System.out.println("TH"); //the table headers contain string values that should not be used.
                     continue;
                 }
                 String cardHand = tr.child(0).text();
@@ -47,13 +51,11 @@ public class HandRankings {
                 i++; // increment card counter
             }
         }
-        System.out.println(mappedCardsToEV);
-        System.out.println(mappedCardsToDistribution);
         calculatePercentagesForMappedCardsToEVPercentage();
     }
 
     private Document getDocument() throws IOException {
-        return Jsoup.connect("https://www.tightpoker.com/poker_hands.html").get();
+        return Jsoup.parse(new File("C:\\handschart.html"), "UTF-8");
     }
 
     public double getEVRankOfCardPair(String card) {
@@ -69,7 +71,6 @@ public class HandRankings {
         int size = mappedCardsToEVPercentagePosition.size();
         int multiplier = 100;
         for (String card: mappedCardsToEVPercentagePosition.keySet()) {
-            System.out.println(mappedCardsToEVPercentagePosition.get(card));
             mappedCardsToEVPercentagePosition.put(card, (mappedCardsToEVPercentagePosition.get(card) / size) * multiplier);
         }
         System.out.println(mappedCardsToEVPercentagePosition);

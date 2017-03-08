@@ -44,4 +44,10 @@ public class HandRankingsTest {
         Assert.assertEquals("JT", cardpairSameSuit6);
     }
 
+    @Test
+    public void testGetEVRankOfACardPair() {
+        HandRankings hr = new HandRankings();
+        double evRank = hr.getEVRankOfCardPair("JJ");
+        Assert.assertEquals(4.0, evRank, 0.1);
+    }
 }
