@@ -246,6 +246,25 @@ public class DataLoader {
         return mappedVectors;
     }
 
+    public List<Map<String, Double>> getCentroids() {
+        MongoClient client = new MongoClient();
+        MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
+        MongoCollection<Document> playerCollection = database.getCollection(DataLoaderStrings.CLUSTER_COLLECTION);
+
+        List<Map<String, Double>> centroids = new LinkedList<>();
+
+        Map<Integer, String> docObjectKeys = fillDocObjectMap();
+        FindIterable<Document> clusterDocs = playerCollection.find();
+        for (Document clusterDoc : clusterDocs) {
+            Map<String, Double> centroidMap = new HashMap<>();
+            for (int j = 0; j < docObjectKeys.size(); j++) {
+                double value = (double)clusterDoc.get(docObjectKeys.get(j));
+                centroidMap.put(docObjectKeys.get(j), value);
+            }
+            centroids.add(centroidMap);
+        }
+        return centroids;
+    }
 
     public static void main(String [] args) throws InterruptedException {
         DataLoader dl = new DataLoader();

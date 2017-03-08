@@ -6,8 +6,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -75,6 +74,39 @@ public class HandRankings {
         }
         System.out.println(mappedCardsToEVPercentagePosition);
     }
+
+    //cards are inputted as: 'Jh', '7d', '8s', '5s', '4c'
+    public static String transformCardsForHandRanking(String cardOne, String cardTwo) {
+        Character [] arraySpecialChars = {'T', 'J', 'Q', 'K', 'A'};
+        List<Character> specialChars = Arrays.asList(arraySpecialChars);
+        if (cardOne.length() != 2 || cardTwo.length() != 2) {
+            throw new IllegalArgumentException("Incorrect format for card hand rank evaluation");
+        }
+        char characterCardOne = cardOne.charAt(0);
+        char characterCardTwo = cardTwo.charAt(0);
+        String suited = "";
+        if (cardOne.charAt(1) == cardTwo.charAt(1)) {
+            suited = " s";
+        }
+        int charIndex1 = specialChars.indexOf(characterCardOne);
+        int charIndex2 = specialChars.indexOf(characterCardTwo);
+        if (charIndex1 == -1 && charIndex2 == -1) {
+            if (characterCardOne < characterCardTwo) {
+                return "" + characterCardTwo + characterCardOne + suited;
+            } else {
+                return "" + characterCardOne + characterCardTwo + suited;
+            }
+        }
+        else {
+            if (charIndex1 > charIndex2) {
+                return "" + characterCardOne + characterCardTwo + suited;
+            }
+            else {
+                return "" + characterCardTwo + characterCardOne + suited;
+            }
+        }
+    }
+
 
     public static void main(String [] args) throws IOException {
         HandRankings hrs = new HandRankings();

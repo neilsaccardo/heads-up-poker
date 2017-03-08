@@ -63,6 +63,20 @@ public class PlayerTypeClusterer {
         new DataLoader().saveClusterCentroids(centroids);
     }
 
+    public static List<Map<String, Double>> getCentroids() {
+        return new DataLoader().getCentroids();
+    }
+
+    public static Map<String, Double> getCentroid(int n) {
+        List<Map<String, Double>> listmap = getCentroids();
+        if (n > listmap.size()) {
+            throw new IllegalArgumentException();
+        }
+        else {
+            return listmap.get(n);
+        }
+    }
+
     private Vector<Double> computeCentroid(List<Integer> li) {
         Vector<Double> centroidVector = new Vector<>();
         for (int i = 0; i < li.size(); i++) {
