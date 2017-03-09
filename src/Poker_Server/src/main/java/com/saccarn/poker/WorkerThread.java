@@ -3,6 +3,7 @@ package com.saccarn.poker;
 import java.io.*;
 import java.net.Socket;
 
+import com.saccarn.poker.ai.AiAgent;
 /**
  * Created by Neil on 08/03/2017.
  */
@@ -22,10 +23,15 @@ public class WorkerThread implements Runnable {
             String [] msgs = serverText.split(" ");
             OutputStream output = clientSocket.getOutputStream();
             DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
-            out.writeUTF(msgs[msgs.length-1] + " - response");
             System.out.println();
+
+            AiAgent ai = new AiAgent();
+            String [] board = {};
+            String action = ai.getAction("preflop", "Js", "9s", board, 10000, 200, 1, 0, 100, "", 5000);
             long time = System.currentTimeMillis();
             System.out.println("Request processed: " + time);
+            out.writeUTF(msgs[msgs.length-1] + " " + action + " " + " - response");
+
         } catch (IOException e) {
             //report exception somewhere.
             e.printStackTrace();

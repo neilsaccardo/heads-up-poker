@@ -22,7 +22,7 @@ public class AiAgent {
     public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
                             int stackSize, int potSize, int playerType, int position, int minBet, String theirAction, int opponentStackSize) {
         String cards = HandRankings.transformCardsForHandRanking(holeCard1, holeCard2);
-        Map<String, Double> playerCluster = PlayerCluster.getPlayerInfo(playerType);
+        Map<String, Double> playerCluster = new HashMap<>();//PlayerCluster.getPlayerInfo(playerType);
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
             return preFlopAction(cards, stackSize, potSize, position, theirAction, playerCluster, minBet, opponentStackSize);
         }
@@ -34,8 +34,8 @@ public class AiAgent {
 
     private String preFlopAction(String cards, int stackSize, int potSize, int position, String theirAction, Map<String, Double> playerCluster,
                                  int minBet, int opponentStackSize) {
-        HandRankings hrs = new HandRankings();
-        if (hrs.getEVRankOfCardPair(cards) < (100-playerCluster.get(DataLoaderStrings.FOLDED_AT_PRE_FLOP))) {
+        HandRankings hrs = new HandRankings(); //(100-playerCluster.get(DataLoaderStrings.FOLDED_AT_PRE_FLOP))
+        if (hrs.getEVRankOfCardPair(cards) < 70) {
             if (position == 0) { //first - bet check etc.
                 if (randomGenerator.nextInt(randomTopLimit) < randomisationThreshold) {
                     int randomNum = randomGenerator.nextInt(randomTopLimit);
