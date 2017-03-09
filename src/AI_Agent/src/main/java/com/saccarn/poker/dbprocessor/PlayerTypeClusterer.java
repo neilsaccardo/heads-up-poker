@@ -37,15 +37,15 @@ public class PlayerTypeClusterer {
 
 
     public void getClusters() {
-        computeDistanceMatrix();
-        mergeVectorsWhereDistanceIsZero();
-        getNClusters(4);
-        computeClusterCentroids();
+        getClusters(4);
     }
 
     public void getClusters(int n) {
         computeDistanceMatrix();
+        mergeVectorsWhereDistanceIsZero();
         getNClusters(n);
+        List<Vector<Double>> lvectors = computeClusterCentroids();
+        saveCentroidsIntoDB(lvectors);
     }
 
     public List<Vector<Double>> computeClusterCentroids() {

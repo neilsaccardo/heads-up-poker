@@ -123,3 +123,4 @@ function ab2str(buf) { //http://stackoverflow.com/questions/6965107/converting-b
 }
 
 server.listen(3000);
+console.log('Listening on port 3000:');

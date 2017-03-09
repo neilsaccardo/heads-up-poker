@@ -236,7 +236,6 @@ public class DataLoader {
             String playerName = (String) doc.get(DataLoaderStrings.NAME);
             System.out.println(playerName);
             for (int i = 0; i < docObjectKeys.size(); i++) {
-                System.out.println(docObjectKeys.get(i));
                 double value = (double) doc.get(docObjectKeys.get(i));
                 v.add(value);
             }

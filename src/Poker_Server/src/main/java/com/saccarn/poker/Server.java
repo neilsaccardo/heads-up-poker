@@ -34,6 +34,7 @@ public class Server implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException("Error accepting client connection", e);
         }
+        System.out.println("Listening for input on port 3500");
         while (true) {
             BufferedReader br = null;
             try {
