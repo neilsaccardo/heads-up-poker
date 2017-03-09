@@ -24,7 +24,6 @@ public class Server implements Runnable {
         }
     }
 
-
     public void run() {
         synchronized (this) {
             this.runningThread = Thread.currentThread();

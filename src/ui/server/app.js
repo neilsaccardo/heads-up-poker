@@ -51,7 +51,7 @@ io.on('connection', function (socket) {
     socket.on('testmessage', function (data) {
         console.log(data);
         socketList[data.id] = socket;
-        javaServerSocket.write('Testing, attention please\n' + data.id);
+        javaServerSocket.write('Testing, attention please ' + data.id.toString() + '\n');
     });
 
     socket.on('action', function (data) {
@@ -109,8 +109,17 @@ io.on('connection', function (socket) {
 
 var i = 0;
 javaServerSocket.on('data', function(data) {
-   socketList['neil'].emit('PrintToConsole', 'Printing to the Console I hope......');
-   console.log(i++ + ": " + data.toString());
+   console.log('Data: ' + data.toString() );
+
+   var socketID = data.toString().trim().split(' ')[0].trim();
+    console.log(socketID.trim() + ' - socketID');
+    var keyToSocketList = socketID.toString().substring(2, socketID.toString().length).toString();
+    socketList[keyToSocketList].emit('PrintToConsole', 'Printing to the Console I hope......' + data);
+    console.log(i++ + ": " + data.toString());
 });
+
+function ab2str(buf) { //http://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
+  return String.fromCharCode.apply(null, new Uint16Array(buf));
+}
 
 server.listen(3000);

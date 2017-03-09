@@ -19,10 +19,11 @@ public class WorkerThread implements Runnable {
 
     public void run() {
         try {
+            String [] msgs = serverText.split(" ");
             OutputStream output = clientSocket.getOutputStream();
             DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
-            out.writeUTF(serverText + " - response");
-            System.out.println(clientSocket);
+            out.writeUTF(msgs[msgs.length-1] + " - response");
+            System.out.println();
             long time = System.currentTimeMillis();
             System.out.println("Request processed: " + time);
         } catch (IOException e) {
