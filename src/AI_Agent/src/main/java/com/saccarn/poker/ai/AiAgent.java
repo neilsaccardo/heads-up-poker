@@ -17,8 +17,8 @@ public class AiAgent {
     public static final String RIVER = "river";
 
     private Random randomGenerator = new Random();
-    private int randomTopLimit = 100;
-    private int randomisationThreshold = 95;
+    private final int randomTopLimit = 100;
+    private final int randomisationThreshold = 95;
     public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
                             int stackSize, int potSize, int playerType, int position, int minBet, String theirAction, int opponentStackSize) {
         String cards = HandRankings.transformCardsForHandRanking(holeCard1, holeCard2);
