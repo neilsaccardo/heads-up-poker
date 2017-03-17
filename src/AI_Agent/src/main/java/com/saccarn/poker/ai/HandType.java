@@ -99,7 +99,9 @@ public class HandType {
         int rank1 = calculateHandRanking(holeCard1, holeCard2, boardCard1, boardCard2, boardCard3);
         int rank2 = calculateHandRanking(holeCard1, holeCard2, boardCard1, boardCard2, boardCard4);
         int rank3 = calculateHandRanking(holeCard1, holeCard2, boardCard1, boardCard2, boardCard5);
-        int minRank1 = Math.min(rank1, (Math.min(rank1, rank2)));
+
+        int minRank1 = Math.min(rank1, (Math.min(rank2, rank3)));
+
         int rank4 = calculateHandRanking(holeCard1, holeCard2, boardCard2, boardCard3, boardCard4);
         int rank5 = calculateHandRanking(holeCard1, holeCard2, boardCard2, boardCard3, boardCard5);
         int rank6 = calculateHandRanking(holeCard1, holeCard2, boardCard2, boardCard4, boardCard5);

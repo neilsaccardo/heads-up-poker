@@ -322,4 +322,18 @@ public class HandTypeTest {
         int rank = ht.calculateHandRanking(c1, c2, c3, c4, c5, c6, c7);
         Assert.assertEquals(6, rank);
     }
+
+    @Test
+    public void test7cardsFlushStraight() { //As 2s 3s 4s 5s Ad 5d
+        String c1 = "2s";
+        String c2 = "3s";
+        String c3 = "4s";
+        String c4 = "5d";
+        String c5 = "5s";
+        String c6 = "Ad";
+        String c7 = "As";
+        HandType ht = new HandType();
+        int rank = ht.calculateHandRanking(c1, c2, c3, c4, c5, c6, c7);
+        Assert.assertEquals(0, rank);
+    }
 }
