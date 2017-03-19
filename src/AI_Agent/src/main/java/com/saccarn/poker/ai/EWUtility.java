@@ -15,7 +15,7 @@ public class EWUtility {
     }
 
     public int getUtilityBet() {
-        return (int) Math.round((getUtilityBetWin()) * beliefInWinning)
+        return (int) Math.round(((getUtilityBetWin()) * beliefInWinning)
                 + (getUtilityBetLose() * (totalOdds-beliefInWinning)));
     }
 

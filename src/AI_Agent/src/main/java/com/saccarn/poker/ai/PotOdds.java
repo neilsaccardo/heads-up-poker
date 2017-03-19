@@ -40,8 +40,7 @@ public class PotOdds {
         return futureContributionPass;
     }
 
-
-    public void calculateFinalPot(int minBet, int stackSize, int opponentStackSize, int potSize, int round, boolean toBet, int numChipsBet) {
+    public void calculatePotAndFutureContribution(int minBet, int stackSize, int opponentStackSize, int potSize, int round, int numChipsBet) {
         futureContributionBet = calculateFinalContributionsPotBetOrCheck(minBet, stackSize, potSize, round);
         finalPotBet =  futureContributionBet  + potSize
                        + calculateOpponentFutureContributionsBetOrCheck(minBet, stackSize, potSize, round);
