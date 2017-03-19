@@ -1,5 +1,6 @@
 package com.saccarn.poker.ai;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -7,10 +8,15 @@ import java.util.Map;
  */
 public class PotOdds {
 
-    private double alphaRaiseCall = 2.145;
-    private double alphaBetCheck = 1.38;
+    private double alphaRaiseCall = 2.145; //alpha'
+    private double alphaBetCheck = 1.38; //alpha
 
-    private Map<Integer, Integer> mappedRoundsLeft;
+    private int finalPotBet;
+    private int finalPotPass;
+    private int futureContributionBet;
+    private int futureContributionPass;
+
+    private Map<Integer, Integer> mappedRoundsLeft = new HashMap<>();
 
     public PotOdds(){
         mappedRoundsLeft.put(0, 2); // flop
@@ -18,37 +24,50 @@ public class PotOdds {
         mappedRoundsLeft.put(2, 0); // river
     }
 
-    public int calculateFinalPot(int minBet, int stackSize, int opponentStackSize, int potSize, int round, boolean toBet, int numChipsBet) {
-        int futurePot = 0;
-        if (toBet) {
-            futurePot = calculateFinalContributionsPotBetOrCheck(minBet, stackSize, potSize, round) +
-                        calculateOpponentFutureContributionsBetOrCheck(minBet, stackSize, potSize, round);
-        }
-        else {
-            futurePot = calculateFinalContributionsRaiseOrCall(minBet, stackSize, potSize, round, numChipsBet) +
-                    calculateOpponentFutureContributionsRaiseOrCall(minBet, stackSize, potSize, round);
-        }
-        return futurePot + potSize;
+    public int getFinalPotBet() {
+        return finalPotBet;
+    }
+
+    public int getFinalPotPass() {
+        return finalPotPass;
+    }
+
+    public int getFutureContributionBet() {
+        return futureContributionBet;
+    }
+
+    public int getFutureContributionPass() {
+        return futureContributionPass;
+    }
+
+
+    public void calculateFinalPot(int minBet, int stackSize, int opponentStackSize, int potSize, int round, boolean toBet, int numChipsBet) {
+        futureContributionBet = calculateFinalContributionsPotBetOrCheck(minBet, stackSize, potSize, round);
+        finalPotBet =  futureContributionBet  + potSize
+                       + calculateOpponentFutureContributionsBetOrCheck(minBet, stackSize, potSize, round);
+        futureContributionPass = calculateFinalContributionsRaiseOrCall(minBet, stackSize, potSize, round, numChipsBet);
+        finalPotPass = futureContributionPass + potSize
+                + calculateOpponentFutureContributionsRaiseOrCall(minBet, stackSize, potSize, round);
     }
 
     private int calculateOpponentFutureContributionsRaiseOrCall(int minBet, int stackSize, int potSize, int round) {
         int betSize = determineBetSize(minBet, potSize, stackSize);
         int roundsLeft = mappedRoundsLeft.get(round);
-        double b = ((betSize * roundsLeft) * alphaRaiseCall);
+        double b = betSize + ((betSize * roundsLeft) * alphaRaiseCall);
         return (int)(Math.round(b));
     }
 
     private int calculateOpponentFutureContributionsBetOrCheck(int minBet, int stackSize, int potSize, int round) {
         int betSize = determineBetSize(minBet, potSize, stackSize);
         int roundsLeft = mappedRoundsLeft.get(round);
-        double b = betSize + ((betSize * roundsLeft) * alphaRaiseCall);
+        double b = ((betSize * roundsLeft) * alphaBetCheck);
         return (int)(Math.round(b));
     }
 
     private int calculateFinalContributionsPotBetOrCheck(int minBet, int stackSize, int potSize, int round) {
         int betSize = determineBetSize(minBet, potSize, stackSize);
         int roundsLeft = mappedRoundsLeft.get(round);
-        double b = betSize + ((betSize * roundsLeft) * alphaRaiseCall);
+        double b = betSize + ((betSize * roundsLeft) * alphaBetCheck);
         return (int)(Math.round(b));
     }
 
