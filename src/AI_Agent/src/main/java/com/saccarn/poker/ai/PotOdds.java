@@ -8,13 +8,15 @@ import java.util.Map;
  */
 public class PotOdds {
 
-    private double alphaRaiseCall = 2.145; //alpha'
-    private double alphaBetCheck = 1.38; //alpha
+    private double alphaBet = 2.145; //alpha'
+    private double alphaPass = 1.38; //alpha
 
     private int finalPotBet;
     private int finalPotPass;
     private int futureContributionBet;
     private int futureContributionPass;
+
+    private int betSize = 0;
 
     private Map<Integer, Integer> mappedRoundsLeft = new HashMap<>();
 
@@ -41,43 +43,41 @@ public class PotOdds {
     }
 
     public void calculatePotAndFutureContribution(int minBet, int stackSize, int opponentStackSize, int potSize, int round, int numChipsBet) {
-        futureContributionBet = calculateFinalContributionsPotBetOrCheck(minBet, stackSize, potSize, round);
+        betSize = determineBetSize(minBet, stackSize, potSize);
+
+        futureContributionBet = calculateFinalContributionsPotBet(round, numChipsBet);
         finalPotBet =  futureContributionBet  + potSize
-                       + calculateOpponentFutureContributionsBetOrCheck(minBet, stackSize, potSize, round);
-        futureContributionPass = calculateFinalContributionsRaiseOrCall(minBet, stackSize, potSize, round, numChipsBet);
+                       + calculateOpponentFutureContributionsBet(round);
+        futureContributionPass = calculateFinalContributionsPass(round, numChipsBet);
         finalPotPass = futureContributionPass + potSize
-                + calculateOpponentFutureContributionsRaiseOrCall(minBet, stackSize, potSize, round);
+                + calculateOpponentFutureContributionsPass(round);
     }
 
-    private int calculateOpponentFutureContributionsRaiseOrCall(int minBet, int stackSize, int potSize, int round) {
-        int betSize = determineBetSize(minBet, potSize, stackSize);
+    private int calculateOpponentFutureContributionsPass( int round) {
         int roundsLeft = mappedRoundsLeft.get(round);
-        double b = betSize + ((betSize * roundsLeft) * alphaRaiseCall);
+        double b = ((betSize * roundsLeft) * alphaPass);
         return (int)(Math.round(b));
     }
 
-    private int calculateOpponentFutureContributionsBetOrCheck(int minBet, int stackSize, int potSize, int round) {
-        int betSize = determineBetSize(minBet, potSize, stackSize);
+    private int calculateOpponentFutureContributionsBet(int round) {
         int roundsLeft = mappedRoundsLeft.get(round);
-        double b = ((betSize * roundsLeft) * alphaBetCheck);
+        double b = betSize + ((betSize * roundsLeft) * alphaBet); //delta in this case becomes betSize
         return (int)(Math.round(b));
     }
 
-    private int calculateFinalContributionsPotBetOrCheck(int minBet, int stackSize, int potSize, int round) {
-        int betSize = determineBetSize(minBet, potSize, stackSize);
+    private int calculateFinalContributionsPotBet(int round, int numChips) {
         int roundsLeft = mappedRoundsLeft.get(round);
-        double b = betSize + ((betSize * roundsLeft) * alphaBetCheck);
+        double b = numChips + betSize + ((betSize * roundsLeft) * alphaBet);
         return (int)(Math.round(b));
     }
 
-    private int calculateFinalContributionsRaiseOrCall(int minBet, int stackSize, int potSize, int round, int numChipsBet) {
-        int betSize = determineBetSize(minBet, potSize, stackSize);
+    private int calculateFinalContributionsPass(int round, int numChipsBet) {
         int roundsLeft = mappedRoundsLeft.get(round);
-        double b = numChipsBet + betSize + ((betSize * roundsLeft) * alphaRaiseCall);
+        double b = numChipsBet + ((betSize * roundsLeft) * alphaPass);
         return (int)(Math.round(b));
     }
 
-    private int determineBetSize(int minBet, int potSize, int stackSize) {
+    private int determineBetSize(int minBet, int stackSize, int potSize) {
         int betSize = ((potSize/4)*3);
         if (betSize < minBet) {
             betSize = minBet;
@@ -86,5 +86,10 @@ public class PotOdds {
             betSize = stackSize;
         }
         return betSize;
+    }
+
+    public static void main(String [] args) {
+        PotOdds po = new PotOdds(); //1, 75, 75, 2, 0, 30
+        po.calculatePotAndFutureContribution(1, 75, 75, 30, 0, 10);
     }
 }
