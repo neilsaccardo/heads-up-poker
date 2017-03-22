@@ -34,7 +34,7 @@ public class DataLoader {
         for (int i = 0; i < clusterCentroids.size(); i++) {
             Document docCluster = new Document();
             for (int j = 0; j < clusterCentroids.get(i).size(); j++) {
-                docCluster.put(docObjectKeys.get(i), clusterCentroids.get(i));
+                docCluster.put(docObjectKeys.get(j), clusterCentroids.get(i).get(j));
             }
             playerCollection.insertOne(docCluster);
         }
@@ -143,6 +143,7 @@ public class DataLoader {
 
         computeFoldAtStagesRatios(document);
         computeActionBetRaisesRatios(document);
+
         return document;
     }
 
@@ -154,9 +155,9 @@ public class DataLoader {
         double numHandsPlayed = (((Integer) document.get(DataLoaderStrings.TOTAL_HANDS_PLAYED))).doubleValue();
 
         document.put(DataLoaderStrings.PRE_FLOP_FOLDED_RATIO, numFoldedAtPreFlop / numHandsPlayed);
-        document.put(DataLoaderStrings.FLOP_FOLDED_RATIO, numFoldedAtFlop / numHandsPlayed);
-        document.put(DataLoaderStrings.TURN_FOLDED_RATIO, numFoldedAtTurn / numHandsPlayed);
-        document.put(DataLoaderStrings.RIVER_FOLDED_RATIO, numFoldedAtRiver / numHandsPlayed);
+        document.put(DataLoaderStrings.FLOP_FOLDED_RATIO, numFoldedAtFlop / ((numHandsPlayed - numFoldedAtPreFlop)+ 1));
+        document.put(DataLoaderStrings.TURN_FOLDED_RATIO, numFoldedAtTurn / ((numHandsPlayed - numFoldedAtPreFlop - numFoldedAtFlop)+1));
+        document.put(DataLoaderStrings.RIVER_FOLDED_RATIO, numFoldedAtRiver / ((numHandsPlayed - numFoldedAtPreFlop - numFoldedAtFlop - numFoldedAtRiver)+1));
     }
 
     private void computeActionBetRaisesRatios(Document document) {
