@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by Neil on 15/03/2017.
  */
-public class PotOdds {
+public class PotPredictor {
 
     private double alphaBet = 2.145; //alpha'
     private double alphaPass = 1.38; //alpha
@@ -19,11 +19,25 @@ public class PotOdds {
     private int betSize = 0;
 
     private Map<Integer, Integer> mappedRoundsLeft = new HashMap<>();
+    private int round;
 
-    public PotOdds(){
+    public PotPredictor(){
+        fillRoundTable();
+    }
+
+    public PotPredictor(int minBet, int stackSize, int opponentStackSize, int potSize, int round0, int numChipsBet) {
+        fillRoundTable();
+        calculatePotAndFutureContribution(minBet, stackSize, opponentStackSize, potSize, round0, numChipsBet);
+    }
+
+    private void fillRoundTable() {
         mappedRoundsLeft.put(0, 2); // flop
         mappedRoundsLeft.put(1, 1); // turn
         mappedRoundsLeft.put(2, 0); // river
+    }
+
+    public int getRound() {
+        return round;
     }
 
     public int getFinalPotBet() {
@@ -42,7 +56,12 @@ public class PotOdds {
         return futureContributionPass;
     }
 
-    public void calculatePotAndFutureContribution(int minBet, int stackSize, int opponentStackSize, int potSize, int round, int numChipsBet) {
+    public int getBetSize() {
+        return betSize;
+    }
+
+    public void calculatePotAndFutureContribution(int minBet, int stackSize, int opponentStackSize, int potSize, int round0, int numChipsBet) {
+        round = round0;
         betSize = determineBetSize(minBet, stackSize, potSize);
 
         futureContributionBet = calculateFinalContributionsPotBet(round, numChipsBet);
@@ -89,7 +108,7 @@ public class PotOdds {
     }
 
     public static void main(String [] args) {
-        PotOdds po = new PotOdds(); //1, 75, 75, 2, 0, 30
+        PotPredictor po = new PotPredictor(); //1, 75, 75, 2, 0, 30
         po.calculatePotAndFutureContribution(1, 75, 75, 30, 0, 10);
     }
 }

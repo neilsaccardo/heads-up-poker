@@ -5,42 +5,49 @@ package com.saccarn.poker.ai;
  */
 public class EWUtility {
 
-    private PotOdds potOdds = new PotOdds();
+    private PotPredictor potPredictor = new PotPredictor();
     private double totalOdds = 1.0; //could change to percentage easily.
-    private double beliefInWinning;
+    private double beliefInWinning = 0.5;
+    private double beliefInLosing = 0.5;
 
-    public EWUtility(PotOdds po, double belief) {
-        potOdds = po;
-        beliefInWinning = belief;
+    public EWUtility(PotPredictor po) {
+        potPredictor = po;
+        beliefInLosing = totalOdds - beliefInWinning;
+    }
+
+    public EWUtility(PotPredictor po, double beliefInWinning0) {
+        beliefInWinning = beliefInWinning0;
+        potPredictor = po;
+        beliefInLosing = totalOdds - beliefInWinning;
     }
 
     public int getUtilityBet() {
-        return (int) Math.round(((getUtilityBetWin()) * beliefInWinning)
-                + (getUtilityBetLose() * (totalOdds-beliefInWinning)));
+        return (int) Math.round(((getUtilityBetWin() * beliefInWinning) )
+                + (getUtilityBetLose() * beliefInLosing));
     }
 
     public int getUtilityBetWin() {
-        return (potOdds.getFinalPotBet() - potOdds.getFutureContributionBet());
+        return (potPredictor.getFinalPotBet() - potPredictor.getFutureContributionBet());
     }
 
     public int getUtilityBetLose() {
-        return -potOdds.getFutureContributionBet();
+        return -potPredictor.getFutureContributionBet();
     }
 
     public int getUtilityPass() { //check or call
-        return (int) Math.round((getUtilityPassWin())* beliefInWinning
-                    + (getUtilityPassLose() * (totalOdds - beliefInWinning)));
+        return (int) Math.round((getUtilityPassWin()* beliefInWinning)
+                    + (getUtilityPassLose() * beliefInLosing));
     }
 
     public int getUtilityPassWin() { //check or call
-        return potOdds.getFinalPotPass() - potOdds.getFutureContributionPass();
+        return potPredictor.getFinalPotPass() - potPredictor.getFutureContributionPass();
     }
 
     public int getUtilityPassLose() { //check or call
-        return - (potOdds.getFutureContributionPass());
+        return - (potPredictor.getFutureContributionPass());
     }
 
-    public int getFoldUtility() {
+    public int getUtilityFold() {
         return getFoldUtilityLose() + getFoldUtilityWin();
     }
 
@@ -50,5 +57,23 @@ public class EWUtility {
 
     public int getFoldUtilityLose() {
         return 0;
+    }
+
+    public int getBetSize() {
+        return potPredictor.getBetSize();
+    }
+
+    public static void main(String [] args) {
+        PotPredictor po = new PotPredictor();
+        po.calculatePotAndFutureContribution(1, 75, 75, 20, 0, 10);
+        System.out.println(po.getFinalPotBet());
+        System.out.println(po.getFinalPotPass());
+        System.out.println(po.getFutureContributionBet());
+        System.out.println(po.getFutureContributionPass());
+        EWUtility ewu = new EWUtility(po);
+        System.out.println("dddddd----------");
+        System.out.println(ewu.getBetSize());
+        System.out.println(ewu.getUtilityBetWin());
+        System.out.println(ewu.getUtilityPass());
     }
 }
