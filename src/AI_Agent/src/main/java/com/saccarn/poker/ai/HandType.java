@@ -2,6 +2,7 @@ package com.saccarn.poker.ai;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Neil on 15/03/2017.
@@ -30,6 +31,15 @@ public class HandType {
         handTypes.put(15, 0.07631); //busted med - 10 J
         handTypes.put(16, 0.0203227); //busted low-  < 10
         fillCardValues();
+    }
+
+    public double calculateProbOfCardRanksBetterThan(int rank) {
+        double probability = 0.0;
+        for (int i = 0; i < rank; i++) {
+            probability = handTypes.get(i) + probability;
+        }
+
+        return probability;
     }
 
     private void fillCardValues() {

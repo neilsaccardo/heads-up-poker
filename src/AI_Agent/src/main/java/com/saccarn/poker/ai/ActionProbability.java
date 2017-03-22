@@ -23,6 +23,14 @@ public class ActionProbability {
         round = pp.getRound();
     }
 
+    public ActionProbability(PotPredictor p, double belief) {
+        pp = p;
+        fillFPParams();
+        fillCPParams();
+        ewu = new EWUtility(pp, belief);
+        round = pp.getRound();
+    }
+
     private void fillCPParams() {
         cpParams = new HashMap<>();
         cpParams.put(0, 1.150054);
@@ -37,25 +45,23 @@ public class ActionProbability {
         fpParams.put(2, 1.765005);
     }
 
-
-    public double getFoldProbablity() {
+    public double getFoldProbability() {
         double ew = (ewu.getUtilityPass() - ewu.getUtilityFold())/((double)ewu.getBetSize());
         double result = ActionProbability.ALPHA / (ActionProbability.ALPHA + (fpParams.get(round) * Math.exp(ew)));
         return result;
     }
 
-    public double getPassProbablity() {
+    public double getPassProbability() {
         double ew = (ewu.getUtilityBet() - ewu.getUtilityPass())/((double)ewu.getBetSize());
         double result = ActionProbability.ALPHA / (ActionProbability.ALPHA + (cpParams.get(round)* Math.exp(ew)));
         return result;
     }
 
-
     public static void main(String [] args) {
         PotPredictor po = new PotPredictor(); //1, 75, 75, 2, 0, 30
         po.calculatePotAndFutureContribution(1, 75, 75, 30, 0, 0);
         ActionProbability ap = new ActionProbability(po);
-        System.out.println(ap.getPassProbablity());
-        System.out.println(ap.getFoldProbablity());
+        System.out.println(ap.getPassProbability());
+        System.out.println(ap.getFoldProbability());
     }
 }

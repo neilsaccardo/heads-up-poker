@@ -26,10 +26,31 @@ public class AiAgent {
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
             return preFlopAction(cards, stackSize, potSize, position, theirAction, playerCluster, minBet, opponentStackSize);
         }
+        if (stageOfPlay.equals(AiAgent.FLOP)) {
+            return flopAction(cards, stackSize, potSize, position, theirAction, playerCluster, minBet, opponentStackSize);
+        }
+        if (stageOfPlay.equals(AiAgent.TURN)) {
+            return turnAction(cards, stackSize, potSize, position, theirAction, playerCluster, minBet, opponentStackSize);
+        }
+        if (stageOfPlay.equals((AiAgent.RIVER))) {
+            return riverAction(cards, stackSize, potSize, position, theirAction, playerCluster, minBet, opponentStackSize);
+        }
         else {
             return "FOLD";
         }
 //        return "CHECK";
+    }
+
+    private String riverAction(String cards, int stackSize, int potSize, int position, String theirAction, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
+        return "FOLD";
+    }
+
+    private String turnAction(String cards, int stackSize, int potSize, int position, String theirAction, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
+        return "FOLD";
+    }
+
+    private String flopAction(String cards, int stackSize, int potSize, int position, String theirAction, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
+        return "FOLD";
     }
 
     private String preFlopAction(String cards, int stackSize, int potSize, int position, String theirAction, Map<String, Double> playerCluster,
