@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by Neil on 22/03/2017.
  */
-public class ActionProbablity {
+public class ActionProbability {
 
     private EWUtility ewu;
     private PotPredictor pp;
@@ -15,7 +15,7 @@ public class ActionProbablity {
     private Map<Integer, Double> fpParams;
     private Map<Integer, Double> cpParams;
 
-    public ActionProbablity(PotPredictor p) {
+    public ActionProbability(PotPredictor p) {
         pp = p;
         fillFPParams();
         fillCPParams();
@@ -40,13 +40,13 @@ public class ActionProbablity {
 
     public double getFoldProbablity() {
         double ew = (ewu.getUtilityPass() - ewu.getUtilityFold())/((double)ewu.getBetSize());
-        double result = ActionProbablity.ALPHA / (ActionProbablity.ALPHA + (fpParams.get(round) * Math.exp(ew)));
+        double result = ActionProbability.ALPHA / (ActionProbability.ALPHA + (fpParams.get(round) * Math.exp(ew)));
         return result;
     }
 
     public double getPassProbablity() {
         double ew = (ewu.getUtilityBet() - ewu.getUtilityPass())/((double)ewu.getBetSize());
-        double result = ActionProbablity.ALPHA / (ActionProbablity.ALPHA + (cpParams.get(round)* Math.exp(ew)));
+        double result = ActionProbability.ALPHA / (ActionProbability.ALPHA + (cpParams.get(round)* Math.exp(ew)));
         return result;
     }
 
@@ -54,7 +54,7 @@ public class ActionProbablity {
     public static void main(String [] args) {
         PotPredictor po = new PotPredictor(); //1, 75, 75, 2, 0, 30
         po.calculatePotAndFutureContribution(1, 75, 75, 30, 0, 0);
-        ActionProbablity ap = new ActionProbablity(po);
+        ActionProbability ap = new ActionProbability(po);
         System.out.println(ap.getPassProbablity());
         System.out.println(ap.getFoldProbablity());
     }
