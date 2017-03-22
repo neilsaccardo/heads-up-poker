@@ -3,6 +3,7 @@ package com.saccarn.poker.ai;
 import com.saccarn.poker.dbprocessor.PlayerTypeClusterer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,8 +11,12 @@ import java.util.Map;
  */
 public class PlayerCluster {
 
+    private List<Map<String, Double>> clusters;
 
-    public static Map<String,Double> getPlayerInfo(int playerType) {
+    public static Map<String, Double> getPlayerInfo(int playerType) {
         return PlayerTypeClusterer.getCentroid(playerType);
     }
+
+
+
 }

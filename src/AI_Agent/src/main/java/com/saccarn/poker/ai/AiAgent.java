@@ -20,20 +20,20 @@ public class AiAgent {
     private final int randomTopLimit = 100;
     private final int randomisationThreshold = 95;
     public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
-                            int stackSize, int potSize, int playerType, int position, int minBet, String theirAction, int opponentStackSize) {
+                            int stackSize, int potSize, int playerType, int position, int minBet, int amountBet, int opponentStackSize) {
         String cards = HandRankings.transformCardsForHandRanking(holeCard1, holeCard2);
         Map<String, Double> playerCluster = new HashMap<>();//PlayerCluster.getPlayerInfo(playerType);
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
-            return preFlopAction(cards, stackSize, potSize, position, theirAction, playerCluster, minBet, opponentStackSize);
+            return preFlopAction(cards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
         }
         if (stageOfPlay.equals(AiAgent.FLOP)) {
-            return flopAction(cards, stackSize, potSize, position, theirAction, playerCluster, minBet, opponentStackSize);
+            return flopAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
         }
         if (stageOfPlay.equals(AiAgent.TURN)) {
-            return turnAction(cards, stackSize, potSize, position, theirAction, playerCluster, minBet, opponentStackSize);
+            return turnAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
         }
         if (stageOfPlay.equals((AiAgent.RIVER))) {
-            return riverAction(cards, stackSize, potSize, position, theirAction, playerCluster, minBet, opponentStackSize);
+            return riverAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
         }
         else {
             return "FOLD";
@@ -41,19 +41,23 @@ public class AiAgent {
 //        return "CHECK";
     }
 
-    private String riverAction(String cards, int stackSize, int potSize, int position, String theirAction, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
+    private String riverAction(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
+        int round = 2;
+        ActionDeterminer ad = new ActionDeterminer(holeCard1, holeCard2, boardCards, stackSize, opponentStackSize, potSize, amountBet, minBet, playerCluster, round);
         return "FOLD";
     }
 
-    private String turnAction(String cards, int stackSize, int potSize, int position, String theirAction, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
+    private String turnAction(String holeCard1, String holeCard2, String [] boardCards, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
+        int round = 1;
         return "FOLD";
     }
 
-    private String flopAction(String cards, int stackSize, int potSize, int position, String theirAction, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
+    private String flopAction(String holeCard1, String holeCard2, String [] boardCards, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
+        int round = 0;
         return "FOLD";
     }
 
-    private String preFlopAction(String cards, int stackSize, int potSize, int position, String theirAction, Map<String, Double> playerCluster,
+    private String preFlopAction(String cards, int stackSize, int potSize, int position, int amountBet , Map<String, Double> playerCluster,
                                  int minBet, int opponentStackSize) {
         HandRankings hrs = new HandRankings(); //(100-playerCluster.get(DataLoaderStrings.FOLDED_AT_PRE_FLOP))
         if (hrs.getEVRankOfCardPair(cards) < 70) {
