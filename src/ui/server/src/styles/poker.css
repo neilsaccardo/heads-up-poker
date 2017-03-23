@@ -53,6 +53,20 @@
     padding-bottom: 52px;
 }
 
+.padding-top-large-md {
+    padding-top: 52px;
+}
+
+.padding-left-right-large-large {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+@media (max-width: 1000px) {
+    .display-none-if-small  {
+        display: none;
+    }
+}
 
 .poker-table {
     height: auto;
@@ -64,4 +78,16 @@
     padding-left: 15%;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.gray-background {
+    background-color: #EEE;
+}
+.suit {
+    padding: 10% 20% 30% 20%;
+    height: 50px;
+
+}
+.suit >  img {
+    max-width: 100%;
 }

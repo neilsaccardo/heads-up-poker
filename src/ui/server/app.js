@@ -14,11 +14,11 @@ var HOST = 'localhost';
 
 app.use(express.static(__dirname + '/src'));
 
-var javaServerSocket = new net.Socket();
+/*var javaServerSocket = new net.Socket();
 javaServerSocket.connect (PORT, HOST, function() {
     console.log('HERE');
 });
-
+*/
 app.get('/', function (req, res) {
     var options = {
         root: __dirname + '/src/',
@@ -44,6 +44,10 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function() {
     });
 
+    socket.on('loginRequest', function(data) {
+        socket.emit('loginAccepted', data);
+    });
+
     socket.on('msg', function (data) { //testing socket communication
         console.log(data);
     });
@@ -51,7 +55,7 @@ io.on('connection', function (socket) {
     socket.on('testmessage', function (data) {
         console.log(data);
         socketList[data.id] = socket;
-        javaServerSocket.write('Testing, attention please ' + data.id.toString() + '\n');
+        //javaServerSocket.write('Testing, attention please ' + data.id.toString() + '\n');
     });
 
     socket.on('action', function (data) {
@@ -108,7 +112,7 @@ io.on('connection', function (socket) {
 });
 
 var i = 0;
-javaServerSocket.on('data', function(data) {
+/*javaServerSocket.on('data', function(data) {
    console.log('Data: ' + data.toString() );
 
    var socketID = data.toString().trim().split(' ')[0].trim();
@@ -116,7 +120,7 @@ javaServerSocket.on('data', function(data) {
     var keyToSocketList = socketID.toString().substring(2, socketID.toString().length).toString();
     socketList[keyToSocketList].emit('PrintToConsole', 'Printing to the Console I hope......' + data);
     console.log(i++ + ": " + data.toString());
-});
+});*/
 
 function ab2str(buf) { //http://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
   return String.fromCharCode.apply(null, new Uint16Array(buf));

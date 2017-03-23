@@ -20,10 +20,18 @@
     <script src="js/ai-player.js"></script>
     <script src="js/community-cards.js"></script>
     <script src="js/table.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/header.js"></script>
 
     <script src="test.js"></script>
-<body ng-app="testDemo" ng-controller="DemoCtrl">
-    <poker-table></poker-table>
+<body ng-app="testDemo" ng-controller="DemoCtrl" class="gray-background">
+<div class="container poker-header ">
+
+    <header></header>
+
+    <login ng-if="!showGame"></login>
+    <poker-table ng-if="showGame" username="username"></poker-table>
+</div>
 </body>
 
 </html>
