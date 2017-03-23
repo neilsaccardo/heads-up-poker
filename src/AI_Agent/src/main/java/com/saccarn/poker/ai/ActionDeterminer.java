@@ -1,6 +1,7 @@
 package com.saccarn.poker.ai;
 
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Neil on 22/03/2017.
@@ -17,6 +18,14 @@ public class ActionDeterminer {
     private final int minBet;
     private final Map<String, Double> playerCluster;
     private final int round;
+
+    private Random randomGenerator = new Random();
+
+    private final static double TOTAL = 1.0;
+    private final static double BET1_CONST = 2;
+    private final static double BET2_CONST = 3;
+    private final static double BET3_CONST = 4;
+
 
     public ActionDeterminer(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int opponentStackSize, int potSize, int numChipsBet, int minBet, Map<String, Double> playerCluster, int round) {
         this.holeCard1 = holeCard1;
@@ -36,7 +45,47 @@ public class ActionDeterminer {
         double belief = bp.calculateBeliefInWinning();
         PotPredictor potPredictor = new PotPredictor(minBet, stackSize, opponentStackSize, potSize, round, numChipsBet);
         ActionProbability ap = new ActionProbability(potPredictor, belief);
+        double foldProb = ap.getFoldProbability();
 
-        return "FOLD";
+        if (determineShouldFold(foldProb)) {
+            return ActionStrings.ACTION_FOLD;
+        }
+        else {
+            double passProbability = ap.getPassProbability();
+            return determinePassOrBetAction(passProbability);
+        }
+    }
+
+    private String determinePassOrBetAction(double passProbability) {
+        return determinePassOrBetAction(passProbability, randomGenerator.nextDouble());
+    }
+
+    public String determinePassOrBetAction(double passProbability, double randomDouble) {
+        if (randomDouble < passProbability) {
+            return ActionStrings.ACTION_PASS;
+        }
+        if (randomDouble < (passProbability * ActionDeterminer.BET1_CONST)) {
+            return ActionStrings.ACTION_BET1;
+        }
+        if (randomDouble < (passProbability * ActionDeterminer.BET2_CONST)) {
+            return ActionStrings.ACTION_BET2;
+        }
+        if (randomDouble < (passProbability * ActionDeterminer.BET3_CONST)) {
+            return ActionStrings.ACTION_BET3;
+        }
+        if (randomDouble == ActionDeterminer.TOTAL) {
+            return ActionStrings.ACTION_ALLIN;
+        }
+        else {
+            return ActionStrings.ACTION_BET1;
+        }
+    }
+
+    private boolean determineShouldFold(double foldProb) {
+        return determineShouldFold(foldProb, randomGenerator.nextDouble());
+    }
+
+    public boolean determineShouldFold(double foldProb, double random) {
+        return foldProb < random;
     }
 }

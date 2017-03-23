@@ -36,7 +36,7 @@ public class AiAgent {
             return riverAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
         }
         else {
-            return "FOLD";
+            return ActionStrings.ACTION_FOLD;
         }
 //        return "CHECK";
     }
@@ -44,19 +44,23 @@ public class AiAgent {
     private String riverAction(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
         int round = 2;
         ActionDeterminer ad = new ActionDeterminer(holeCard1, holeCard2, boardCards, stackSize, opponentStackSize, potSize, amountBet, minBet, playerCluster, round);
-        return "FOLD";
+        return ad.getAction();
     }
 
     private String turnAction(String holeCard1, String holeCard2, String [] boardCards, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
         int round = 1;
-        return "FOLD";
+        ActionDeterminer ad = new ActionDeterminer(holeCard1, holeCard2, boardCards, stackSize, opponentStackSize, potSize, amountBet, minBet, playerCluster, round);
+        return ad.getAction();
     }
 
     private String flopAction(String holeCard1, String holeCard2, String [] boardCards, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
         int round = 0;
-        return "FOLD";
+        ActionDeterminer ad = new ActionDeterminer(holeCard1, holeCard2, boardCards, stackSize, opponentStackSize, potSize, amountBet, minBet, playerCluster, round);
+        return ad.getAction();
     }
 
+
+    // TODO : Abstract this out to another Pre FLop action class.
     private String preFlopAction(String cards, int stackSize, int potSize, int position, int amountBet , Map<String, Double> playerCluster,
                                  int minBet, int opponentStackSize) {
         HandRankings hrs = new HandRankings(); //(100-playerCluster.get(DataLoaderStrings.FOLDED_AT_PRE_FLOP))
@@ -65,29 +69,29 @@ public class AiAgent {
                 if (randomGenerator.nextInt(randomTopLimit) < randomisationThreshold) {
                     int randomNum = randomGenerator.nextInt(randomTopLimit);
                     if (randomNum < randomTopLimit / 3 && stackSize > (2*minBet)) {
-                        return "BET2";
+                        return ActionStrings.ACTION_BET2;
                     } else if (randomNum < ((randomTopLimit / 3) * 2) && stackSize > (minBet)) {
-                        return "BET1";
+                        return ActionStrings.ACTION_BET1;
                     }
                     else {
-                        return "CHECK";
+                        return ActionStrings.ACTION_PASS;
                     }
                 } else {
-                    return "FOLD";
+                    return ActionStrings.ACTION_FOLD;
                 }
             } else {
                 if (randomGenerator.nextInt(randomTopLimit) < randomisationThreshold) {
                     int randomNum = randomGenerator.nextInt(randomTopLimit);
                     if (randomNum < randomTopLimit / 3 && stackSize > (2*minBet)) {
-                        return "RAISE2";
+                        return ActionStrings.ACTION_RAISE2;
                     } else if (randomNum < ((randomTopLimit / 3) * 2) && stackSize > (minBet)) {
-                        return "RAISE1";
+                        return ActionStrings.ACTION_RAISE1;
                     }
                     else {
-                        return "CALL";
+                        return ActionStrings.ACTION_PASS;
                     }
                 } else {
-                    return "FOLD";
+                    return ActionStrings.ACTION_FOLD;
                 }
             }
         }
