@@ -10,6 +10,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.min.js"></script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+
     <script src="js/util/playing-card/playing-card.js"></script>
     <script src="js/util/dealer-button/dealer-button.js"></script>
     <script src="js/util/chip-stack/chip-stack.js"></script>
@@ -25,10 +29,8 @@
 
     <script src="test.js"></script>
 <body ng-app="testDemo" ng-controller="DemoCtrl" class="gray-background">
-<div class="container poker-header ">
-
+<div class="container poker-header">
     <header></header>
-
     <login ng-if="!showGame"></login>
     <poker-table ng-if="showGame" username="username"></poker-table>
 </div>
