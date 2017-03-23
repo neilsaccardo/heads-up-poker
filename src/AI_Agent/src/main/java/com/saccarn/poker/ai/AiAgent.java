@@ -2,6 +2,7 @@ package com.saccarn.poker.ai;
 
 import com.saccarn.poker.dbprocessor.DataLoaderStrings;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -27,18 +28,42 @@ public class AiAgent {
             return preFlopAction(cards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
         }
         if (stageOfPlay.equals(AiAgent.FLOP)) {
-            return flopAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
+            String action = flopAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
+            return getCorrectOutputAction(action, position);
         }
         if (stageOfPlay.equals(AiAgent.TURN)) {
-            return turnAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
+            String action = turnAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
+            return getCorrectOutputAction(action, position);
         }
         if (stageOfPlay.equals((AiAgent.RIVER))) {
-            return riverAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
+            String action = riverAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
+            return getCorrectOutputAction(action, position);
         }
         else {
             return ActionStrings.ACTION_FOLD;
         }
 //        return "CHECK";
+    }
+
+    private String getCorrectOutputAction(String action, int position) {
+        if (action.equals(ActionStrings.ACTION_PASS)) {
+            return (position == 0) ? ActionStrings.ACTION_CHECK : ActionStrings.ACTION_CALL;
+        }
+        if (position == 0) {
+            return action;
+        }
+        else {
+            switch (action) {
+                case ActionStrings.ACTION_BET1:
+                    return ActionStrings.ACTION_RAISE1;
+                case ActionStrings.ACTION_BET2:
+                    return ActionStrings.ACTION_RAISE2;
+                case ActionStrings.ACTION_BET3:
+                    return ActionStrings.ACTION_RAISE3;
+                default:
+                    return ActionStrings.ACTION_FOLD;
+            }
+        }
     }
 
     private String riverAction(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
@@ -60,7 +85,7 @@ public class AiAgent {
     }
 
 
-    // TODO : Abstract this out to another Pre FLop action class.
+    // TODO : Abstract this out to another Pre Flop action class.
     private String preFlopAction(String cards, int stackSize, int potSize, int position, int amountBet , Map<String, Double> playerCluster,
                                  int minBet, int opponentStackSize) {
         HandRankings hrs = new HandRankings(); //(100-playerCluster.get(DataLoaderStrings.FOLDED_AT_PRE_FLOP))
