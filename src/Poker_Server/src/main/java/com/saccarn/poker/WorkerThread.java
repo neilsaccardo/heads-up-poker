@@ -27,7 +27,7 @@ public class WorkerThread implements Runnable {
 
             AiAgent ai = new AiAgent();
             String [] board = {};
-            String action = ai.getAction("preflop", "Js", "9s", board, 10000, 200, 1, 0, 100, "", 5000);
+            String action = ai.getAction("preflop", "Js", "9s", board, 10000, 200, 1, 0, 100, 0, 5000);
             long time = System.currentTimeMillis();
             System.out.println("Request processed: " + time);
             out.writeUTF(msgs[msgs.length-1] + " " + action + " " + " - response");

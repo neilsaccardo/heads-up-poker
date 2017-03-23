@@ -20,6 +20,7 @@ public class AiAgent {
     private Random randomGenerator = new Random();
     private final int randomTopLimit = 100;
     private final int randomisationThreshold = 95;
+
     public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
                             int stackSize, int potSize, int playerType, int position, int minBet, int amountBet, int opponentStackSize) {
         String cards = HandRankings.transformCardsForHandRanking(holeCard1, holeCard2);
@@ -41,28 +42,6 @@ public class AiAgent {
         }
         else {
             return ActionStrings.ACTION_FOLD;
-        }
-//        return "CHECK";
-    }
-
-    private String getCorrectOutputAction(String action, int position) {
-        if (action.equals(ActionStrings.ACTION_PASS)) {
-            return (position == 0) ? ActionStrings.ACTION_CHECK : ActionStrings.ACTION_CALL;
-        }
-        if (position == 0) {
-            return action;
-        }
-        else {
-            switch (action) {
-                case ActionStrings.ACTION_BET1:
-                    return ActionStrings.ACTION_RAISE1;
-                case ActionStrings.ACTION_BET2:
-                    return ActionStrings.ACTION_RAISE2;
-                case ActionStrings.ACTION_BET3:
-                    return ActionStrings.ACTION_RAISE3;
-                default:
-                    return ActionStrings.ACTION_FOLD;
-            }
         }
     }
 
@@ -123,5 +102,24 @@ public class AiAgent {
         return "";
     }
 
-
+    private String getCorrectOutputAction(String action, int position) {
+        if (action.equals(ActionStrings.ACTION_PASS)) {
+            return (position == 0) ? ActionStrings.ACTION_CHECK : ActionStrings.ACTION_CALL;
+        }
+        if (position == 0) {
+            return action;
+        }
+        else {
+            switch (action) {
+                case ActionStrings.ACTION_BET1:
+                    return ActionStrings.ACTION_RAISE1;
+                case ActionStrings.ACTION_BET2:
+                    return ActionStrings.ACTION_RAISE2;
+                case ActionStrings.ACTION_BET3:
+                    return ActionStrings.ACTION_RAISE3;
+                default:
+                    return ActionStrings.ACTION_FOLD;
+            }
+        }
+    }
 }
