@@ -1,2 +1,20 @@
-<img class="col-md-1" ng-if="!$ctrl.isHidden" ng-src="js/util/playing-card/imgs/{{$ctrl.value}}_of_{{$ctrl.suit}}.svg">
-<img class="col-md-1" ng-if="$ctrl.isHidden"  ng-src="js/util/playing-card/imgs/card_back.svg">
+    <!--<img class="col-md-1" ng-if="!$ctrl.isHidden" ng-src="js/util/playing-card/imgs/{{$ctrl.value}}_of_{{$ctrl.suit}}.svg">-->
+    <!--<img class="col-md-1" ng-if="$ctrl.isHidden"  ng-src="js/util/playing-card/imgs/card_back.svg">-->
+
+<span ng-if="!$ctrl.isHidden">
+    <span class="card rank-{{$ctrl.getRankValue()}} {{$ctrl.suit}}">
+        <span class="rank">{{$ctrl.value}}</span>
+        <span class="suit" ng-if="$ctrl.suit === 'diams'">&diams;</span>
+        <span class="suit" ng-if="$ctrl.suit === 'hearts'">&hearts;</span>
+        <span class="suit" ng-if="$ctrl.suit === 'clubs'">&clubs;</span>
+        <span class="suit" ng-if="$ctrl.suit === 'spades'">&spades;</span>
+    </span>
+</span>
+    <!--<div class="card rank-j hearts"><span class="rank">J</span><span class="suit">&hearts;</span></div>-->
+
+    <span ng-if="$ctrl.isHidden">
+    <span class="card back" style="color:red;">
+        <!--<span class="rank">2</span>-->
+        <!--<span class="suit">&diams;</span>-->
+    </span>
+</span>

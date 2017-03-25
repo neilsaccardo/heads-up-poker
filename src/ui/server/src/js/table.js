@@ -1,5 +1,6 @@
 function TableController($scope, cards, socket, $timeout) {
     var ctrl = this;
+
     ctrl.player = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
     ctrl.aiplayer = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
     ctrl.hideAICards = true;
@@ -26,7 +27,8 @@ function TableController($scope, cards, socket, $timeout) {
         ctrl.dealOutCards();
         ctrl.blinds();
         ctrl.continueGame();
-        socket.emit('testmessage', {id: 'neil'});
+        console.log('ctrl.username == ' + ctrl.username);
+        socket.emit('testmessage', {id: ctrl.username});
     }
     //methods to receive actions from server
     socket.on('cfr', function(data) {
@@ -264,6 +266,7 @@ angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 
     templateUrl: 'js/table.html',
     controller: TableController,
     bindings: {
+        username: '@',
         stackSize: '<'
     }
 });

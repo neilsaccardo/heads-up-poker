@@ -74,7 +74,7 @@
     border-width: thick;
     border-color: chocolate;
     border-radius: 45px;
-    background-color: green;
+    background-color: rgba(51, 165, 183, 0.35);
     padding-left: 15%;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -82,12 +82,4 @@
 
 .gray-background {
     background-color: #EEE;
-}
-.suit {
-    padding: 10% 20% 30% 20%;
-    height: 50px;
-
-}
-.suit >  img {
-    max-width: 100%;
 }
