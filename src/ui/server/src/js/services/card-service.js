@@ -24,25 +24,8 @@ function Cards($rootScope) {
     function getCardValue(cardInt) {
         var cardSuit = Math.floor(cardInt / 13);
         var cardNum = cardInt % 13;
+        console.log(cardInt);
         var cardObj = {suit: '', value: '', evalValue: ''};
-        switch(cardNum) {
-            case 0:
-                cardObj.value = 'A'
-                break;
-            case 10:
-                cardObj.value = 'J';
-                break;
-            case 11:
-                cardObj.value = 'Q';
-                break;
-            case 12:
-                cardObj.value = 'K';
-                break;
-            default:
-                cardNum++;
-                cardObj.value = '' + cardNum;
-        }
-
         switch(cardNum) {
             case 0:
                 cardObj.value = 'A';
@@ -51,6 +34,7 @@ function Cards($rootScope) {
             case 9:
                 cardObj.value = '10';
                 cardObj.evalValue = 'T';
+                break;
             case 10:
                 cardObj.value = 'J';
                 cardObj.evalValue = 'J';
@@ -64,9 +48,8 @@ function Cards($rootScope) {
                 cardObj.evalValue = 'K';
                 break;
             default:
-                cardNum++;
-                cardObj.value = '' + cardNum;
-                cardObj.evalValue = '' + cardNum;
+                cardObj.value = '' + (cardNum+1);
+                cardObj.evalValue = '' + (cardNum+1);
         }
 
         switch(cardSuit) {
@@ -87,7 +70,7 @@ function Cards($rootScope) {
                 cardObj.evalValue = cardObj.evalValue + 's';
                 break;
         }
-
+        console.log(cardObj);
         return cardObj;
     }
 
