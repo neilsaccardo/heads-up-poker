@@ -1,3 +1,4 @@
+
 function LoginController($scope, socket, $uibModal) {
     var ctrl = this;
     ctrl.showModal = false;
@@ -19,6 +20,9 @@ function LoginController($scope, socket, $uibModal) {
     function badUsername() {
         console.log('ctrl.username ' + ctrl.username);
         if (ctrl.username === '') {
+            return true;
+        }
+        if (ctrl.username.length > 100) {
             return true;
         }
         else {

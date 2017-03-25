@@ -8,10 +8,17 @@
                                is-dealer="!$ctrl.isPlayerDealer" is-turn="!$ctrl.isPlayerTurn" stack-size="$ctrl.aiStackSize"></ai-player>
                     </div>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1">
+                    <pot total="$ctrl.potSize" class="pull-left padding-bottom-large-md"></pot>
+                </div>
+
                 <div class="col-md-3"></div>
-                <pot total="$ctrl.potSize" class="pull-left padding-bottom-large-md"></pot>
-                <div class="playingCards faceImages">
-                <community-cards cards="$ctrl.communityCards"></community-cards>
+                 <div class="col-md-3">
+                    <div class="playingCards faceImages">
+                    <community-cards cards="$ctrl.communityCards"></community-cards>
+                    </div>
                 </div>
             </div>
             <div class="row">
