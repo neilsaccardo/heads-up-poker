@@ -1,6 +1,6 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync').create();
-
+var nodemon = require('nodemon');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
@@ -39,3 +39,26 @@ gulp.task('minifyScripts', function() {
            .pipe(gulp.dest(jsDest));
 });
 
+gulp.task('watch', function() {
+    gulp.watch(jsFiles, ['concatScripts']);
+    gulp.watch(cssFiles, ['concatAndMinifyCSS']);
+});
+
+// start our server and listen for changes -
+//http://stackoverflow.com/questions/28048029/running-a-command-with-gulp-to-start-node-js-server
+gulp.task('server', function() {
+    // configure nodemon
+    nodemon({
+        // the script to run the app
+        script: 'app.js',
+        // this listens to changes in any of these files/routes and restarts the application
+        watch: ["app.js", jsScripts, cssMinStyles],
+        ext: 'js'
+
+    }).on('restart', function() {
+        gulp.src('server.js')
+  });
+});
+
+// default task allows node to be continually run, with changes being reloaded and watched.
+gulp.task('default', ['server', 'watch']);
