@@ -46,14 +46,12 @@ public class Server implements Runnable {
             String line = null;
             try {
                 line = br.readLine();
+                System.out.println(line);
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
-            new Thread(
-                    new WorkerThread(
-                            clientSocket, line)
-            ).start();
+            new Thread(new WorkerThread(clientSocket, line)).start();
         }
     }
     public synchronized void stop() {

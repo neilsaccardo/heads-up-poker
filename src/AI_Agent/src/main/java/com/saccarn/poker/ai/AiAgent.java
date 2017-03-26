@@ -24,7 +24,7 @@ public class AiAgent {
     public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
                             int stackSize, int potSize, int playerType, int position, int minBet, int amountBet, int opponentStackSize) {
         String cards = HandRankings.transformCardsForHandRanking(holeCard1, holeCard2);
-        Map<String, Double> playerCluster = new HashMap<>();//PlayerCluster.getPlayerInfo(playerType);
+        Map<String, Double> playerCluster = PlayerCluster.getPlayerInfo(playerType);
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
             return preFlopAction(cards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
         }

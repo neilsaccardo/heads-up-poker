@@ -40,23 +40,23 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
     }
 
     private double calculateDistanceFromAverageBettingPattern() {
-
         return 0.0;
     }
 
     private double checkFoldPercentagesPerRound() {
         double roundDoubt = 0;
+        System.out.println("here : " + opponentModel);
         if (round == 0) {
-            roundDoubt = opponentModel.get(DataLoaderStrings.FOLDED_AT_PRE_FLOP);
+            roundDoubt = opponentModel.get(DataLoaderStrings.PRE_FLOP_FOLDED_RATIO);
         }
         if (round == 1) {
-            roundDoubt = opponentModel.get(DataLoaderStrings.FOLDED_AT_PRE_FLOP)
-                            + opponentModel.get(DataLoaderStrings.FOLDED_AT_FLOP);
+            roundDoubt = opponentModel.get(DataLoaderStrings.PRE_FLOP_FOLDED_RATIO)
+                            + opponentModel.get(DataLoaderStrings.FLOP_FOLDED_RATIO);
         }
         if (round == 2) {
-            roundDoubt = opponentModel.get(DataLoaderStrings.FOLDED_AT_PRE_FLOP)
-                            + opponentModel.get(DataLoaderStrings.FOLDED_AT_FLOP)
-                            + opponentModel.get(DataLoaderStrings.FOLDED_AT_TURN);
+            roundDoubt = opponentModel.get(DataLoaderStrings.PRE_FLOP_FOLDED_RATIO)
+                            + opponentModel.get(DataLoaderStrings.FLOP_FOLDED_RATIO)
+                            + opponentModel.get(DataLoaderStrings.TURN_FOLDED_RATIO);
         }
         return (roundDoubt * BeliefPredictor.ALPHA*(round+1));
     }
@@ -68,7 +68,7 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
                                                         boardCards[2]);
         }
-        if (boardCards.length == 4) {
+        else if (boardCards.length == 4) {
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
                                                         boardCards[2], boardCards[3]);
         }

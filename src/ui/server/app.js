@@ -9,16 +9,16 @@ var obj = PokerEvaluator.evalHand(["Th", "Kh", "Qh", "Jh", "9h", "3s", "5h"]);
 
 console.log(obj);
 
-var PORT = 3500;
+var JAVA_PORT = 3500;
 var HOST = 'localhost';
 
 app.use(express.static(__dirname + '/src'));
 
-/*var javaServerSocket = new net.Socket();
-javaServerSocket.connect (PORT, HOST, function() {
+var javaServerSocket = new net.Socket();
+javaServerSocket.connect (JAVA_PORT, HOST, function() {
     console.log('HERE');
 });
-*/
+
 app.get('/', function (req, res) {
     var options = {
         root: __dirname + '/src/',
@@ -69,6 +69,11 @@ io.on('connection', function (socket) {
         if (data.action === 'raise') {
             socket.emit('cfr', { action: 'call', amount: 0 }); //call/bet/fold on a check
         }
+        if (data.action === 'call') {
+            console.log('log : ' + JSON.stringify(data));
+        }
+        sendActionToAIServer(data);
+
     });
     socket.on('call', function (data) {
         socket.emit('fcb', {action: 'check', amount: 0});
@@ -125,6 +130,25 @@ var i = 0;
 
 function ab2str(buf) { //http://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
   return String.fromCharCode.apply(null, new Uint16Array(buf));
+}
+
+function sendActionToAIServer(data) {
+    var action = data.action;
+    var amount = data.action | 0;
+    var round = data.round;
+    var cardOne = data.cardOne.evalValue;
+    var cardTwo = data.cardTwo.evalValue;
+    var minBet = data.minBet;
+    var stackSize = data.stackSize;
+    var potSize = data.potSize;
+    var boardCards = '';
+    for (var i  = 0; i < data.boardCards.length; i++) {
+        boardCards += (data.boardCards[i].evalValue + ' ');
+    }
+    var totalString = /*action + ' ' +*/ amount + ' ' + round + ' ' + cardOne + ' ' +
+                        cardTwo + ' ' + minBet + ' ' + stackSize + ' ' + potSize +  ' ' + boardCards + '\n';
+    console.log(totalString);
+    javaServerSocket.write(totalString);
 }
 
 server.listen(3000);

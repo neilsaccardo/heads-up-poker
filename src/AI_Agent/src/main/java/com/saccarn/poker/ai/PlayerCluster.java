@@ -11,8 +11,6 @@ import java.util.Map;
  */
 public class PlayerCluster {
 
-    private List<Map<String, Double>> clusters;
-
     public static Map<String, Double> getPlayerInfo(int playerType) {
         return PlayerTypeClusterer.getCentroid(playerType);
     }
