@@ -18,6 +18,7 @@ target/
 
 # Ignore generated scripts js file.
 scripts.min.js
+scripts.js
 
 # Ignore minified files - css & js
 *.min.js
