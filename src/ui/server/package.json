@@ -10,7 +10,16 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.1",
+    "gulp": "^3.9.1",
     "poker-evaluator": "^0.3.1",
     "socket.io": "^1.7.2"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.18.8",
+    "gulp-clean-css": "^3.0.4",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^2.4.1",
+    "gulp-uglify": "^2.1.2"
   }
 }

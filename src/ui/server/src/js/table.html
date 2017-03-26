@@ -2,11 +2,14 @@
     <div class="poker-table">
         <div class="container-fluid">
             <div class="row padding-bottom-md">
-                <div>
+                <div class=" col-md-4">
                     <div class="playingCards faceImages">
                     <ai-player card-one="$ctrl.aiplayer.cardOne" card-two="$ctrl.aiplayer.cardTwo" hide-card="$ctrl.hideAICards"
                                is-dealer="!$ctrl.isPlayerDealer" is-turn="!$ctrl.isPlayerTurn" stack-size="$ctrl.aiStackSize"></ai-player>
                     </div>
+                </div>
+                <div class="col-md-4">
+                    <ai-action-message message="$ctrl.message"></ai-action-message>
                 </div>
             </div>
             <div class="row">
@@ -15,7 +18,7 @@
                 </div>
 
                 <div class="col-md-3"></div>
-                 <div class="col-md-3">
+                 <div class="col-md-6">
                     <div class="playingCards faceImages">
                     <community-cards cards="$ctrl.communityCards"></community-cards>
                     </div>
