@@ -5,7 +5,6 @@ function AmountService($uibModal) {
     function checkBetRaiseAmount(amountStr, stackSize, minBet) {
         var amount = parseInt(amountStr);
         if (!(typeof amount === 'number' && (amount%1) === 0)) {
-            console.log(typeof amount);
             $uibModal.open({templateUrl: path + 'modalContentNotAnInteger.html'});
             return false;
         }
@@ -26,6 +25,5 @@ function AmountService($uibModal) {
         checkBetRaiseAmount : checkBetRaiseAmount
     }
 }
-
 
 angular.module('amountService', ['ui.bootstrap']).factory('amountService', AmountService);
