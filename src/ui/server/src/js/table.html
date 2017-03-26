@@ -40,6 +40,10 @@
                         <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-success" ng-click="$ctrl.call()">Call</button>
                         <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()">Fold</button>
                     </div>
+                    <div class="col-md-2">
+                        <label for="amount">Amount:</label>
+                        <input type="text" class="form-control" id="amount" ng-model="$ctrl.raiseBetAmount">
+                    </div>
                 </div>
             </div>
         </div>

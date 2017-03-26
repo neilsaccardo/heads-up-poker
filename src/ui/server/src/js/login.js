@@ -13,7 +13,6 @@ function LoginController($scope, socket, $uibModal) {
             socket.emit('loginRequest', {id: ctrl.username});
             console.log('Log in accepted');
         }
-
     }
 
 

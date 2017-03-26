@@ -60,6 +60,7 @@ io.on('connection', function (socket) {
 
     socket.on('action', function (data) {
         if (data.action === 'bet') {
+            //javaServerSocket.write(data.stage, data.cardOne, data.cardTwo, data.boardCards, data.minBet, data.stackSize)
             socket.emit('cfr', {action: 'call', amount: data.amount}); //call/raise/fold on a bet
         }
         if (data.action === 'check') {

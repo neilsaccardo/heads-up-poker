@@ -1,4 +1,4 @@
-function TableController($scope, cards, socket, $timeout, message) {
+function TableController($scope, cards, socket, $timeout, message, amountService) {
     var ctrl = this;
 
     ctrl.player = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
@@ -80,8 +80,14 @@ function TableController($scope, cards, socket, $timeout, message) {
 
     //methods relating to the buttons on the UI
     ctrl.bet = function() {
+        if (!amountService.checkBetRaiseAmount(ctrl.raiseBetAmount, ctrl.playerStackSize, ctrl.bigBlindAmount)) {
+            return;
+        };
         console.log('betting');
-        var obj = {action: 'bet', amount: 100} ;
+        var obj =  {action: 'bet', amount: 100, round: pokerStage,
+                    cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
+                    boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount, stackSize: ctrl.aiStackSize};
+
         socket.emit('action', obj);
         //send event to server saying opponent has bet.
     }
@@ -94,18 +100,27 @@ function TableController($scope, cards, socket, $timeout, message) {
     }
 
     ctrl.raise = function() {
+        if (!amountService.checkBetRaiseAmount(ctrl.raiseBetAmount, ctrl.playerStackSize, ctrl.bigBlindAmount)) {
+            return;
+        };
         console.log('I HAVE RAISED');
-        socket.emit('action', {action: 'raise', amount: 20});
+        var obj =  {action: 'raise', amount: 100, round: pokerStage,
+                    cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
+                    boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount, stackSize: ctrl.aiStackSize};
+        socket.emit('action', obj);
     }
 
     ctrl.check = function() {
         console.log('I HAVE CHECKED');
+        var obj =  {action: 'raise', amount: 0, round: pokerStage,
+                    cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
+                    boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount, stackSize: ctrl.aiStackSize};
         if(ctrl.isPlayerDealer) {
             incrementStage();
             ctrl.isPlayerTurn = ctrl.isPlayerDealer;
-            socket.emit('newaction', {action: 'check', amount: 0});
+            socket.emit('newaction', obj);
         } else {
-            socket.emit('action', {action: 'check', amount: 0});
+            socket.emit('action', obj);
         }
     }
 
@@ -114,7 +129,11 @@ function TableController($scope, cards, socket, $timeout, message) {
         ctrl.addToPotPlayer(10);
         incrementStage();
         ctrl.isPlayerTurn = !ctrl.isPlayerDealer;
-        socket.emit();//inform server that the player has called.
+        var obj =  {action: 'raise', amount: 100, round: pokerStage,
+                    cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
+                    boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount, stackSize: ctrl.aiStackSize};
+
+        socket.emit('action', obj);//inform server that the player has called.
         ctrl.checkBetOptions = true;
         if(ctrl.isPlayerDealer) {
             socket.emit('call', {action: 'call', amount: 0});
@@ -262,7 +281,7 @@ function TableController($scope, cards, socket, $timeout, message) {
     ctrl.newHand(); //start a game.
 };
 
-angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'cardsService', 'socketService', 'messageService']).component('pokerTable', {
+angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'cardsService', 'socketService', 'messageService', 'amountService']).component('pokerTable', {
     templateUrl: 'js/table.html',
     controller: TableController,
     bindings: {
