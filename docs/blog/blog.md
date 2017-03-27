@@ -31,18 +31,23 @@ For the post flop stages, I have decided to implement a bayesian decision networ
  - Specific round (flop, turn, river)
  - Board Cards/Community Cards
 
-This part involves estimating what the final pot will be / what the future contribution will be from each player, and also calculate a value representing a belief in winning.
+This part involves estimating what the final pot will be / what the future contribution will be from each player depending on the action decided, and also calculate a value representing a belief in winning.
 
 The final pot and future contributions are calculated using techniques specified in [Carlton, 2000](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.146.3280&rep=rep1&type=pdf) unpublished thesis.
-The belief value takes into account two factors
+The belief value takes into account two factors:
  - Current hole and board cards - Probability of winning at showdown
  - Opponent Model
 
-All possibilities for hole and board cards are split into buckets or hand types, along with the probability of a bucket occuring. The values for these have been obtained form Carlton, 2000 thesis also (see table 2). Currently I am using 17 buckets to represent all possible hands.
+All possibilities for hole and board cards are split into buckets or hand types, along with the probability of a bucket occuring. The values for these have been obtained form Carlton, 2000 thesis also (see table 2). Currently I am using 17 buckets to represent all possible hands. A belief in winning is partially calculated using this.
 
+Belief is also partially calculated by taking into account the opponent model - it takes into account how often the opponent ususally gets to the current stage of play (i.e. a player who gets to this stage of play with a low value, then the belief in winning would be reduced also.). Further work could be done here by taking account and modelling typical betting patterns/ratios.
 
-At the moment, belief is partially calculated by taking into account the opponent model - it takes into account how often the opponent ususally gets to the current stage of play (i.e. a player who gets to this stage of play with a low value, then the belief in winning would be reduced also.). 
+The best action to carry out is worked out using the final pot/future contribution and belief value. This is done in a similar way to how Carlton describes in his thesis - using a fold/pass curve and a pass/bet curve to determine an action(see sections 6.2.1 Deterministic Strategy and 6.2.2 Mixed Strategy). This introduces an element of randomness/unpredicatability into the way the AI will play against opponents. Evaluation will need to be carried out to examine the effectiveness of the AI.
+ 
+### Server Communication
 
+Communicating between the ExpressJS web server and java server(which runs the AI) has been achieved using Sockets.
+In the NodeJS environment this has been achieved using the [net module](https://nodejs.org/api/net.html), and java using the [Socket](https://docs.oracle.com/javase/7/docs/api/java/net/Socket.html) and [ServerSocket](https://docs.oracle.com/javase/7/docs/api/java/net/ServerSocket.html) classes. 
 
 ## Blog Entry - 05/03/17
 Over the past two weeks I have using data mining techniques to analyse the data from University of Alberta IRC poker database. I have used a clustering technique in order to cluster together types of player based on how often they raise or bet in each stage of a hand (preflop, flop, turn and river). I have used [MongoDB] (https://www.mongodb.com) to store the information for each player from IRC db files. The primary reason I used MongoDB rather a traditional relational database was that it allowed me to be flexible. If I had used relational dbs such MySQL or SQL Server I would have specify exact attributes, while MongoDB allowed me to be flexible in that regard. The other primary reason is because I inted to use Mongo to store user information when a user would play a game with my system. This is because Mongo is simple and easy to use with NodeJS.
