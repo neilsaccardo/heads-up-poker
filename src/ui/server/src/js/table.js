@@ -252,32 +252,48 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 
     socket.on('AIAction', function(data) {
         console.log('Ai action is ' + data.action);
+
         if (data.action.toLowerCase() === actions.getFoldString()) {
             ctrl.aiFold();
         }
         else if (data.action.toLowerCase() === actions.getBet1String()) {
+            var numChips = ((ctrl.potSize / 4) * 3) * 1;
+            numChips = (numChips < minBet) ? minBet : numChips;
             ctrl.aiBet(10);
         }
         else if (data.action.toLowerCase() === actions.getBet2String()) {
-            ctrl.aiBet(20);
+            var numChips = ((ctrl.potSize / 4) * 3) * 2;
+            numChips = (numChips < minBet) ? minBet : numChips;
+            ctrl.aiBet(numChips);
         }
         else if (data.action.toLowerCase() === actions.getBet3String()) {
+            var numChips = ((ctrl.potSize / 4) * 3) * 3;
+            numChips = (numChips < minBet) ? minBet : numChips;
             ctrl.aiBet(30);
         }
         else if (data.action.toLowerCase() === actions.getRaise1String) {
+            var numChips = ((ctrl.potSize / 4) * 3) * 1;
+            numChips = (numChips < minBet) ? minBet : numChips;
             ctrl.aiRaise(10);
         }
         else if (data.action.toLowerCase() === actions.getRaise2String) {
+            var numChips = ((ctrl.potSize / 4) * 3) * 2;
+            numChips = (numChips < minBet) ? minBet : numChips;
             ctrl.aiRaise(20);
         }
         else if (data.action.toLowerCase() === actions.getRaise3String) {
-            ctrl.aiRaise(30);
+            var numChips = ((ctrl.potSize / 4) * 3) * 3;
+            numChips = (numChips < minBet) ? minBet : numChips;
+            ctrl.aiRaise(numChips);
         }
         else if (data.action.toLowerCase() === actions.getCallString()) {
             ctrl.aiCall();
         }
         else if (data.action.toLowerCase() === actions.getCheckString()) {
             ctrl.aiCheck();
+        }
+        else if (data.action.toLowerCase() === actions.getAllInString()) {
+            ctrl.aiBet(ctrl.aiStackSize);
         }
     });
 

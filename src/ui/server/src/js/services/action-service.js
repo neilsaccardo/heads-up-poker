@@ -59,7 +59,8 @@ function Actions() {
         getBet3String : getBetString,
         getCheckString : getCheckString,
         getCallString : getCallString,
-        getFoldString : getFoldString
+        getFoldString : getFoldString,
+        getAllInString : getAllInString
     }
 }
 
