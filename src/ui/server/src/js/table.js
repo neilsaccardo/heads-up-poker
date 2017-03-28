@@ -9,6 +9,8 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     ctrl.playerStackSize = ctrl.stackSize | 4000;
     ctrl.aiStackSize = ctrl.stackSize | 4000;
     ctrl.potSize = 0;
+    ctrl.aiToPot = 0;
+    ctrl.playerToPot = 0;
     ctrl.bigBlindAmount = 100;
     ctrl.isPlayerTurn = ctrl.isPlayerDealer;
     var deckPointer = 0;
@@ -23,6 +25,8 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         ctrl.hideAICards = true;
         pokerStage = 0;
         ctrl.potSize = 0;
+        ctrl.aiToPot = 0;
+        ctrl.playerToPot = 0;
         ctrl.communityCards = [];
         ctrl.dealOutCards();
         ctrl.blinds();
@@ -160,6 +164,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         if(ctrl.aiStackSize - betAmount < 0) {
             return false;
         } else {
+            ctrl.aiToPot += betAmount;
             ctrl.aiStackSize -= betAmount;
             ctrl.potSize += betAmount;
             return true;
@@ -169,7 +174,9 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     ctrl.addToPotPlayer = function(betAmount) {
         if(ctrl.playerStackSize - betAmount < 0) {
             return false;
-        } else {
+        }
+        else {
+            ctrl.playerToPot += betAmount;
             ctrl.playerStackSize -= betAmount;
             ctrl.potSize += betAmount;
             return true;

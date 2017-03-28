@@ -12,6 +12,12 @@
                     <ai-action-message message="$ctrl.message"></ai-action-message>
                 </div>
             </div>
+            <div class="row margin-bottom-md">
+                <div class="col-md-1">
+                    <chip-stack total="$ctrl.aiToPot"></chip-stack>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-1">
                     <pot total="$ctrl.potSize" class="pull-left padding-bottom-large-md"></pot>
@@ -22,6 +28,11 @@
                     <div class="playingCards faceImages">
                     <community-cards cards="$ctrl.communityCards"></community-cards>
                     </div>
+                </div>
+            </div>
+            <div class="row margin-bottom-md">
+                <div class="col-md-1">
+                    <chip-stack total="$ctrl.playerToPot"></chip-stack>
                 </div>
             </div>
             <div class="row">

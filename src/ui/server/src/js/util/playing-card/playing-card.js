@@ -9,6 +9,10 @@ function PlayingCardController() {
             return ctrl.value;
         }
     }
+
+    ctrl.isFaceCard = function() {
+        return ctrl.value === 'K' || ctrl.value === 'Q' || ctrl.value === 'J';
+    }
 };
 
 angular.module('playingCard', []).component('playingCard', {
