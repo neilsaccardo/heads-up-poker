@@ -22,8 +22,7 @@ public class WorkerThread implements Runnable {
     public void run() {
         try {
             String [] splitInput = input.split(" ");
-            OutputStream output = clientSocket.getOutputStream();
-            DataOutputStream out = new DataOutputStream(output);
+            DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
             System.out.println();
             int amountBet = WorkerThread.getAmountBet(splitInput[0]);
             String round = WorkerThread.getRound(splitInput[1]);
@@ -33,6 +32,7 @@ public class WorkerThread implements Runnable {
             int stackSize = WorkerThread.getStack(splitInput[5]);
             int minBet = WorkerThread.getMinBet(splitInput[4]);
             int potSize = WorkerThread.getPotSize(splitInput[6]);
+            String id = WorkerThread.getID(splitInput[7]);
             AiAgent ai = new AiAgent();
 
             System.out.println("Round: " + round +
@@ -45,14 +45,18 @@ public class WorkerThread implements Runnable {
                                                 //"Js", "9s"       //need to add position and oppponent model.
             String action = ai.getAction(round, cardOne, cardTwo, boardCards, stackSize, potSize, 1, 0, minBet, amountBet, stackSize);
             long time = System.currentTimeMillis();
-            System.out.println(action);
+            System.out.println(id + " " + action);
             System.out.println("Request processed: " + time);
-            out.writeUTF(splitInput[splitInput.length-1] + " " + action + " " + " - response");
+            out.writeUTF(id + " " + action);
 
         } catch (IOException e) {
             //report exception somewhere.
             e.printStackTrace();
         }
+    }
+
+    private static String getID(String id) {
+        return id;
     }
 
     private static int getAmountBet(String s) {

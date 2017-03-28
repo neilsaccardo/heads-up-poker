@@ -45,6 +45,8 @@ io.on('connection', function (socket) {
     });
 
     socket.on('loginRequest', function(data) {
+        socketList[data.id] = socket;
+        console.log('Log in accepted: ' + data.id);
         socket.emit('loginAccepted', data);
     });
 
@@ -73,7 +75,6 @@ io.on('connection', function (socket) {
             console.log('log : ' + JSON.stringify(data));
         }
         sendActionToAIServer(data);
-
     });
     socket.on('call', function (data) {
         socket.emit('fcb', {action: 'check', amount: 0});
@@ -118,6 +119,17 @@ io.on('connection', function (socket) {
 });
 
 var i = 0;
+
+
+javaServerSocket.on('data', function(data) {
+    console.log('Data: ' + data.toString());
+    var socketID = data.toString().trim().split(' ')[0].trim();
+    var keyToSocketList = socketID.toString().substring(2, socketID.toString().length).toString();
+    console.log(keyToSocketList);
+    var action = data.toString().trim().split(' ')[1].trim();
+    socketList[keyToSocketList].emit('AIAction', {action: action});
+});
+
 /*javaServerSocket.on('data', function(data) {
    console.log('Data: ' + data.toString() );
 
@@ -146,10 +158,12 @@ function sendActionToAIServer(data) {
         boardCards += (data.boardCards[i].evalValue + ' ');
     }
     var totalString = /*action + ' ' +*/ amount + ' ' + round + ' ' + cardOne + ' ' +
-                        cardTwo + ' ' + minBet + ' ' + stackSize + ' ' + potSize +  ' ' + boardCards + '\n';
+                        cardTwo + ' ' + minBet + ' ' + stackSize + ' ' + potSize +  ' ' + data.id +  ' ' + boardCards + '\n';
     console.log(totalString);
     javaServerSocket.write(totalString);
 }
+
+
 
 server.listen(3000);
 console.log('Listening on port 3000:');
