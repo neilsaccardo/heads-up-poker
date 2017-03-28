@@ -47,7 +47,25 @@ The best action to carry out is worked out using the final pot/future contributi
 ### Server Communication
 
 Communicating between the ExpressJS web server and java server(which runs the AI) has been achieved using Sockets.
-In the NodeJS environment this has been achieved using the [net module](https://nodejs.org/api/net.html), and java using the [Socket](https://docs.oracle.com/javase/7/docs/api/java/net/Socket.html) and [ServerSocket](https://docs.oracle.com/javase/7/docs/api/java/net/ServerSocket.html) classes. 
+In the NodeJS environment this has been achieved using the [net module](https://nodejs.org/api/net.html), and on the java side, this has been done using the [Socket](https://docs.oracle.com/javase/7/docs/api/java/net/Socket.html) and [ServerSocket](https://docs.oracle.com/javase/7/docs/api/java/net/ServerSocket.html) classes. Communication between the client (front end) and the ExpressJS using the [SocketIO](https://github.com/socketio/socket.io) - which is much more high level and easier to use than sockets :).
+
+
+### UI 
+(added 28-03-'17)
+
+In terms of UI advancements the major change I have made is I have decided to use this [set of cards, made using HTMl5 and CSS3](https://github.com/selfthinker/CSS-Playing-Cards). I have found that they scale much nicer to different screen sizes - I also prefer how they look in general. 
+I've made use of existing [Bootstrap](http://getbootstrap.com/) CSS classes and also [Angular UIBootstrap](https://angular-ui.github.io/bootstrap/) modules as part of my UI.
+
+Here's a screen shot of what my UI currently looks like:
+
+![Current UI] (https://gitlab.computing.dcu.ie/saccarn2/2017-ca400-saccarn2/raw/WIP_ai/docs/blog/images/updateUI.PNG)
+
+
+I've also added a simple log in screen to the front end. This helps me keep track of users playing agains the AI.
+
+![Log in screen] (https://gitlab.computing.dcu.ie/saccarn2/2017-ca400-saccarn2/raw/WIP_ai/docs/blog/images/loginUI.PNG)
+
+There is still some work to be done on the front end, mainly to do with augmenting the overall UX, and making it more clear precisely what action the AI has taken against them.
 
 ## Blog Entry - 05/03/17
 Over the past two weeks I have using data mining techniques to analyse the data from University of Alberta IRC poker database. I have used a clustering technique in order to cluster together types of player based on how often they raise or bet in each stage of a hand (preflop, flop, turn and river). I have used [MongoDB] (https://www.mongodb.com) to store the information for each player from IRC db files. The primary reason I used MongoDB rather a traditional relational database was that it allowed me to be flexible. If I had used relational dbs such MySQL or SQL Server I would have specify exact attributes, while MongoDB allowed me to be flexible in that regard. The other primary reason is because I inted to use Mongo to store user information when a user would play a game with my system. This is because Mongo is simple and easy to use with NodeJS.
