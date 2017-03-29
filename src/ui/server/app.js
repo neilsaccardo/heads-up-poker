@@ -39,15 +39,35 @@ app.get('/', function (req, res) {
 });
 
 var socketList = [];
+var ids = [];
+var sockets = [];
 io.on('connection', function (socket) {
 
     socket.on('disconnect', function() {
+        var i = sockets.indexOf(socket);
+        console.log(socketList.length);
+        console.log(i);
+        sockets.splice(i, 1);
+        var id = ids.splice(i, 1);
+        console.log(id + ' is being removed from the list.');
+        socketList[id] = undefined;
     });
 
     socket.on('loginRequest', function(data) {
-        socketList[data.id] = socket;
-        console.log('Log in accepted: ' + data.id);
-        socket.emit('loginAccepted', data);
+        var s = socketList[data.id];
+        console.log(socketList.length);
+
+        if (s === undefined) {
+            sockets.push(socket);
+            ids.push(data.id);
+            socketList[data.id] = socket;
+            console.log('Log in accepted: ' + data.id);
+            socket.emit('loginAccepted', data);
+        }
+        else {
+            console.log('Log in rejected: ' + data.id);
+            socket.emit('loginRejected', data);
+        }
     });
 
     socket.on('msg', function (data) { //testing socket communication

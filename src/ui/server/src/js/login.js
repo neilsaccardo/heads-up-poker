@@ -1,4 +1,3 @@
-
 function LoginController($scope, socket, $uibModal) {
     var ctrl = this;
     ctrl.showModal = false;
@@ -28,9 +27,15 @@ function LoginController($scope, socket, $uibModal) {
             return false;
         }
     }
+
     ctrl.ok = function() {
         console.log('Closed modal');
     };
+
+    socket.on('loginRejected', function(data) {
+        console.log('Log in rejected');
+        $uibModal.open({templateUrl: 'js/alreadyLoggedInModal.html'});
+    });
 };
 
 angular.module('login', ['socketService', 'ui.bootstrap']).component('login', {
