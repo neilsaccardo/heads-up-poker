@@ -38,29 +38,29 @@ app.get('/', function (req, res) {
     });
 });
 
-var socketList = [];
+var idSocketMap = [];
 var ids = [];
 var sockets = [];
 io.on('connection', function (socket) {
 
     socket.on('disconnect', function() {
         var i = sockets.indexOf(socket);
-        console.log(socketList.length);
+        console.log(idSocketMap.length);
         console.log(i);
         sockets.splice(i, 1);
         var id = ids.splice(i, 1);
         console.log(id + ' is being removed from the list.');
-        socketList[id] = undefined;
+        idSocketMap[id] = undefined;
     });
 
     socket.on('loginRequest', function(data) {
-        var s = socketList[data.id];
-        console.log(socketList.length);
+        var s = idSocketMap[data.id]; // used to see if this id is in use by a socket.
+        console.log(idSocketMap.length);
 
-        if (s === undefined) {
-            sockets.push(socket);
-            ids.push(data.id);
-            socketList[data.id] = socket;
+        if (s === undefined) { //if the id is not in use
+            sockets.push(socket); //add the socket using the id to a list
+            ids.push(data.id);  // add the id (same index as socket)
+            idSocketMap[data.id] = socket;  //  map the socket to the id
             console.log('Log in accepted: ' + data.id);
             socket.emit('loginAccepted', data);
         }
@@ -76,7 +76,7 @@ io.on('connection', function (socket) {
 
     socket.on('testmessage', function (data) {
         console.log(data);
-        socketList[data.id] = socket;
+        idSocketMap[data.id] = socket;
         //javaServerSocket.write('Testing, attention please ' + data.id.toString() + '\n');
     });
 
@@ -147,7 +147,7 @@ javaServerSocket.on('data', function(data) {
     var keyToSocketList = socketID.toString().substring(2, socketID.toString().length).toString();
     console.log(keyToSocketList);
     var action = data.toString().trim().split(' ')[1].trim();
-    socketList[keyToSocketList].emit('AIAction', {action: action});
+    idSocketMap[keyToSocketList].emit('AIAction', {action: action});
 });
 
 /*javaServerSocket.on('data', function(data) {
