@@ -81,15 +81,16 @@ io.on('connection', function (socket) {
     });
 
     socket.on('action', function (data) {
+        console.log('Action received');
         if (data.action === 'bet') {
             //javaServerSocket.write(data.stage, data.cardOne, data.cardTwo, data.boardCards, data.minBet, data.stackSize)
-            socket.emit('cfr', {action: 'call', amount: data.amount}); //call/raise/fold on a bet
+//            socket.emit('cfr', {action: 'call', amount: data.amount}); //call/raise/fold on a bet
         }
         if (data.action === 'check') {
-            socket.emit('fcb', { action: 'bet', amount: 0 }); //call/bet/fold on a check
+  //          socket.emit('fcb', { action: 'bet', amount: 0 }); //call/bet/fold on a check
         }
         if (data.action === 'raise') {
-            socket.emit('cfr', { action: 'call', amount: 0 }); //call/bet/fold on a check
+    //        socket.emit('cfr', { action: 'call', amount: 0 }); //call/bet/fold on a check
         }
         if (data.action === 'call') {
             console.log('log : ' + JSON.stringify(data));

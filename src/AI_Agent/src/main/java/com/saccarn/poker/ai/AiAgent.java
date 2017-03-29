@@ -26,7 +26,8 @@ public class AiAgent {
         String cards = HandRankings.transformCardsForHandRanking(holeCard1, holeCard2);
         Map<String, Double> playerCluster = PlayerCluster.getPlayerInfo(playerType);
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
-            return preFlopAction(cards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
+            String action = preFlopAction(cards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
+            return getCorrectOutputAction(action, position);
         }
         if (stageOfPlay.equals(AiAgent.FLOP)) {
             String action = flopAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
@@ -99,7 +100,7 @@ public class AiAgent {
                 }
             }
         }
-        return "";
+        return ActionStrings.ACTION_PASS;
     }
 
     private String getCorrectOutputAction(String action, int position) {

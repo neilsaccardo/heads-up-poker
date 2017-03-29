@@ -5,7 +5,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     ctrl.aiplayer = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
     ctrl.hideAICards = true;
     ctrl.communityCards = []; //empty
-    ctrl.isPlayerDealer = true;
+    ctrl.isPlayerDealer = false;
     ctrl.playerStackSize = ctrl.stackSize | 4000;
     ctrl.aiStackSize = ctrl.stackSize | 4000;
     ctrl.potSize = 0;
@@ -13,6 +13,8 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     ctrl.playerToPot = 0;
     ctrl.bigBlindAmount = 100;
     ctrl.isPlayerTurn = ctrl.isPlayerDealer;
+
+    var bigBlindCalled = false;
     var deckPointer = 0;
     var deck = cards.createDeck();
     var pokerStage = 0;
@@ -30,7 +32,8 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         ctrl.communityCards = [];
         ctrl.dealOutCards();
         ctrl.blinds();
-        ctrl.continueGame();
+        bigBlindCalled = false;
+        ctrl.startHand();
         console.log('ctrl.username == ' + ctrl.username);
         socket.emit('testmessage', {id: ctrl.username});
     }
@@ -92,6 +95,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
                     cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
                     boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
                     potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
+        ctrl.isPlayerTurn = false;
         socket.emit('action', obj);
         //send event to server saying opponent has bet.
     }
@@ -112,6 +116,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
                     cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
                     boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
                     potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
+        ctrl.isPlayerTurn = false;
         socket.emit('action', obj);
     }
 
@@ -121,41 +126,69 @@ function TableController($scope, cards, socket, $timeout, message, amountService
                     cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
                     boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
                     potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
-        if(ctrl.isPlayerDealer) {
+        if (pokerStage === 0 && !(ctrl.isPlayerDealer)) { //pre flop, the player is not the dealer (player plays second)
             incrementStage();
-            ctrl.isPlayerTurn = ctrl.isPlayerDealer;
-            socket.emit('newaction', obj);
-        } else {
+            ctrl.continueGame();
+        }
+        else if (pokerStage > 0 && !(ctrl.isPlayerDealer)) { // post flop, if the player plays first
+            ctrl.isPlayerTurn = false;
             socket.emit('action', obj);
+        }
+        else if (pokerStage > 0 && ctrl.isPlayerDealer) { //  post flop, if the player plays second
+            ctrl.isPlayerTurn = false;
+            ctrl.incrementStage();
+            ctrl.continueGame();
         }
     }
 
     ctrl.call = function() {
         console.log('I HAVE CALLED');
-        ctrl.addToPotPlayer(10);
-        incrementStage();
-        ctrl.isPlayerTurn = !ctrl.isPlayerDealer;
         var obj =  {action: actions.getCallString(), amount: 0, round: pokerStage,
                     cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
                     boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
                     potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
-
-        socket.emit('action', obj);//inform server that the player has called.
-        ctrl.checkBetOptions = true;
-//        if(ctrl.isPlayerDealer) {
-//            socket.emit('call', {action: 'call', amount: 0});
-//        }
+        ctrl.addToPotPlayer(10); //TODO: put the real number here
+        if (pokerStage === 0 && ctrl.isPlayerDealer && !(bigBlindCalled)) { // player calls the big blind amount
+            ctrl.isPlayerTurn = false;
+            bigBlindCalled = true;
+            console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH');
+            socket.emit('action', object);
+        }
+        else if (bigBlindCalled) {   //if the big blind has been called already.
+            ctrl.isPlayerTurn = false;
+            incrementStage();
+            ctrl.continueGame();
+        }
     }
-    ctrl.continueGame = function() {
-        if(ctrl.isPlayerDealer) {
-            console.log('Player is small blind.');
-            ctrl.isPlayerTurn = true;
+
+    ctrl.startHand = function() {
+        console.log('Starting Hand. ');
+        if (pokerStage === 0 && ctrl.isPlayerDealer) { //if the player is the dealer at the start of a game
+            ctrl.isPlayerTurn = true;             // then they must start - its their turn
             ctrl.checkBetOptions = false;
-            //wait for them to complete an action.
-        } else {
-            console.log('AI is small blind.');
-            socket.emit('startgame', {data: 'sample'});
-            //send an event for ai to start the hand.
+        }
+        else if (pokerStage === 0 && !(ctrl.isPlayerDealer)) { //else if AI is dealer
+            ctrl.isPlayerTurn = false; //than AI must start
+            var obj =  {action: actions.getCallString(), amount: 0, round: pokerStage,
+                            cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
+                            boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
+                            potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
+            socket.emit('action', obj);
+        }
+    }
+
+    ctrl.continueGame = function() { // Only called when stage is flop, turn, river
+        if (ctrl.isPlayerDealer) { // if player is dealer, they will act second.
+            ctrl.isPlayerTurn = false;
+            var obj =  {action: actions.getCallString(), amount: 0, round: pokerStage,
+                            cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
+                            boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
+                            potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
+            socket.emit('action', obj);
+        }
+        else { // else they will act first - they will have option to check/bet
+            ctrl.isPlayerTurn = true;
+            ctrl.checkBetOptions = true;
         }
     }
 
@@ -192,27 +225,27 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     ctrl.blinds = function() {
-        if(ctrl.isPlayerDealer) {
-            ctrl.addToPotAI(ctrl.bigBlindAmount/2); //player puts small blind
-            ctrl.addToPotPlayer(ctrl.bigBlindAmount);
+        if(ctrl.isPlayerDealer) { // the dealer should post the small blind
+            ctrl.addToPotAI(ctrl.bigBlindAmount);         // AI is not the dealer, they post the big blind
+            ctrl.addToPotPlayer(ctrl.bigBlindAmount / 2); // player is the dealer, they post the small blind
         } else {
-            ctrl.addToPotPlayer(ctrl.bigBlindAmount); //player puts big blind
-            ctrl.addToPotAI(ctrl.bigBlindAmount/2);
+            ctrl.addToPotAI(ctrl.bigBlindAmount / 2);  // AI is the dealer, they post the small blind
+            ctrl.addToPotPlayer(ctrl.bigBlindAmount);  // player is not the dealer, they post the big blind
         }
     }
 
     function incrementStage() {
         pokerStage++;
-        if (pokerStage === 1) {
+        if (pokerStage === 1) { // flop
             console.log('FLOP');
             ctrl.flop();
-        } else if (pokerStage === 2) {
+        } else if (pokerStage === 2) {  //turn
             console.log('TURN')
             ctrl.turn();
-        } else if (pokerStage === 3){
+        } else if (pokerStage === 3){ //river
             console.log('RIVER')
             ctrl.river();
-        } else if (pokerStage === 4) {
+        } else if (pokerStage === 4) {  //showdown
             //showdown (show ai hand). need to evaluate hands.
             console.log('SHOWDOWN');
             ctrl.hideAICards = false;
@@ -259,7 +292,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 
     socket.on('AIAction', function(data) {
         console.log('Ai action is ' + data.action);
-
+        console.log('C' + data.action.toLowerCase() + 'C');
         if (data.action.toLowerCase() === actions.getFoldString()) {
             ctrl.aiFold();
         }
@@ -302,6 +335,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         else if (data.action.toLowerCase() === actions.getAllInString()) {
             ctrl.aiBet(ctrl.aiStackSize);
         }
+        console.log(typeof data.action);
     });
 
     ctrl.aiFold = function() {
@@ -314,20 +348,40 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     ctrl.aiCall = function() {
-        console.log('AI has checked');
-        incrementStage();
+        console.log('AI has called');
+        ctrl.addToPotPlayer(10); //TODO: put the real number here
+        if (pokerStage === 0 && !(ctrl.isPlayerDealer) && !(bigBlindCalled)) { // AI calls the big blind amount. !(ctrl.isPlayerDealer) is equivalent to ctrl.isAIDealer.
+            bigBlindCalled = true;
+            ctrl.isPlayerTurn = true;
+            ctrl.checkBetOptions = true;
+        }
+        else if (bigBlindCalled) {   //if the big blind has been called already.
+            ctrl.isPlayerTurn = false;
+            incrementStage();
+            ctrl.continueGame();
+        }
     }
 
     ctrl.aiCheck = function() {
         console.log('AI has checked');
-        ctrl.checkBetOptions = true;
-        ctrl.isPlayerTurn = true;
-        if(!ctrl.isPlayerDealer) {
+        var obj =  {action: actions.getCheckString(), amount: 0, round: pokerStage,
+                    cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
+                    boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
+                    potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
+        if (pokerStage === 0 && (ctrl.isPlayerDealer)) { //pre flop, the AI is not the dealer (player plays second)
             incrementStage();
-            ctrl.isPlayerTurn = ctrl.isPlayerDealer;
-        } else {
-            socket.emit('action', obj);
+            ctrl.continueGame();
         }
+        else if (pokerStage > 0 && (ctrl.isPlayerDealer)) { // post flop, if the AI plays first
+            ctrl.isPlayerTurn = true;
+            ctrl.checkBetOptions = true;
+        }
+        else if (pokerStage > 0 && ctrl.isPlayerDealer) { //  post flop, if the AI plays second
+            ctrl.isPlayerTurn = false;
+            ctrl.incrementStage();
+            ctrl.continueGame();
+        }
+
     }
 
     ctrl.aiBet = function(numChips) {
