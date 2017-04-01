@@ -178,7 +178,7 @@ function sendActionToAIServer(data) {
     for (var i  = 0; i < data.boardCards.length; i++) {
         boardCards += (data.boardCards[i].evalValue + ' ');
     }
-    var totalString = /*action + ' ' +*/ amount + ' ' + round + ' ' + cardOne + ' ' +
+    var totalString = action + ' ' +  amount + ' ' + round + ' ' + cardOne + ' ' +
                         cardTwo + ' ' + minBet + ' ' + stackSize + ' ' + potSize +  ' ' + data.id +  ' ' + boardCards + '\n';
     console.log(totalString);
     javaServerSocket.write(totalString);

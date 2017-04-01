@@ -24,15 +24,17 @@ public class WorkerThread implements Runnable {
             String [] splitInput = input.split(" ");
             DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
             System.out.println();
-            int amountBet = WorkerThread.getAmountBet(splitInput[0]);
-            String round = WorkerThread.getRound(splitInput[1]);
-            String cardOne = WorkerThread.getCard(splitInput[2]);
-            String cardTwo = WorkerThread.getCard(splitInput[3]);
+            String prevAction = WorkerThread.getPreviousAction(splitInput[0]);
+            int amountBet = WorkerThread.getAmountBet(splitInput[1]);
+            String round = WorkerThread.getRound(splitInput[2]);
+            String cardOne = WorkerThread.getCard(splitInput[3]);
+            String cardTwo = WorkerThread.getCard(splitInput[4]);
+            int minBet = WorkerThread.getMinBet(splitInput[5]);
+            int stackSize = WorkerThread.getStack(splitInput[6]);
+            int potSize = WorkerThread.getPotSize(splitInput[7]);
+            String id = WorkerThread.getID(splitInput[8]);
             String [] boardCards = WorkerThread.getBoardCards(round, splitInput);
-            int stackSize = WorkerThread.getStack(splitInput[5]);
-            int minBet = WorkerThread.getMinBet(splitInput[4]);
-            int potSize = WorkerThread.getPotSize(splitInput[6]);
-            String id = WorkerThread.getID(splitInput[7]);
+
             AiAgent ai = new AiAgent();
 
             System.out.println("Round: " + round +
@@ -43,7 +45,7 @@ public class WorkerThread implements Runnable {
             " min bet " + minBet +
             " a mount bet: " + amountBet);
                                                 //"Js", "9s"       //need to add position and oppponent model.
-            String action = ai.getAction(round, cardOne, cardTwo, boardCards, stackSize, potSize, 1, 0, minBet, amountBet, stackSize);
+            String action = ai.getAction(round, cardOne, cardTwo, boardCards, stackSize, potSize, 1, 0, minBet, amountBet, stackSize, prevAction);
             long time = System.currentTimeMillis();
             System.out.println(id + " " + action);
             System.out.println("Request processed: " + time);
@@ -53,6 +55,10 @@ public class WorkerThread implements Runnable {
             //report exception somewhere.
             e.printStackTrace();
         }
+    }
+
+    private static String getPreviousAction(String action) {
+        return action;
     }
 
     private static String getID(String id) {
@@ -116,5 +122,4 @@ public class WorkerThread implements Runnable {
             return "river";
         }
     }
-
 }

@@ -22,24 +22,24 @@ public class AiAgent {
     private final int randomisationThreshold = 95;
 
     public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
-                            int stackSize, int potSize, int playerType, int position, int minBet, int amountBet, int opponentStackSize) {
+                            int stackSize, int potSize, int playerType, int position, int minBet, int amountBet, int opponentStackSize, String previousAction) {
         String cards = HandRankings.transformCardsForHandRanking(holeCard1, holeCard2);
         Map<String, Double> playerCluster = PlayerCluster.getPlayerInfo(playerType);
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
             String action = preFlopAction(cards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
-            return getCorrectOutputAction(action, position);
+            return getCorrectOutputAction(action, position, stageOfPlay, previousAction);
         }
         if (stageOfPlay.equals(AiAgent.FLOP)) {
             String action = flopAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
-            return getCorrectOutputAction(action, position);
+            return getCorrectOutputAction(action, position, stageOfPlay, previousAction);
         }
         if (stageOfPlay.equals(AiAgent.TURN)) {
             String action = turnAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
-            return getCorrectOutputAction(action, position);
+            return getCorrectOutputAction(action, position, stageOfPlay, previousAction);
         }
         if (stageOfPlay.equals((AiAgent.RIVER))) {
             String action = riverAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
-            return getCorrectOutputAction(action, position);
+            return getCorrectOutputAction(action, position, stageOfPlay, previousAction);
         }
         else {
             return ActionStrings.ACTION_FOLD;
@@ -101,6 +101,57 @@ public class AiAgent {
             }
         }
         return ActionStrings.ACTION_PASS;
+    }
+
+
+    private String getCorrectOutputAction(String action, int position, String stageOfPlay, String previousAction) {
+        if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
+            if (previousAction.equals(ActionStrings.ACTION_CHECK) || previousAction.equals(ActionStrings.ACTION_CALL)) {
+                switch (action) {
+                    case ActionStrings.ACTION_PASS:
+                        return ActionStrings.ACTION_CHECK;
+                    default:
+                        return action;
+                }
+            } else {
+                switch (action) {
+                    case ActionStrings.ACTION_PASS:
+                        return ActionStrings.ACTION_CALL;
+                    case ActionStrings.ACTION_BET1:
+                        return ActionStrings.ACTION_RAISE1;
+                    case ActionStrings.ACTION_BET2:
+                        return ActionStrings.ACTION_RAISE2;
+                    case ActionStrings.ACTION_BET3:
+                        return ActionStrings.ACTION_RAISE3;
+                    default:
+                        return action;
+                }
+            }
+        }
+        else {
+            if (previousAction.equals(ActionStrings.ACTION_CHECK) || previousAction.equals(ActionStrings.ACTION_CALL)) {
+                switch (action) {
+                    case ActionStrings.ACTION_PASS:
+                        return ActionStrings.ACTION_CHECK;
+                    default:
+                        return action;
+                }
+            }
+            else {
+                switch (action) {
+                    case ActionStrings.ACTION_PASS:
+                        return ActionStrings.ACTION_CALL;
+                    case ActionStrings.ACTION_BET1:
+                        return ActionStrings.ACTION_RAISE1;
+                    case ActionStrings.ACTION_BET2:
+                        return ActionStrings.ACTION_RAISE2;
+                    case ActionStrings.ACTION_BET3:
+                        return ActionStrings.ACTION_RAISE3;
+                    default:
+                        return action;
+                }
+            }
+        }
     }
 
     private String getCorrectOutputAction(String action, int position) {
