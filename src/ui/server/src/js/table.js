@@ -34,6 +34,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         ctrl.blinds();
         bigBlindCalled = false;
         ctrl.startHand();
+        ctrl.message = 'New hand!';
         console.log('ctrl.username == ' + ctrl.username);
         socket.emit('testmessage', {id: ctrl.username});
     }
@@ -350,10 +351,11 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         else if (data.action.toLowerCase() === actions.getAllInString()) {
             ctrl.aiBet(ctrl.aiStackSize);
         }
-        console.log(typeof data.action);
+
     });
 
     ctrl.aiFold = function() {
+        ctrl.message = message.getAIHasFoldedMessage();
         console.log('The AI has folded. PLayer wins the Hand')
         $timeout(function () {
                     ctrl.addPotToStackPlayer(ctrl.potSize);
@@ -364,6 +366,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 
     ctrl.aiCall = function() {
         console.log('AI has called');
+        ctrl.message = message.getAIHasCalledMessage();
         var amount = amountToCall();
         ctrl.addToPotPlayer(amount); //TODO: put the real number here
         if (pokerStage === 0 && !(ctrl.isPlayerDealer) && !(bigBlindCalled)) { // AI calls the big blind amount. !(ctrl.isPlayerDealer) is equivalent to ctrl.isAIDealer.
@@ -380,6 +383,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 
     ctrl.aiCheck = function() {
         console.log('AI has checked');
+        ctrl.message = message.getAIHasCheckedMessage();
         var obj =  {action: actions.getCheckString(), amount: 0, round: pokerStage,
                     cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
                     boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
@@ -401,6 +405,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     ctrl.aiBet = function(numChips) {
+        ctrl.message = message.getAIHasBetMessage(numChips);
         console.log('AI has bet ' + numChips);
         ctrl.addToPotAI(numChips);
         ctrl.checkBetOptions = false;
@@ -408,6 +413,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     ctrl.aiRaise = function(numChips) {
+        ctrl.message = message.getAIHasRaisedMessage(numChips);
         console.log('Amount to Call : ' + amountToCall());
         console.log('AI has raised ' + numChips);
         ctrl.addToPotAI(numChips + amountToCall());
@@ -450,7 +456,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 };
 
 angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'cardsService', 'socketService'
-                                , 'messageService', 'amountService', 'actionsService'])
+                                , 'messageService', 'amountService', 'actionsService', 'ai-action-message'])
                                 .component('pokerTable', {
     templateUrl: 'js/table.html',
     controller: TableController,

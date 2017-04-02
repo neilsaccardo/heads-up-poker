@@ -1,4 +1,4 @@
-function Message() {
+function Message(actions) {
 
     function getAIHasCheckedMessage() {
         return 'The AI has checked.';
@@ -20,14 +20,27 @@ function Message() {
         return 'The AI has folded.';
     }
 
+    var messageMap = {
+        'call' : 'The AI has called.',
+        'check' : 'The AI has checked.',
+        'raise' : 'The AI has raised.' ,
+        'bet' : 'The AI has bet.' ,
+        'fold' : 'The AI has folded'
+    }
+
+    function getMessageOnAction(action) {
+        return messageMap[action];
+    }
+
     return {
         getAIHasCheckedMessage : getAIHasCheckedMessage,
         getAIHasCalledMessage : getAIHasCalledMessage,
         getAIHasRaisedMessage : getAIHasRaisedMessage,
         getAIHasBetMessage : getAIHasBetMessage,
-        getAIHasFoldedMessage : getAIHasFoldedMessage
+        getAIHasFoldedMessage : getAIHasFoldedMessage,
+        getMessageOnAction : getMessageOnAction
     }
 }
 
 
-angular.module('messageService', []).factory('message', Message);
+angular.module('messageService', ['actionsService']).factory('message', Message);
