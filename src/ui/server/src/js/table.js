@@ -119,7 +119,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
                     cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
                     boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
                     potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
-        ctrl.addToPotPlayer(ctrl.raiseBetAmount + amount);
+        ctrl.addToPotPlayer(parseInt(ctrl.raiseBetAmount) + amount);
         ctrl.isPlayerTurn = false;
         socket.emit('action', obj);
     }
