@@ -29,15 +29,15 @@ function Actions() {
     }
 
     function getRaise1String() {
-        return "raise";
+        return "raise1";
     }
 
     function getRaise2String() {
-        return "raise";
+        return "raise2";
     }
 
     function getRaise3String() {
-        return "raise";
+        return "raise3";
     }
 
     function getFoldString() {

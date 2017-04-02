@@ -108,12 +108,13 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     ctrl.raise = function() {
+        console.log(amountToCall() + '@@@');
         var amount = amountToCall();
-        if (!amountService.checkBetRaiseAmount(ctrl.raiseBetAmount + amount, ctrl.playerStackSize, ctrl.bigBlindAmount)) {
+        if (!amountService.checkBetRaiseAmount(parseInt(ctrl.raiseBetAmount) + amount, ctrl.playerStackSize, ctrl.bigBlindAmount)) {
             return;
         };
         console.log('I HAVE RAISED');
-
+        console.log('By ' + ctrl.raiseBetAmount);
         var obj =  {action: actions.getRaiseString(), amount: ctrl.raiseBetAmount, round: pokerStage,
                     cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
                     boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
@@ -239,7 +240,13 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     function amountToCall() {
-        return (ctrl.potSize - ctrl.aiToPot) - ctrl.playerToPot;
+        if (ctrl.aiToPot > ctrl.playerToPot) { // get the difference between two pots
+            return ctrl.aiToPot - ctrl.playerToPot;
+        }
+        else {
+            return ctrl.playerToPot - ctrl.aiToPot;
+        }
+
     }
 
     function incrementStage() {
