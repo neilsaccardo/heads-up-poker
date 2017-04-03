@@ -10,6 +10,7 @@
                 </div>
                 <div class="col-md-4">
                     <ai-action-message message="{{$ctrl.message}}"></ai-action-message>
+                    <button ng-if="$ctrl.showNewGameButton" ng-click="$ctrl.newGame()" type="button" class="btn btn-primary">New Game?</button>
                 </div>
             </div>
             <div class="row margin-bottom-md">

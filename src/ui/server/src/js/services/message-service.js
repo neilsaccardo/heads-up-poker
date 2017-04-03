@@ -32,13 +32,22 @@ function Message(actions) {
         return messageMap[action];
     }
 
+    function getWinnerMessage(playerStack, aiStackSize) {
+        if (aiStackSize > playerStack) {
+            return "Unlucky... You've lost!";
+        }
+        else {
+            return "Congratulations, you've won! "
+        }
+    }
     return {
         getAIHasCheckedMessage : getAIHasCheckedMessage,
         getAIHasCalledMessage : getAIHasCalledMessage,
         getAIHasRaisedMessage : getAIHasRaisedMessage,
         getAIHasBetMessage : getAIHasBetMessage,
         getAIHasFoldedMessage : getAIHasFoldedMessage,
-        getMessageOnAction : getMessageOnAction
+        getMessageOnAction : getMessageOnAction,
+        getWinnerMessage : getWinnerMessage
     }
 }
 

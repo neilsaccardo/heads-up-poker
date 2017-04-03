@@ -5,21 +5,28 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     ctrl.aiplayer = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
     ctrl.hideAICards = true;
     ctrl.communityCards = []; //empty
-    ctrl.isPlayerDealer = false;
-    ctrl.playerStackSize = ctrl.stackSize | 4000;
-    ctrl.aiStackSize = ctrl.stackSize | 4000;
-    ctrl.potSize = 0;
-    ctrl.aiToPot = 0;
-    ctrl.playerToPot = 0;
-    ctrl.bigBlindAmount = 100;
-    ctrl.isPlayerTurn = ctrl.isPlayerDealer;
 
     var bigBlindCalled = false;
     var deckPointer = 0;
     var deck = cards.createDeck();
     var pokerStage = 0;
+
+    //method to initiate new game. called with the button.
+    ctrl.newGame = function() {
+        ctrl.showNewGameButton = false;
+        ctrl.isPlayerDealer = false;
+        ctrl.playerStackSize = ctrl.stackSize | 500;
+        ctrl.aiStackSize = ctrl.stackSize | 500;
+        ctrl.potSize = 0;
+        ctrl.aiToPot = 0;
+        ctrl.playerToPot = 0;
+        ctrl.bigBlindAmount = 100;
+        ctrl.isPlayerTurn = ctrl.isPlayerDealer;
+        ctrl.newHand();
+    }
     //method to start a new hand
     ctrl.newHand = function() {
+
         console.log('NEW GAME');
         ctrl.isPlayerDealer = !ctrl.isPlayerDealer;
         ctrl.isPlayerTurn = !ctrl.isPlayerDealer;
@@ -191,6 +198,13 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     ctrl.continueGame = function() { // Only called when stage is flop, turn, river
+        if (checkWinner()) {
+            console.log('CHECK WINNER SUCCEDED');
+            ctrl.message = message.getWinnerMessage(ctrl.playerStackSize, ctrl.aiStackSize);
+            ctrl.showNewGameButton = true;
+            return;
+        }
+
         if (ctrl.isPlayerDealer) { // if player is dealer, they will act second.
             ctrl.isPlayerTurn = false;
             var obj =  {action: actions.getCallString(), amount: 0, round: pokerStage,
@@ -281,6 +295,12 @@ function TableController($scope, cards, socket, $timeout, message, amountService
                                             aiCards: [ctrl.aiplayer.cardOne.evalValue, ctrl.aiplayer.cardTwo.evalValue],
                                             communityCards: communityCardsEvalValues, id: ctrl.id});
         }
+    }
+
+    function checkWinner() {
+        console.log((ctrl.playerStackSize < ctrl.bigBlindAmount));
+        console.log((ctrl.aiStackSize < ctrl.bigBlindAmount));
+        return (ctrl.playerStackSize < ctrl.bigBlindAmount) || (ctrl.aiStackSize < ctrl.bigBlindAmount);
     }
 
     //socket on events relating to player win, loss or draw of hand
@@ -469,7 +489,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         deckPointer++;
     }
 
-    ctrl.newHand(); //start a game.
+    ctrl.newGame(); // initiate new game
 };
 
 angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'cardsService', 'socketService'
