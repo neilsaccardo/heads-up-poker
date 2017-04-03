@@ -401,7 +401,6 @@ function TableController($scope, cards, socket, $timeout, message, amountService
             ctrl.incrementStage();
             ctrl.continueGame();
         }
-
     }
 
     ctrl.aiBet = function(numChips) {
