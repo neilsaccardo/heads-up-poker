@@ -33,8 +33,10 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         ctrl.dealOutCards();
         ctrl.blinds();
         bigBlindCalled = false;
-        ctrl.startHand();
         ctrl.message = 'New hand!';
+        $timeout(function () {
+            ctrl.startHand();
+        }, 2000);
         console.log('ctrl.username == ' + ctrl.username);
         socket.emit('testmessage', {id: ctrl.username});
     }
@@ -157,10 +159,15 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         if (pokerStage === 0 && ctrl.isPlayerDealer && !(bigBlindCalled)) { // player calls the big blind amount
             ctrl.isPlayerTurn = false;
             bigBlindCalled = true;
-            console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH');
             socket.emit('action', obj);
         }
-        else if (bigBlindCalled) {   //if the big blind has been called already.
+        else if (pokerStage === 0 && !ctrl.isPlayerDealer && !bigBlindCalled) { //player has raised on the blind.
+            bigBlindAmount = true;
+            ctrl.isPlayerTurn = false;
+            incrementStage();
+            ctrl.continueGame();
+        }
+        else if ((pokerStage > 0) || bigBlindCalled) {   //if the big blind has been called already.
             ctrl.isPlayerTurn = false;
             incrementStage();
             ctrl.continueGame();
@@ -361,20 +368,31 @@ function TableController($scope, cards, socket, $timeout, message, amountService
                     ctrl.addPotToStackPlayer(ctrl.potSize);
                     ctrl.newHand();
                 }, 2000);
-        ctrl.newHand();
+
     }
 
     ctrl.aiCall = function() {
         console.log('AI has called');
         ctrl.message = message.getAIHasCalledMessage();
         var amount = amountToCall();
-        ctrl.addToPotPlayer(amount); //TODO: put the real number here
+        ctrl.addToPotAI(amount);
+        console.log('ggggggggggggggg ' + (pokerStage === 0 && !(ctrl.isPlayerDealer) && !(bigBlindCalled)));
+        console.log('ggggggggggggggg ' + (pokerStage === 0  ));
+        console.log('ggggggggggggggg ' + !(ctrl.isPlayerDealer));
+        console.log('ggggggggggggggg ' + !(bigBlindCalled));
         if (pokerStage === 0 && !(ctrl.isPlayerDealer) && !(bigBlindCalled)) { // AI calls the big blind amount. !(ctrl.isPlayerDealer) is equivalent to ctrl.isAIDealer.
             bigBlindCalled = true;
             ctrl.isPlayerTurn = true;
             ctrl.checkBetOptions = true;
         }
-        else if (bigBlindCalled) {   //if the big blind has been called already.
+        else if (pokerStage === 0 && ctrl.isPlayerDealer && !bigBlindCalled) { //player has raised on the blind.
+            bigBlindAmount = true;
+            ctrl.isPlayerTurn = false;
+            incrementStage();
+            ctrl.continueGame();
+        }
+        else if ((pokerStage > 0) || bigBlindCalled) {   //if the big blind has been called already.
+            console.log('Calling. Go to next stage' );
             ctrl.isPlayerTurn = false;
             incrementStage();
             ctrl.continueGame();
