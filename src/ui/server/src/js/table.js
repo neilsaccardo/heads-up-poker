@@ -29,7 +29,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 
         console.log('NEW GAME');
         ctrl.isPlayerDealer = !ctrl.isPlayerDealer;
-        ctrl.isPlayerTurn = !ctrl.isPlayerDealer;
+        ctrl.isPlayerTurn = false;
         ctrl.checkBetOptions = !ctrl.isPlayerTurn;
         ctrl.hideAICards = true;
         pokerStage = 0;
@@ -183,6 +183,13 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 
     ctrl.startHand = function() {
         console.log('Starting Hand. ');
+        if (checkWinner()) {
+            console.log('CHECK WINNER SUCCEDED');
+            ctrl.message = message.getWinnerMessage(ctrl.playerStackSize, ctrl.aiStackSize);
+            ctrl.showNewGameButton = true;
+            return;
+        }
+
         if (pokerStage === 0 && ctrl.isPlayerDealer) { //if the player is the dealer at the start of a game
             ctrl.isPlayerTurn = true;             // then they must start - its their turn
             ctrl.checkBetOptions = false;
@@ -357,12 +364,12 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         else if (data.action.toLowerCase() === actions.getRaise1String()) {
             var numChips = ((ctrl.potSize / 4) * 3) * 1;
             numChips = (numChips < minBet) ? minBet : numChips;
-            ctrl.aiRaise(10);
+            ctrl.aiRaise(numChips);
         }
         else if (data.action.toLowerCase() === actions.getRaise2String()) {
             var numChips = ((ctrl.potSize / 4) * 3) * 2;
             numChips = (numChips < minBet) ? minBet : numChips;
-            ctrl.aiRaise(20);
+            ctrl.aiRaise(numChips);
         }
         else if (data.action.toLowerCase() === actions.getRaise3String()) {
             var numChips = ((ctrl.potSize / 4) * 3) * 3;
@@ -396,10 +403,6 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         ctrl.message = message.getAIHasCalledMessage();
         var amount = amountToCall();
         ctrl.addToPotAI(amount);
-        console.log('ggggggggggggggg ' + (pokerStage === 0 && !(ctrl.isPlayerDealer) && !(bigBlindCalled)));
-        console.log('ggggggggggggggg ' + (pokerStage === 0  ));
-        console.log('ggggggggggggggg ' + !(ctrl.isPlayerDealer));
-        console.log('ggggggggggggggg ' + !(bigBlindCalled));
         if (pokerStage === 0 && !(ctrl.isPlayerDealer) && !(bigBlindCalled)) { // AI calls the big blind amount. !(ctrl.isPlayerDealer) is equivalent to ctrl.isAIDealer.
             bigBlindCalled = true;
             ctrl.isPlayerTurn = true;
