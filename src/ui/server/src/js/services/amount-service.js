@@ -21,8 +21,15 @@ function AmountService($uibModal) {
         }
     }
 
+    function getBetRaiseAmount(potSize, multiplier) {
+        var mult = multiplier | 1;
+        var numChips = ((potSize / 4) * 3) * mult;
+        return Math.floor(numChips);
+    }
+
     return {
-        checkBetRaiseAmount : checkBetRaiseAmount
+        checkBetRaiseAmount : checkBetRaiseAmount,
+        getBetRaiseAmount : getBetRaiseAmount
     }
 }
 

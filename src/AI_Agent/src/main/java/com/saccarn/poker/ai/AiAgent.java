@@ -26,20 +26,25 @@ public class AiAgent {
         String cards = HandRankings.transformCardsForHandRanking(holeCard1, holeCard2);
         Map<String, Double> playerCluster = PlayerCluster.getPlayerInfo(playerType);
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
+
             String action = preFlopAction(cards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
-            return getCorrectOutputAction(action, position, stageOfPlay, previousAction);
+            String a = getCorrectOutputAction(action, position, stageOfPlay, previousAction);
+            return noUnNecessaryFolds(a, position, stageOfPlay, previousAction);
         }
         if (stageOfPlay.equals(AiAgent.FLOP)) {
             String action = flopAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
-            return getCorrectOutputAction(action, position, stageOfPlay, previousAction);
+            String a = getCorrectOutputAction(action, position, stageOfPlay, previousAction);
+            return noUnNecessaryFolds(a, position, stageOfPlay, previousAction);
         }
         if (stageOfPlay.equals(AiAgent.TURN)) {
             String action = turnAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
-            return getCorrectOutputAction(action, position, stageOfPlay, previousAction);
+            String a = getCorrectOutputAction(action, position, stageOfPlay, previousAction);
+            return noUnNecessaryFolds(a, position, stageOfPlay, previousAction);
         }
         if (stageOfPlay.equals((AiAgent.RIVER))) {
             String action = riverAction(holeCard1, holeCard2, boardCards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
-            return getCorrectOutputAction(action, position, stageOfPlay, previousAction);
+            String a = getCorrectOutputAction(action, position, stageOfPlay, previousAction);
+            return noUnNecessaryFolds(a, position, stageOfPlay, previousAction);
         }
         else {
             return ActionStrings.ACTION_FOLD;
@@ -103,12 +108,29 @@ public class AiAgent {
         return ActionStrings.ACTION_PASS;
     }
 
+    public String noUnNecessaryFolds(String action, int position, String stageOfPlay, String previousAction) {
+        if (!action.equals(ActionStrings.ACTION_FOLD)) { // if its no fold then no need to check
+            return action;
+        }
+        if (previousAction.equals(ActionStrings.ACTION_CHECK)) {
+           return ActionStrings.ACTION_CHECK;
+        }
+        else if (previousAction.equals(ActionStrings.ACTION_CALL)) {
+            return ActionStrings.ACTION_CHECK;
+        }
+        else {
+            return action;
+        }
+    }
+
 
     public String getCorrectOutputAction(String action, int position, String stageOfPlay, String previousAction) {
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
             if (previousAction.equals(ActionStrings.ACTION_CHECK) || previousAction.equals(ActionStrings.ACTION_CALL)) {
-                switch (action) {
-                    case ActionStrings.ACTION_PASS:
+                switch (previousAction) {
+                    case ActionStrings.ACTION_CHECK:
+                        return ActionStrings.ACTION_CALL;
+                    case ActionStrings.ACTION_CALL:
                         return ActionStrings.ACTION_CHECK;
                     default:
                         return action;
