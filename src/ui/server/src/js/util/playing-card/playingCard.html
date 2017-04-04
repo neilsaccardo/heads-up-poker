@@ -1,2 +1,30 @@
-<img class="col-md-1" ng-if="!$ctrl.isHidden" ng-src="js/util/playing-card/imgs/{{$ctrl.value}}_of_{{$ctrl.suit}}.svg">
-<img class="col-md-1" ng-if="$ctrl.isHidden"  ng-src="js/util/playing-card/imgs/card_back.svg">
+    <!--<img class="col-md-1" ng-if="!$ctrl.isHidden" ng-src="js/util/playing-card/imgs/{{$ctrl.value}}_of_{{$ctrl.suit}}.svg">-->
+    <!--<img class="col-md-1" ng-if="$ctrl.isHidden"  ng-src="js/util/playing-card/imgs/card_back.svg">-->
+<li>
+<span ng-if="!$ctrl.isHidden">
+    <span class="card rank-{{$ctrl.getRankValue()}} {{$ctrl.suit}}">
+        <span class="rank">{{$ctrl.value}}</span>
+        <span class="suit" ng-if="$ctrl.suit === 'diams'">
+            <span ng-if="!$ctrl.isFaceCard()">&nbsp;</span>
+            <span ng-if="$ctrl.isFaceCard()">&diams;</span>
+        </span>
+        <span class="suit" ng-if="$ctrl.suit === 'hearts'">
+            <span ng-if="!$ctrl.isFaceCard()">&nbsp;</span>
+            <span ng-if="$ctrl.isFaceCard()">&hearts;</span>
+        </span>
+        <span class="suit" ng-if="$ctrl.suit === 'clubs'">
+            <span ng-if="!$ctrl.isFaceCard()">&nbsp;</span>
+            <span ng-if="$ctrl.isFaceCard()">&clubs;</span>
+        </span>
+        <span class="suit" ng-if="$ctrl.suit === 'spades'">
+            <span ng-if="!$ctrl.isFaceCard()">&nbsp;</span>
+            <span ng-if="$ctrl.isFaceCard()">&spades;</span>
+        </span>
+    </span>
+</span>
+
+<span ng-if="$ctrl.isHidden">
+    <span class="card back" style="color:red;">
+    </span>
+</span>
+</li>

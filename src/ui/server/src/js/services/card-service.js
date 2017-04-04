@@ -20,52 +20,35 @@ function Cards($rootScope) {
         return array;
     }
 
+    /*This function is used for components that want to display a card.  */
     function getCardValue(cardInt) {
         var cardSuit = Math.floor(cardInt / 13);
         var cardNum = cardInt % 13;
         var cardObj = {suit: '', value: '', evalValue: ''};
         switch(cardNum) {
             case 0:
-                cardObj.value = 'ace'
-                break;
-            case 10:
-                cardObj.value = 'jack';
-                break;
-            case 11:
-                cardObj.value = 'queen';
-                break;
-            case 12:
-                cardObj.value = 'king';
-                break;
-            default:
-                cardNum++;
-                cardObj.value = '' + cardNum;
-        }
-
-        switch(cardNum) {
-            case 0:
-                cardObj.value = 'ace';
+                cardObj.value = 'A';
                 cardObj.evalValue = 'A';
                 break;
             case 9:
                 cardObj.value = '10';
                 cardObj.evalValue = 'T';
+                break;
             case 10:
-                cardObj.value = 'jack';
+                cardObj.value = 'J';
                 cardObj.evalValue = 'J';
                 break;
             case 11:
-                cardObj.value = 'queen';
+                cardObj.value = 'Q';
                 cardObj.evalValue = 'Q';
                 break;
             case 12:
-                cardObj.value = 'king';
+                cardObj.value = 'K';
                 cardObj.evalValue = 'K';
                 break;
             default:
-                cardNum++;
-                cardObj.value = '' + cardNum;
-                cardObj.evalValue = '' + cardNum;
+                cardObj.value = '' + (cardNum+1);
+                cardObj.evalValue = '' + (cardNum+1);
         }
 
         switch(cardSuit) {
@@ -78,7 +61,7 @@ function Cards($rootScope) {
                 cardObj.evalValue = cardObj.evalValue + 'c';
                 break;
             case 2:
-                cardObj.suit = 'diamonds';
+                cardObj.suit = 'diams';
                 cardObj.evalValue = cardObj.evalValue + 'd';
                 break;
             case 3:
@@ -86,7 +69,6 @@ function Cards($rootScope) {
                 cardObj.evalValue = cardObj.evalValue + 's';
                 break;
         }
-
         return cardObj;
     }
 

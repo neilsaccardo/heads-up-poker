@@ -1,5 +1,7 @@
-<playing-card suit="$ctrl.cardOne.suit" value="$ctrl.cardOne.value" is-hidden="$ctrl.hideCard"></playing-card>
-<playing-card suit="$ctrl.cardTwo.suit" value="$ctrl.cardTwo.value" is-hidden="$ctrl.hideCard"></playing-card>
+<ul class="table">
+    <playing-card suit="$ctrl.cardOne.suit" value="$ctrl.cardOne.value" is-hidden="$ctrl.hideCard"></playing-card>
+    <playing-card suit="$ctrl.cardTwo.suit" value="$ctrl.cardTwo.value" is-hidden="$ctrl.hideCard"></playing-card>
+</ul>
 <chip-stack total="$ctrl.stackSize"></chip-stack>
 <dealer-button ng-if="$ctrl.isDealer"></dealer-button>
 <!--<div ng-if="$ctrl.isOwnPlayer">-->

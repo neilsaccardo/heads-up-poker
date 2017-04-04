@@ -25,7 +25,7 @@ public class DataLoaderStrings {
     public final static String TOTAL_RIVER_ACTIONS = "totalRiverActions";
 
     public final static String PRE_FLOP_FOLDED_RATIO = "preFlopFoldedRatio";
-    public final static String FLOP_FOLDED_RATIO = "preFlopFoldedRatio";
+    public final static String FLOP_FOLDED_RATIO = "flopFoldedRatio";
     public final static String TURN_FOLDED_RATIO = "turnFoldedRatio";
     public final static String RIVER_FOLDED_RATIO = "riverFoldedRatio";
 

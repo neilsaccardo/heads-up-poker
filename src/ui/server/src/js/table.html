@@ -2,28 +2,67 @@
     <div class="poker-table">
         <div class="container-fluid">
             <div class="row padding-bottom-md">
-                <div>
+                <div class=" col-md-4">
+                    <div class="playingCards faceImages">
                     <ai-player card-one="$ctrl.aiplayer.cardOne" card-two="$ctrl.aiplayer.cardTwo" hide-card="$ctrl.hideAICards"
                                is-dealer="!$ctrl.isPlayerDealer" is-turn="!$ctrl.isPlayerTurn" stack-size="$ctrl.aiStackSize"></ai-player>
+                    </div>
                 </div>
-                <div class="col-md-3"></div>
-                <pot total="$ctrl.potSize" class="pull-left padding-bottom-large-md"></pot>
-                <community-cards cards="$ctrl.communityCards"></community-cards>
+                <div class="col-md-4">
+                    <ai-action-message message="{{$ctrl.message}}"></ai-action-message>
+                    <button ng-if="$ctrl.showNewGameButton" ng-click="$ctrl.newGame()" type="button" class="btn btn-primary">New Game?</button>
+                </div>
+            </div>
+            <div class="row margin-bottom-md">
+                <div class="col-md-1">
+                    <chip-stack total="$ctrl.aiToPot"></chip-stack>
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col-md-1">
+                    <pot total="$ctrl.potSize" class="pull-left padding-bottom-large-md"></pot>
+                </div>
+
+                <div class="col-md-3"></div>
+                 <div class="col-md-6">
+                    <div class="playingCards faceImages">
+                    <community-cards cards="$ctrl.communityCards"></community-cards>
+                    </div>
+                </div>
+            </div>
+            <div class="row margin-bottom-md">
+                <div class="col-md-1">
+                    <chip-stack total="$ctrl.playerToPot"></chip-stack>
+                </div>
             </div>
             <div class="row">
                 <div>
+                    <div class="playingCards faceImages col-md-4">
                     <player card-one="$ctrl.player.cardOne" card-two="$ctrl.player.cardTwo" hide-card="false"
                             is-dealer="$ctrl.isPlayerDealer" is-own-player="true" is-turn="$ctrl.isPlayerTurn" stack-size="$ctrl.playerStackSize"></player>
-                    <div ng-if="$ctrl.checkBetOptions">
-                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-primary" ng-click="$ctrl.bet()">Bet</button>
-                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-success" ng-click="$ctrl.check()">Check</button>
-                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()">Fold</button>
                     </div>
-                    <div ng-if="!$ctrl.checkBetOptions">
-                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-primary" ng-click="$ctrl.raise()">Raise</button>
-                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-success" ng-click="$ctrl.call()">Call</button>
-                        <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()">Fold</button>
+                    <div class="col-md-8 row">
+                        <div class="col-sm-6 row" style="white-space:nowrap!important;">
+                            <label for="amount" class="col-xs-4">Bet/Raise By:</label>
+                            <div class="col-xs-8">
+                                <input type="text" class="form-control" id="amount" ng-model="$ctrl.raiseBetAmount">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div ng-if="$ctrl.checkBetOptions">
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-primary" ng-click="$ctrl.bet()">Bet</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-success" ng-click="$ctrl.check()">Check</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()">Fold</button>
+                            </div>
+                            <div ng-if="!$ctrl.checkBetOptions" >
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-primary" ng-click="$ctrl.raise()">Raise</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-success" ng-click="$ctrl.call()">Call</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()">Fold</button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
