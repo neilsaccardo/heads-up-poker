@@ -11,37 +11,37 @@ public class HandRankingsTest {
     @Test
     public void testTransformCardsForHandRanking() {
         String cardpair1 = HandRankings.transformCardsForHandRanking("Tc", "4d");
-        Assert.assertEquals("T4", cardpair1);
+        Assert.assertEquals("Should take first character from each card represented as strings and concatonate them", "T4", cardpair1);
         String cardpair2 = HandRankings.transformCardsForHandRanking("As", "2h");
-        Assert.assertEquals("A2", cardpair2);
+        Assert.assertEquals("Should take first character from each card represented as strings and concatonate them", "A2", cardpair2);
         String cardpair3 = HandRankings.transformCardsForHandRanking("Qs", "Qd");
-        Assert.assertEquals("QQ", cardpair3);
+        Assert.assertEquals("Should take first character from each card represented as strings and concatonate them", "QQ", cardpair3);
     }
 
     @Test
     public void testTransCardsForHandRankingWithSameSuits() {
         String cardpairSameSuit1 = HandRankings.transformCardsForHandRanking("Tc", "8c");
-        Assert.assertEquals("T8 s", cardpairSameSuit1);
+        Assert.assertEquals("Cards of the same suit should have the first characters of the cards followed by  \'s\'","T8 s", cardpairSameSuit1);
         String cardpairSameSuit2 = HandRankings.transformCardsForHandRanking("Ad", "3d");
-        Assert.assertEquals("A3 s", cardpairSameSuit2);
+        Assert.assertEquals("Cards of the same suit should have the first characters of the cards followed by  \'s\'","A3 s", cardpairSameSuit2);
         String cardpairSameSuit3 = HandRankings.transformCardsForHandRanking("Js", "9s");
-        Assert.assertEquals("J9 s", cardpairSameSuit3);
+        Assert.assertEquals("Cards of the same suit should have the first characters of the cards followed by  \'s\'","J9 s", cardpairSameSuit3);
     }
 
     @Test
     public void testTransformCardsForHandRankingsWithCardsInDifferentOrder() {
         String cardpairSameSuit1 = HandRankings.transformCardsForHandRanking("4c", "Kc");
-        Assert.assertEquals("K4 s", cardpairSameSuit1);
+        Assert.assertEquals("Cards should have the characters in order of card rank e.g. K4 not 4k", "K4 s", cardpairSameSuit1);
         String cardpairSameSuit2 = HandRankings.transformCardsForHandRanking("Qd", "As");
-        Assert.assertEquals("AQ", cardpairSameSuit2);
+        Assert.assertEquals("Cards should have the characters in order of card rank e.g. AQ not QA", "AQ", cardpairSameSuit2);
         String cardpairSameSuit3 = HandRankings.transformCardsForHandRanking("Js", "Td");
-        Assert.assertEquals("JT", cardpairSameSuit3);
+        Assert.assertEquals("Cards should have the characters in order of card rank e.g. JT not TJ","JT", cardpairSameSuit3);
         String cardpairSameSuit4 = HandRankings.transformCardsForHandRanking("4s", "2d");
-        Assert.assertEquals("42", cardpairSameSuit4);
+        Assert.assertEquals("Cards should have the characters in order of card rank e.g. 42 not 42", "42", cardpairSameSuit4);
         String cardpairSameSuit5 = HandRankings.transformCardsForHandRanking("2c", "5c");
-        Assert.assertEquals("52 s", cardpairSameSuit5);
+        Assert.assertEquals("Cards should have the characters in order of card rank e.g. 52 not 25", "52 s", cardpairSameSuit5);
         String cardpairSameSuit6 = HandRankings.transformCardsForHandRanking("Ts", "Jd");
-        Assert.assertEquals("JT", cardpairSameSuit6);
+        Assert.assertEquals("Cards should have the characters in order of card rank e.g. JT not TJ","JT", cardpairSameSuit6);
     }
 
     @Test

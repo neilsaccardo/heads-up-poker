@@ -59,4 +59,74 @@ public class AiAgentTest {
         Assert.assertEquals("Flop : Action should be call as player has CHECKED and AI wants to BET .", ActionStrings.ACTION_BET1, action);
     }
 
+    @Test
+    public void testGetCorrectOutputActionFlopPlayerHasRaised() {
+        String action = agent.getCorrectOutputAction(ActionStrings.ACTION_PASS, 0, AiAgent.FLOP, ActionStrings.ACTION_RAISE1);
+        Assert.assertEquals("Flop : Action should be CALL as player RAISE  and AI wants to PASS.", ActionStrings.ACTION_CALL, action);
+
+        action = agent.getCorrectOutputAction(ActionStrings.ACTION_BET1, 0, AiAgent.FLOP, ActionStrings.ACTION_RAISE1);
+        Assert.assertEquals("Flop : Action should be RAISE as player has RAISE and AI wants to BET .", ActionStrings.ACTION_RAISE1, action);
+    }
+
+
+    @Test
+    public void testGetCorrectOutputActionFlopPlayerHasCalled() {
+        String action = agent.getCorrectOutputAction(ActionStrings.ACTION_PASS, 0, AiAgent.FLOP, ActionStrings.ACTION_CALL);
+        Assert.assertEquals("Flop : Action should be CHECK as player CALLED  and AI wants to PASS.", ActionStrings.ACTION_CHECK, action);
+
+        action = agent.getCorrectOutputAction(ActionStrings.ACTION_BET1, 0, AiAgent.FLOP, ActionStrings.ACTION_CALL);
+        Assert.assertEquals("Flop : Action should be BET as player has CALLED and AI wants to BET .", ActionStrings.ACTION_BET1, action);
+    }
+
+    @Test
+    public void testNoUnNecessaryFoldsPreFlopPlayerCheck() {
+        String action = agent.noUnNecessaryFolds(ActionStrings.ACTION_FOLD, 0, AiAgent.PRE_FLOP, ActionStrings.ACTION_CHECK);
+        Assert.assertEquals("Preflop: Action should not be fold as player has just checked before them. The AI should Check",
+                ActionStrings.ACTION_CHECK, action);
+    }
+
+    @Test
+    public void testNoUnNecessaryFoldsFlopPlayerCheck() {
+        String action = agent.noUnNecessaryFolds(ActionStrings.ACTION_FOLD, 0, AiAgent.FLOP, ActionStrings.ACTION_CHECK);
+        Assert.assertEquals("Flop: Action should not be fold as player has just checked before them. The AI should Check",
+                ActionStrings.ACTION_CHECK, action);
+    }
+
+    @Test
+    public void testNoUnNecessaryFoldsTurnPlayerCheck() {
+        String action = agent.noUnNecessaryFolds(ActionStrings.ACTION_FOLD, 0, AiAgent.FLOP, ActionStrings.ACTION_CHECK);
+        Assert.assertEquals("Turn: Action should not be fold as player has just checked before them. The AI should Check",
+                ActionStrings.ACTION_CHECK, action);
+    }
+
+    @Test
+    public void testNoUnNecessaryFoldsRiverPlayerCheck() {
+        String action = agent.noUnNecessaryFolds(ActionStrings.ACTION_FOLD, 0, AiAgent.FLOP, ActionStrings.ACTION_CHECK);
+        Assert.assertEquals("River: Action should not be fold as player has just checked before them. The AI should Check",
+                ActionStrings.ACTION_CHECK, action);
+    }
+
+    @Test
+    public void testNoUnNecessaryFoldsDoesNotAffectNonFoldActions() {
+        String action = agent.noUnNecessaryFolds(ActionStrings.ACTION_CALL, 0, AiAgent.FLOP, ActionStrings.ACTION_CHECK);
+        Assert.assertEquals("Action should not be affected as the action is not FOLD",
+                ActionStrings.ACTION_CALL, action);
+        action = agent.noUnNecessaryFolds(ActionStrings.ACTION_CALL, 0, AiAgent.FLOP, ActionStrings.ACTION_CHECK);
+        Assert.assertEquals("CALL Action should not be affected as the action is not FOLD",
+                ActionStrings.ACTION_CALL, action);
+        action = agent.noUnNecessaryFolds(ActionStrings.ACTION_BET1, 0, AiAgent.FLOP, ActionStrings.ACTION_CHECK);
+        Assert.assertEquals("BET Action should not be affected as the action is not FOLD",
+                ActionStrings.ACTION_BET1, action);
+        action = agent.noUnNecessaryFolds(ActionStrings.ACTION_RAISE2, 0, AiAgent.FLOP, ActionStrings.ACTION_CHECK);
+        Assert.assertEquals("RAISE Action should not be affected as the action is not FOLD",
+                ActionStrings.ACTION_RAISE2, action);
+
+        action = agent.noUnNecessaryFolds(ActionStrings.ACTION_CHECK, 0, AiAgent.FLOP, ActionStrings.ACTION_CHECK);
+        Assert.assertEquals("CHECK Action should not be affected as the action is not FOLD",
+                ActionStrings.ACTION_CHECK, action);
+
+
+    }
+
+
 }
