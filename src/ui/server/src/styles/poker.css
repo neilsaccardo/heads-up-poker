@@ -16,7 +16,6 @@
     font-size: 24px;
     line-height: 1.33;
     cursor: inherit;
-    background-color: #cccccc;
 }
 
 .thin-black-border {
@@ -78,4 +77,44 @@
 
 .gray-background {
     background-color: #EEE;
+}
+
+.chip-stack {
+    float: left;
+    border: 9px dotted;
+    background-color: #fff;
+    font-size: 1.75rem; /*Responsive em scales nicely with mobile*/
+    font-weight: bold;
+    border-radius: 50px 50px 50px 50px;
+    line-height: 48px;
+    width: 65px;
+    text-align: center;
+}
+
+.red-border {
+    border-color: red;
+}
+
+.green-border {
+    border-color: green;
+}
+
+.yellow-border {
+    border-color: yellow;
+}
+
+.purple-border {
+    border-color: purple;
+}
+
+.blue-border {
+    border-color: blue;
+}
+
+.brown-border {
+    border-color: brown;
+}
+
+.black-border {
+    border-color: black;
 }
