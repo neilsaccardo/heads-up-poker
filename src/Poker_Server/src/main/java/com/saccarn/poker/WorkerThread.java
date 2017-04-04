@@ -43,7 +43,8 @@ public class WorkerThread implements Runnable {
             " boardCards.legnth: " + boardCards.length +
             " stack size: " + stackSize +
             " min bet " + minBet +
-            " a mount bet: " + amountBet);
+            " amount bet: " + amountBet +
+            " previous action: " + prevAction);
                                                 //"Js", "9s"       //need to add position and oppponent model.
             String action = ai.getAction(round, cardOne, cardTwo, boardCards, stackSize, potSize, 1, 0, minBet, amountBet, stackSize, prevAction);
             long time = System.currentTimeMillis();
@@ -58,7 +59,7 @@ public class WorkerThread implements Runnable {
     }
 
     private static String getPreviousAction(String action) {
-        return action;
+        return action.toUpperCase();
     }
 
     private static String getID(String id) {

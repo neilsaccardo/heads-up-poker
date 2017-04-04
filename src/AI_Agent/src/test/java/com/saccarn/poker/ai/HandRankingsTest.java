@@ -48,6 +48,6 @@ public class HandRankingsTest {
     public void testGetEVRankOfACardPair() {
         HandRankings hr = new HandRankings();
         double evRank = hr.getEVRankOfCardPair("JJ");
-        Assert.assertEquals(4.0, evRank, 0.1);
+        Assert.assertEquals("The EV rank of JJ should be 4.0",4.0, evRank, 0.1);
     }
 }

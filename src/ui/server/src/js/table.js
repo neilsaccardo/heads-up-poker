@@ -206,7 +206,6 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 
     ctrl.continueGame = function() { // Only called when stage is flop, turn, river
         if (checkWinner()) {
-            console.log('CHECK WINNER SUCCEDED');
             ctrl.message = message.getWinnerMessage(ctrl.playerStackSize, ctrl.aiStackSize);
             ctrl.showNewGameButton = true;
             return;

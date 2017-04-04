@@ -104,7 +104,7 @@ public class AiAgent {
     }
 
 
-    private String getCorrectOutputAction(String action, int position, String stageOfPlay, String previousAction) {
+    public String getCorrectOutputAction(String action, int position, String stageOfPlay, String previousAction) {
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
             if (previousAction.equals(ActionStrings.ACTION_CHECK) || previousAction.equals(ActionStrings.ACTION_CALL)) {
                 switch (action) {
@@ -113,7 +113,8 @@ public class AiAgent {
                     default:
                         return action;
                 }
-            } else {
+            }
+            else {
                 switch (action) {
                     case ActionStrings.ACTION_PASS:
                         return ActionStrings.ACTION_CALL;
