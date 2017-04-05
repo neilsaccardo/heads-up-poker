@@ -31,8 +31,6 @@ public class PlayerTypeClusterer {
                 distMatrix.put(computeDistance(playerVectors.get(s1), playerVectors.get(s2)));
             }
         }
-        System.out.println(mappedIdsToNames);
-        //distMatrix.print();
     }
 
 
@@ -64,7 +62,6 @@ public class PlayerTypeClusterer {
             List<Integer> li = mappedIDsToClusters.get(id);
             clusterCentroids.add(computeCentroid(li));
         }
-        System.out.println("Centroids : " + clusterCentroids);
         return clusterCentroids;
     }
 
@@ -114,7 +111,6 @@ public class PlayerTypeClusterer {
         }
         while(mappedIDsToClusters.size() != n) {
             Point p = getMinDistPointFromMatrix();
-            System.out.println(p);
             int x = p.getX();
             int y = p.getY();
             if (x < y) {
@@ -123,8 +119,6 @@ public class PlayerTypeClusterer {
                 updateMapIdToClusters(y, x);
             }
             updateMatrix(p);
-            //distMatrix.print();
-            System.out.println(mappedIDsToClusters);
         }
     }
     // method is used to deal when the distance between two points
@@ -151,8 +145,6 @@ public class PlayerTypeClusterer {
 
     private void updateMapIdToClusters(int small, int large) {
         List ly = mappedIDsToClusters.get(large);
-        System.out.println("Y" + large);
-        System.out.println("ly" + ly);
         if(ly == null) { //these two are already clustered together.
             return;
         }

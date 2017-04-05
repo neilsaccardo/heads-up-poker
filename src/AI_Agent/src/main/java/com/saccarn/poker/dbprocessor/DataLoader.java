@@ -201,7 +201,6 @@ public class DataLoader {
         playerDoc.put(DataLoaderStrings.TOTAL_FLOP_ACTIONS, p.getTotalNumActionsFlop());
         playerDoc.put(DataLoaderStrings.TOTAL_TURN_ACTIONS, p.getTotalNumActionsTurn());
         playerDoc.put(DataLoaderStrings.TOTAL_RIVER_ACTIONS, p.getTotalNumActionsRiver());
-        System.out.println("Hello  " + p.getName());
         if (p.isWinner()) {
             playerDoc.put(DataLoaderStrings.NUM_WINS, 1);
         } else {
@@ -237,14 +236,12 @@ public class DataLoader {
             Map<Integer, String> docObjectKeys = fillDocObjectMap();
             Vector<Double> v = new Vector<>();
             String playerName = (String) doc.get(DataLoaderStrings.NAME);
-            System.out.println(playerName);
             for (int i = 0; i < docObjectKeys.size(); i++) {
                 double value = (double) doc.get(docObjectKeys.get(i));
                 v.add(value);
             }
             mappedVectors.put(playerName, v);
         }
-        System.out.println(mappedVectors);
         return mappedVectors;
     }
 

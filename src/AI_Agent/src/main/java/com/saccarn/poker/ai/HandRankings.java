@@ -73,7 +73,6 @@ public class HandRankings {
         for (String card: mappedCardsToEVPercentagePosition.keySet()) {
             mappedCardsToEVPercentagePosition.put(card, (mappedCardsToEVPercentagePosition.get(card) / size) * multiplier);
         }
-        System.out.println(mappedCardsToEVPercentagePosition);
     }
 
     //cards are inputted as: 'Jh', '7d', '8s', '5s', '4c'

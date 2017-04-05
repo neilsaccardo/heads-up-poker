@@ -90,7 +90,6 @@ public class ActionDeterminerTest {
             i++;
             ad = new ActionDeterminer("As", "Ac", bcs3, 2, 2, 20, 15, 3, playerCluster, 0); // i% 3 to go through flop, turn, river
             action = ad.getAction();
-            System.out.println(action);
         }
         Assert.assertEquals("Flop: Action Determiner should always return a valid action string", totalTimes, i );
     }
@@ -110,7 +109,6 @@ public class ActionDeterminerTest {
             i++;
             ad = new ActionDeterminer("As", "Ac", bcs4, 2, 2, 20, 15, 3, playerCluster, 1);
             action = ad.getAction();
-            System.out.println(action);
         }
         Assert.assertEquals("Turn: Action Determiner should always return a valid action string", totalTimes, i );
     }
@@ -129,7 +127,6 @@ public class ActionDeterminerTest {
             i++;
             ad = new ActionDeterminer("As", "Ac", bcs5, 2, 2, 20, 15, 3, playerCluster, 2);
             action = ad.getAction();
-            System.out.println(action);
         }
         Assert.assertEquals("River: Action Determiner should always return a valid action string", totalTimes, i );
     }

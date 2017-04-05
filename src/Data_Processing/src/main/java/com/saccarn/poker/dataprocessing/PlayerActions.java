@@ -46,17 +46,12 @@ public class PlayerActions {
             System.out.println("ERror finding game for this player.");
             return null;
         }
-//        System.out.println(playerOneLine);
-//        System.out.println(playerTwoLine);
         return addActions(playerOneLine, playerTwoLine);
     }
 
     private GamePlayerRecord addActions(String playerOneLine, String playerTwoLine) {
         String [] playerOneList = playerOneLine.trim().split("\\s+");
         String [] playerTwoList = playerTwoLine.trim().split("\\s+");
-//        for (int i = 0; i < playerOneList.length; i++) {
-//            System.out.println(i + " : " + playerOneList[i]);
-//        }
         if(playerOneList[3].equals("1")) {
             return addActionsToRecord(playerOneList, playerTwoList);
         } else {
