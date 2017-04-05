@@ -13,7 +13,7 @@ import java.util.Vector;
 public class PlayerTypeClustererTest {
 
     @Test
-    public void testGetCentroidsCorrectAmountSaved() {
+    public void testGetCentroidsCorrectAmountSaved() { // Kind of a 'God' test - a lot of stuff happening
         PlayerTypeClusterer ptc = new PlayerTypeClusterer();
         int n = 4;
         ptc.getClusters(n); //save into DB
