@@ -26,6 +26,7 @@ public class DataLoader {
 
 
     public void saveClusterCentroids(List<Vector<Double>> clusterCentroids) {
+        dropClusterCollection(); //drop everything before continuing
         MongoClient client = new MongoClient();
         MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
         MongoCollection<Document> playerCollection = database.getCollection(DataLoaderStrings.CLUSTER_COLLECTION);
@@ -54,6 +55,7 @@ public class DataLoader {
     }
 
     public void loadDataIntoMongo() throws InterruptedException {
+        dropPlayerCollection(); //drop existing players from collection
         List<GamePlayerRecord> gprs;
         try {
             gprs = getListOfRecords();
@@ -264,6 +266,18 @@ public class DataLoader {
             centroids.add(centroidMap);
         }
         return centroids;
+    }
+
+    private void dropPlayerCollection() {
+        MongoClient client = new MongoClient();
+        MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
+        database.getCollection(DataLoaderStrings.PLAYER_COLLECTION).drop();
+    }
+
+    private void dropClusterCollection() {
+        MongoClient client = new MongoClient();
+        MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
+        database.getCollection(DataLoaderStrings.CLUSTER_COLLECTION).drop();
     }
 
     public static void main(String [] args) throws InterruptedException {
