@@ -161,4 +161,14 @@ public class AiAgentTest {
         Assert.assertEquals("AI Agent should output a valid action from the valid action list:" + validActionList,
                 true, validActionList.contains(action));
     }
+
+
+    @Test
+    public void testAiAgentGetActionPreFlop() {
+        String [] bcs0 = {};
+        String action = agent.getAction(AiAgent.PRE_FLOP, "As", "Ac", bcs0, 2000, 400, 0, 0,100, 0, 2000, ActionStrings.ACTION_CALL);
+        Assert.assertEquals("AI Agent should output a valid action from the valid action list:" + validActionList,
+                true, validActionList.contains(action));
+    }
+
 }
