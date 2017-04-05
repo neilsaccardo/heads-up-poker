@@ -54,6 +54,7 @@ public class Server implements Runnable {
             new Thread(new WorkerThread(clientSocket, line)).start();
         }
     }
+
     public synchronized void stop() {
         try {
             this.serverSocket.close();
