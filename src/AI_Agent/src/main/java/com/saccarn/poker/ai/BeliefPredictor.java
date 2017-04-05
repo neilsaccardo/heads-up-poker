@@ -62,20 +62,27 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
 
     private double calculateProbabilityOfLossAtShowdown() {
         int rank;
+        double rankPotential;
         HandType ht = new HandType();
+        HandPotential hp = new HandPotential();
         if (boardCards.length == 3) {
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
+                                                        boardCards[2]);
+            rankPotential = hp.calculateHandPotential(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
                                                         boardCards[2]);
         }
         else if (boardCards.length == 4) {
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
                                                         boardCards[2], boardCards[3]);
+            rankPotential = hp.calculateHandPotential(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
+                    boardCards[2]);
         }
         else { // boardCards.length == 5
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0],
                                                         boardCards[1], boardCards[2], boardCards[3], boardCards[4]);
+            rankPotential = 0; // no potential on the river.
         }
-        return ht.calculateProbOfCardRanksBetterThan(rank);
+        return ht.calculateProbOfCardRanksBetterThan(rank); // - rankPotential
     }
 
 }

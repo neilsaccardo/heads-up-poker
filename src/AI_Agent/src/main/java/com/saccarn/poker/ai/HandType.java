@@ -11,7 +11,7 @@ public class HandType {
 
     private HashMap<Integer, Double> handTypes = new HashMap<>();
     private HashMap<Character, Integer> cardValues = new HashMap<>();
-
+    private HashMap<Character, Integer> pairTable = new HashMap<>();
     public HandType() {
         handTypes.put(0, 0.000014); //straight flush
         handTypes.put(1, 0.0002347); //four of a kind
@@ -23,14 +23,39 @@ public class HandType {
         handTypes.put(7, 0.0324047); //pair A
         handTypes.put(8, 0.0325547); //pair K
         handTypes.put(9, 0.03249); // Pair Q
-        handTypes.put(10, 0.0649163); //Medium Pair - 10 J
-        handTypes.put(11, 0.2599887); //Pair low - < 10
-        handTypes.put(12, 0.193495); // busted ace
-        handTypes.put(13, 0.1292463); // busted king
-        handTypes.put(14, 0.082212); //busted queen
-        handTypes.put(15, 0.07631); //busted med - 10 J
-        handTypes.put(16, 0.0203227); //busted low-  < 10
+        handTypes.put(10, 0.0325); //Medium Pair - J
+        handTypes.put(11, 0.0325); //Medium Pair - 10
+        handTypes.put(12, 0.0325); //Low Pair - 9
+        handTypes.put(13, 0.0325); //Low Pair - 8
+        handTypes.put(14, 0.0325); //Low Pair - 7
+        handTypes.put(15, 0.0325); //Low Pair - 6
+        handTypes.put(16, 0.0325); //Low Pair - 5
+        handTypes.put(17, 0.0325); //Low Pair - 4
+        handTypes.put(18, 0.0325); //Low Pair - 3
+        handTypes.put(19, 0.0325); //Low Pair - 2
+        handTypes.put(20, 0.193495); // busted ace
+        handTypes.put(21, 0.1292463); // busted king
+        handTypes.put(22, 0.082212); //busted queen
+        handTypes.put(23, 0.07631); //busted med - 10 J
+        handTypes.put(24, 0.0203227); //busted low-  < 10
         fillCardValues();
+        fillPairTable();
+    }
+
+    private void fillPairTable() {
+        pairTable.put('2', 19);
+        pairTable.put('3', 18);
+        pairTable.put('4', 17);
+        pairTable.put('5', 16);
+        pairTable.put('6', 15);
+        pairTable.put('7', 14);
+        pairTable.put('8', 13);
+        pairTable.put('9', 12);
+        pairTable.put('T', 11);
+        pairTable.put('J', 10);
+        pairTable.put('Q', 9);
+        pairTable.put('K', 8);
+        pairTable.put('A', 7);
     }
 
     public double calculateProbOfCardRanksBetterThan(int rank) {
@@ -38,7 +63,6 @@ public class HandType {
         for (int i = 0; i < rank; i++) {
             probability = handTypes.get(i) + probability;
         }
-
         return probability;
     }
 
@@ -175,37 +199,41 @@ public class HandType {
         else if (isTwoPair(cards)) {
             rank = 6;
         }
-        else if (isPairAce(cards)) {
-            rank = 7;
-        }
-        else if (isPairKing(cards)) {
-            rank = 8;
-        }
-        else if (isPairQueen(cards)) {
-            rank = 9;
-        }
-        else if (isPairMed(cards)) {
-            rank = 10;
-        }
-        else if (isPairLow(cards)) {
-            rank = 11;
+        else if (isPair(cards) != -1) {
+            rank = isPair(cards);
         }
         else if (isAceHighCard(cards)) {
-            rank = 12;
+            rank = 20;
         }
         else if (isKingHighCard(cards)) {
-            rank = 13;
+            rank = 21;
         }
         else if (isQueenHighCard(cards)) {
-            rank = 14;
+            rank = 22;
         }
         else if (isMedHighCard(cards)) {
-            rank  = 15;
+            rank  = 23;
         }
         else { //low card
-            rank = 16;
+            rank = 24;
         }
         return rank;
+    }
+
+    /*
+     * Returns -1 if no pair is found
+     * Returns pair rank from pairTable if found. Not guaranteed to return highest or lowest pair.
+     */
+    private int isPair(String[] cards) {
+        int pairRank = -1;
+        Set<Character> values = pairTable.keySet();
+        for (Character c : values) {
+            if (isPairInCards(cards, c)) {
+                pairRank = pairTable.get(c);
+                break;
+            }
+        }
+        return pairRank;
     }
 
     private boolean isFlush(String[] cards) {
@@ -236,42 +264,13 @@ public class HandType {
         return isHighCardInCards(cards, 'A');
     }
 
-    private boolean isPairLow(String[] cards) {
-        char [] charValues = {'9', '8', '7', '6', '5', '4', '3', '2'};
-        for (int i = 0; i < charValues.length; i++) {
-            if (isPairInCards(cards, charValues[i])) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isPairMed(String[] cards) {
-        return isPairInCards(cards, 'J')
-                || isPairInCards(cards, 'T');
-    }
-
-    private boolean isPairQueen(String[] cards) {
-        return isPairInCards(cards, 'Q');
-    }
-
-    private boolean isPairKing(String[] cards) {
-        return isPairInCards(cards, 'K');
-    }
-
-    private boolean isPairAce(String[] cards) {
-        return isPairInCards(cards, 'A');
-    }
-
     private boolean isHighCardInCards(String[] cards, char c) {
-        int count = 0;
         for (int i = 0; i < cards.length; i++) {
             if (cards[i].charAt(0) == c) {
                 return true; //its here
             }
         }
         return false;
-
     }
 
 
