@@ -50,4 +50,12 @@ public class HandRankingsTest {
         double evRank = hr.getEVRankOfCardPair("JJ");
         Assert.assertEquals("The EV rank of JJ should be 4.0",4.0, evRank, 0.1);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testExceptionThrownWhenCardInputNotFormattedCorrectlyToTransformCardsForHandRanking() {
+        String bad = HandRankings.transformCardsForHandRanking("244", "few");
+        Assert.assertEquals("An Illegal Argument exception should be thrown when cards inputted incorrectly", false, true);
+        // if no exception is thrown this will fail.
+    }
+
 }

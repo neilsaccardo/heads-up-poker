@@ -43,7 +43,6 @@ public class PotPredictorTest {
     @Test
     public void testDeterminingBetSizeBigMinBet() {
         potPredictor = new PotPredictor(30, 75, 75, 15, 0, 10);
-        System.out.println(potPredictor.getBetSize());
         boolean betsizeConditions = potPredictor.getBetSize() < 75 && potPredictor.getBetSize() >= 30;
         Assert.assertEquals("Bet size should be at least the minimum bet and at most should be stack size - flop", betsizeConditions, true);
     }
@@ -52,7 +51,6 @@ public class PotPredictorTest {
     public void testDeterminingBetSizeSmallStack() {
         potPredictor = new PotPredictor();
         potPredictor.calculatePotAndFutureContribution(30, 20, 75, 15, 0, 10);
-        System.out.println(potPredictor.getBetSize());
         boolean betsizeConditions = potPredictor.getBetSize() == 20;
         Assert.assertEquals("Bet size should be at least the minimum bet and at most should be stack size - flop", betsizeConditions, true);
     }

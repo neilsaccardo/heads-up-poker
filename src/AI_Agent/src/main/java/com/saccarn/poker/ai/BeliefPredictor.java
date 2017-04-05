@@ -45,7 +45,6 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
 
     private double checkFoldPercentagesPerRound() {
         double roundDoubt = 0;
-        System.out.println("here : " + opponentModel);
         if (round == 0) {
             roundDoubt = opponentModel.get(DataLoaderStrings.PRE_FLOP_FOLDED_RATIO);
         }

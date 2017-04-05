@@ -11,6 +11,8 @@ import java.util.Map;
  */
 public class PlayerCluster {
 
+    private PlayerCluster() {} // no need to initialise this class.
+
     public static Map<String, Double> getPlayerInfo(int playerType) {
         return PlayerTypeClusterer.getCentroid(playerType);
     }

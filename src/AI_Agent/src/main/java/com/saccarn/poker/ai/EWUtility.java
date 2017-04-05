@@ -63,17 +63,4 @@ public class EWUtility {
         return potPredictor.getBetSize();
     }
 
-    public static void main(String [] args) {
-        PotPredictor po = new PotPredictor();
-        po.calculatePotAndFutureContribution(1, 75, 75, 20, 0, 10);
-        System.out.println(po.getFinalPotBet());
-        System.out.println(po.getFinalPotPass());
-        System.out.println(po.getFutureContributionBet());
-        System.out.println(po.getFutureContributionPass());
-        EWUtility ewu = new EWUtility(po);
-        System.out.println("dddddd----------");
-        System.out.println(ewu.getBetSize());
-        System.out.println(ewu.getUtilityBetWin());
-        System.out.println(ewu.getUtilityPass());
-    }
 }

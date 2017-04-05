@@ -56,12 +56,4 @@ public class ActionProbability {
         double result = ActionProbability.ALPHA / (ActionProbability.ALPHA + (cpParams.get(round)* Math.exp(ew)));
         return result;
     }
-
-    public static void main(String [] args) {
-        PotPredictor po = new PotPredictor(); //1, 75, 75, 2, 0, 30
-        po.calculatePotAndFutureContribution(1, 75, 75, 30, 0, 0);
-        ActionProbability ap = new ActionProbability(po);
-        System.out.println(ap.getPassProbability());
-        System.out.println(ap.getFoldProbability());
-    }
 }

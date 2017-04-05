@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by Neil on 23/03/2017.
@@ -15,7 +15,7 @@ public class ActionDeterminerTest {
 
     @Before
     public void setUp() {
-        String [] bcs = {};
+        String [] bcs = {"2c", "4d", "10s"};
         ad = new ActionDeterminer("As", "Ac", bcs, 2, 2, 20, 15, 3, new HashMap<String, Double>(), 0);
     }
 
@@ -57,6 +57,14 @@ public class ActionDeterminerTest {
     }
 
     @Test
+    public void testActionDeterminerDetermineBet1EdgeCase() {
+        String action = ad.determinePassOrBetAction(0.2, 0.9);
+        Assert.assertEquals("Should determine action BET1 - random number(0.61) > passBetProbability and random number < passBetProbability * BET3_CONST(4)", ActionStrings.ACTION_BET1, action);
+    }
+
+
+
+    @Test
     public void testActionDeterminerDetermineAllIn() {
         String action = ad.determinePassOrBetAction(0.2, 1.0);
         Assert.assertEquals("Should determine all in - when random number is 1.0 and random > passBetProbability*BET3_CONST", ActionStrings.ACTION_ALLIN, action);
@@ -67,4 +75,63 @@ public class ActionDeterminerTest {
         action = ad.determinePassOrBetAction(0.26, 1.0);
         Assert.assertNotEquals("Should NOT determine all in - when random number is 1.0and random < passBetProbability*BET3_CONST", ActionStrings.ACTION_ALLIN, action);
     }
+
+    @Test
+    public void testActionDeterminerGetActionAlwaysReturnsAValidActionFlop() {
+        String [] bcs3 = {"2c", "4d", "Ad"};
+        Map<String, Double> playerCluster = PlayerCluster.getPlayerInfo(0);
+        ad = new ActionDeterminer("As", "Ac", bcs3, 2, 2, 20, 15, 3, playerCluster, 0);
+        String [] validActions = {ActionStrings.ACTION_FOLD, ActionStrings.ACTION_PASS, ActionStrings.ACTION_BET2, ActionStrings.ACTION_BET1, ActionStrings.ACTION_BET3, ActionStrings.ACTION_ALLIN};
+        List<String> listOfValidActions = Arrays.asList(validActions);
+        int totalTimes = 15;
+        int i = 0;
+        String action = ad.getAction();
+        while(i < totalTimes && listOfValidActions.contains(action)) {
+            i++;
+            ad = new ActionDeterminer("As", "Ac", bcs3, 2, 2, 20, 15, 3, playerCluster, 0); // i% 3 to go through flop, turn, river
+            action = ad.getAction();
+            System.out.println(action);
+        }
+        Assert.assertEquals("Flop: Action Determiner should always return a valid action string", totalTimes, i );
+    }
+
+
+    @Test
+    public void testActionDeterminerGetActionAlwaysReturnsAValidActionTurn() {
+        String [] bcs4 = {"2c", "4d", "Ad", "3s"};
+        Map<String, Double> playerCluster = PlayerCluster.getPlayerInfo(0);
+        ad = new ActionDeterminer("As", "Ac", bcs4, 2, 2, 20, 15, 3, playerCluster, 0);
+        String [] validActions = {ActionStrings.ACTION_FOLD, ActionStrings.ACTION_PASS, ActionStrings.ACTION_BET2, ActionStrings.ACTION_BET1, ActionStrings.ACTION_BET3, ActionStrings.ACTION_ALLIN};
+        List<String> listOfValidActions = Arrays.asList(validActions);
+        int totalTimes = 15;
+        int i = 0;
+        String action = ad.getAction();
+        while(i < totalTimes && listOfValidActions.contains(action)) {
+            i++;
+            ad = new ActionDeterminer("As", "Ac", bcs4, 2, 2, 20, 15, 3, playerCluster, 1);
+            action = ad.getAction();
+            System.out.println(action);
+        }
+        Assert.assertEquals("Turn: Action Determiner should always return a valid action string", totalTimes, i );
+    }
+
+    @Test
+    public void testActionDeterminerGetActionAlwaysReturnsAValidActionTurnRiver() {
+        String [] bcs5 = {"2c", "4d", "Ad", "3s", "7d"};
+        Map<String, Double> playerCluster = PlayerCluster.getPlayerInfo(0);
+        ad = new ActionDeterminer("As", "Ac", bcs5, 2, 2, 20, 15, 3, playerCluster, 0);
+        String [] validActions = {ActionStrings.ACTION_FOLD, ActionStrings.ACTION_PASS, ActionStrings.ACTION_BET2, ActionStrings.ACTION_BET1, ActionStrings.ACTION_BET3, ActionStrings.ACTION_ALLIN};
+        List<String> listOfValidActions = Arrays.asList(validActions);
+        int totalTimes = 15;
+        int i = 0;
+        String action = ad.getAction();
+        while(i < totalTimes && listOfValidActions.contains(action)) {
+            i++;
+            ad = new ActionDeterminer("As", "Ac", bcs5, 2, 2, 20, 15, 3, playerCluster, 2);
+            action = ad.getAction();
+            System.out.println(action);
+        }
+        Assert.assertEquals("River: Action Determiner should always return a valid action string", totalTimes, i );
+    }
+
 }

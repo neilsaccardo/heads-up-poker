@@ -5,6 +5,8 @@ package com.saccarn.poker.ai;
  */
 public class ActionStrings {
 
+    private ActionStrings() {} //No need to initialise
+
     public static final String ACTION_FOLD = "FOLD";
     public static final String ACTION_PASS = "PASS";
     public static final String ACTION_CALL = "CALL";

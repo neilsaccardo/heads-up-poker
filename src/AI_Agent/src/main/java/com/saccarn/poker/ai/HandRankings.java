@@ -107,9 +107,4 @@ public class HandRankings {
             }
         }
     }
-
-    public static void main(String [] args) throws IOException {
-        HandRankings hrs = new HandRankings();
-        hrs.getHandRankings();
-    }
 }

@@ -4,12 +4,21 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Neil on 04/04/2017.
  */
 public class AiAgentTest {
 
     private AiAgent agent;
+    private String [] validActions = {  ActionStrings.ACTION_FOLD, ActionStrings.ACTION_BET2, ActionStrings.ACTION_BET1,
+                                        ActionStrings.ACTION_BET3,
+                                        ActionStrings.ACTION_RAISE1, ActionStrings.ACTION_RAISE2, ActionStrings.ACTION_RAISE3,
+                                        ActionStrings.ACTION_ALLIN,
+                                        ActionStrings.ACTION_CHECK, ActionStrings.ACTION_CALL};
+    private List<String> validActionList = Arrays.asList(validActions);
 
     @Before
     public void setUp() {
@@ -120,13 +129,36 @@ public class AiAgentTest {
         action = agent.noUnNecessaryFolds(ActionStrings.ACTION_RAISE2, 0, AiAgent.FLOP, ActionStrings.ACTION_CHECK);
         Assert.assertEquals("RAISE Action should not be affected as the action is not FOLD",
                 ActionStrings.ACTION_RAISE2, action);
-
         action = agent.noUnNecessaryFolds(ActionStrings.ACTION_CHECK, 0, AiAgent.FLOP, ActionStrings.ACTION_CHECK);
         Assert.assertEquals("CHECK Action should not be affected as the action is not FOLD",
                 ActionStrings.ACTION_CHECK, action);
-
-
     }
 
 
+    @Test
+    public void testAiAgentGetActionFlop() {
+        String [] bcs3 = {"2c", "4d", "Ad"};
+
+        String action = agent.getAction(AiAgent.FLOP, "As", "5d", bcs3, 2000, 400, 0, 0,100, 0, 2000, ActionStrings.ACTION_CALL);
+        Assert.assertEquals("AI Agent should output a valid action from the valid action list:" + validActionList,
+                true, validActionList.contains(action));
+    }
+
+    @Test
+    public void testAiAgentGetActionTurn() {
+        String [] bcs4 = {"2c", "4d", "Ad", "3s"};
+
+        String action = agent.getAction(AiAgent.TURN, "As", "5d", bcs4, 2000, 400, 0, 0,100, 0, 2000, ActionStrings.ACTION_CALL);
+        Assert.assertEquals("AI Agent should output a valid action from the valid action list:" + validActionList,
+                true, validActionList.contains(action));
+    }
+
+    @Test
+    public void testAiAgentGetActionRiver() {
+        String [] bcs5 = {"2c", "4d", "Ad", "3s", "7d"};
+
+        String action = agent.getAction(AiAgent.RIVER, "As", "5d", bcs5, 2000, 400, 0, 0,100, 0, 2000, ActionStrings.ACTION_CALL);
+        Assert.assertEquals("AI Agent should output a valid action from the valid action list:" + validActionList,
+                true, validActionList.contains(action));
+    }
 }
