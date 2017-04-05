@@ -1,4 +1,4 @@
-package com.saccarn.poker.dataprocessing.unit;
+package com.saccarn.poker.dataprocessing;
 
 import com.saccarn.poker.dataprocessing.GamePlayerRecord;
 import com.saccarn.poker.dataprocessing.Player;
