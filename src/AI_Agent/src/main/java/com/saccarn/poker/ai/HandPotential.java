@@ -8,7 +8,7 @@ import com.saccarn.poker.ai.potential.StraightFlushChecker;
  */
 public class HandPotential {
 
-
+    private static double LUCK = 1; //?
 
     public double calculateHandPotential(String holeCardOne, String holeCardTwo, String boardCard, String boardCard1, String boardCard2) {
 
@@ -18,7 +18,8 @@ public class HandPotential {
 
     public double isStraightFlushOn(String holeCardOne, String holeCardTwo, String [] boardCards) {
         StraightFlushChecker sfc = new StraightFlushChecker(holeCardOne, holeCardTwo, boardCards);
-
+        int numStraightOn = sfc.numStraightOn();
+        int numFlushOn = sfc.numFlushOn();
         return 0.0;
     }
 }
