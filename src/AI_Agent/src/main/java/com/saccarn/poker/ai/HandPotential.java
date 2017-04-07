@@ -55,7 +55,7 @@ public class HandPotential {
     }
 
 
-    public double isStraightFlushOn() {
+    private double isStraightFlushOn() {
         StraightFlushChecker sfc = new StraightFlushChecker(holeCardOne, holeCardTwo, boardCards);
         int numStraightOn = sfc.numStraightOn();
         double probStraightHappening = numStraightOn * luck;

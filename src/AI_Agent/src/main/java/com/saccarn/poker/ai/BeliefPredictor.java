@@ -80,7 +80,7 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
                                                         boardCards[2], boardCards[3]);
             probOfCardRanksBetterThanCurrentRank = ht.calculateProbOfCardRanksBetterThan(rank);
             HandPotential hp = new HandPotential(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
-                    boardCards[2]);
+                    boardCards[2], boardCards[3]);
             probOfLoss = hp.calculateHandPotential(probOfCardRanksBetterThanCurrentRank);
         }
         else { // boardCards.length == 5
