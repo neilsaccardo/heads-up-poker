@@ -63,7 +63,8 @@
                                 <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()">Fold</button>
                             </div>
                         </div>
-
+                        <min-bet bet="$ctrl.bigBlindAmount" hands="$ctrl.handsLeftTillBetIncrease">
+                        </min-bet>
                     </div>
                 </div>
             </div>

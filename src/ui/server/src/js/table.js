@@ -1,8 +1,8 @@
 function TableController($scope, cards, socket, $timeout, message, amountService, actions) {
     var ctrl = this;
 
-    ctrl.player = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
-    ctrl.aiplayer = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
+    ctrl.player = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}};
+    ctrl.aiplayer = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}};
     ctrl.hideAICards = true;
     ctrl.communityCards = []; //empty
 
@@ -16,17 +16,24 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         ctrl.showNewGameButton = false;
         ctrl.isPlayerDealer = false;
         ctrl.showNewHandButton = false;
-        ctrl.playerStackSize = ctrl.stackSize | 500;
-        ctrl.aiStackSize = ctrl.stackSize | 500;
+        ctrl.playerStackSize = ctrl.stackSize | 5000;
+        ctrl.aiStackSize = ctrl.stackSize | 5000;
         ctrl.potSize = 0;
         ctrl.aiToPot = 0;
         ctrl.playerToPot = 0;
-        ctrl.bigBlindAmount = 100;
+        ctrl.betIncreaseEveryNumHands = ctrl.handsIncrease | 10;
+        ctrl.handsLeftTillBetIncrease = ctrl.betIncreaseEveryNumHands;
+        ctrl.bigBlindAmount = ctrl.minimumBet | 100;
         ctrl.isPlayerTurn = ctrl.isPlayerDealer;
         ctrl.newHand();
     }
     //method to start a new hand
     ctrl.newHand = function() {
+        ctrl.handsLeftTillBetIncrease = ctrl.handsLeftTillBetIncrease - 1;
+        if (ctrl.handsLeftTillBetIncrease === 0) {
+            ctrl.bigBlindAmount = ctrl.bigBlindAmount + ctrl.bigBlindAmount;
+            ctrl.handsLeftTillBetIncrease = ctrl.betIncreaseEveryNumHands;
+        }
         ctrl.showNewHandButton = false;
         console.log('NEW GAME');
         ctrl.isPlayerDealer = !ctrl.isPlayerDealer;
@@ -505,13 +512,15 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     ctrl.newGame(); // initiate new game
 };
 
-angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'cardsService', 'socketService'
+angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'min-bet','cardsService', 'socketService'
                                 , 'messageService', 'amountService', 'actionsService', 'ai-action-message'])
                                 .component('pokerTable', {
     templateUrl: 'js/table.html',
     controller: TableController,
     bindings: {
         username: '@',
-        stackSize: '<'
+        stackSize: '<',
+        minimumBet: '<',
+        handsIncrease: '<'
     }
 });
