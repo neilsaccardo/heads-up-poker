@@ -3,14 +3,15 @@ var app = express();
 var server = require('http').Server(app)
 var io = require('socket.io')(server);
 var PokerEvaluator = require('poker-evaluator');
+var db = require('./db.js');
 var net = require('net');
-
 var obj = PokerEvaluator.evalHand(["Th", "Kh", "Qh", "Jh", "9h", "3s", "5h"]);
-
 console.log(obj);
 
 var JAVA_PORT = 3500;
 var HOST = 'localhost';
+
+db.saveIntoDB('name');
 
 app.use(express.static(__dirname + '/src'));
 
@@ -151,19 +152,6 @@ javaServerSocket.on('data', function(data) {
     idSocketMap[keyToSocketList].emit('AIAction', {action: action});
 });
 
-/*javaServerSocket.on('data', function(data) {
-   console.log('Data: ' + data.toString() );
-
-   var socketID = data.toString().trim().split(' ')[0].trim();
-    console.log(socketID.trim() + ' - socketID');
-    var keyToSocketList = socketID.toString().substring(2, socketID.toString().length).toString();
-    socketList[keyToSocketList].emit('PrintToConsole', 'Printing to the Console I hope......' + data);
-    console.log(i++ + ": " + data.toString());
-});*/
-
-function ab2str(buf) { //http://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
-  return String.fromCharCode.apply(null, new Uint16Array(buf));
-}
 
 function sendActionToAIServer(data) {
     var action = data.action;
@@ -183,7 +171,6 @@ function sendActionToAIServer(data) {
     console.log(totalString);
     javaServerSocket.write(totalString);
 }
-
 
 
 server.listen(3000);
