@@ -112,11 +112,6 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('startgame', function (data) {
-        //receive the card info.
-        socket.emit('cfr', {action: 'call', amount: 0}); //start game will be call raise or fold on the - big blind
-    });
-
     socket.on('evaluate hands', function (data) {
         var playerHandRank = PokerEvaluator.evalHand(data.communityCards.concat(data.playerCards));
         var aiHandRank = PokerEvaluator.evalHand(data.communityCards.concat(data.aiCards));
@@ -161,24 +156,25 @@ javaServerSocket.on('data', function(data) {
 
 
 function sendActionToAIServer(data) {
-    var modelString = db.retrieveModelFromDB(data.id);
-    var action = data.action;
-    var amount = data.action | 0;
-    var round = data.round;
-    var cardOne = data.cardOne.evalValue;
-    var cardTwo = data.cardTwo.evalValue;
-    var minBet = data.minBet;
-    var stackSize = data.stackSize;
-    var potSize = data.potSize;
-    var boardCards = '';
-    for (var i  = 0; i < data.boardCards.length; i++) {
-        boardCards += (data.boardCards[i].evalValue + ' ');
-    }
-    var totalString = action + ' ' +  amount + ' ' + round + ' ' + cardOne + ' ' +
-                        cardTwo + ' ' + minBet + ' ' + stackSize + ' ' + potSize +  ' ' + data.id +  ' ' + boardCards
-                        + ': ' +  modelString + '\n';
-    console.log(totalString);
-    javaServerSocket.write(totalString);
+   db.retrieveModelFromDB(data.id, function(modelString) {
+        var action = data.action;
+        var amount = data.action | 0;
+        var round = data.round;
+        var cardOne = data.cardOne.evalValue;
+        var cardTwo = data.cardTwo.evalValue;
+        var minBet = data.minBet;
+        var stackSize = data.stackSize;
+        var potSize = data.potSize;
+        var boardCards = '';
+        for (var i  = 0; i < data.boardCards.length; i++) {
+            boardCards += (data.boardCards[i].evalValue + ' ');
+        }
+        var totalString = action + ' ' +  amount + ' ' + round + ' ' + cardOne + ' ' +
+                            cardTwo + ' ' + minBet + ' ' + stackSize + ' ' + potSize +  ' ' + data.id +  ' ' + boardCards
+                            + ': ' +  modelString + '\n';
+        console.log(totalString);
+        javaServerSocket.write(totalString);
+    });
 }
 
 

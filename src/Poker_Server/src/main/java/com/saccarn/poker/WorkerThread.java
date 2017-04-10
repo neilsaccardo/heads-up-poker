@@ -27,7 +27,7 @@ public class WorkerThread implements Runnable {
         try {
             String [] splitInputsAndModel = inputLine.split(":");
             String [] splitInput = splitInputsAndModel[0].split(" ");
-            String [] model = splitInputsAndModel[1].split(" ");
+            String [] model = splitInputsAndModel[1].trim().split(" ");
             DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
             System.out.println();
             String prevAction = WorkerThread.getPreviousAction(splitInput[0]);
@@ -51,14 +51,17 @@ public class WorkerThread implements Runnable {
             " min bet " + minBet +
             " amount bet: " + amountBet +
             " previous action: " + prevAction);
+            System.out.println(model.length);
             String action = "";                                //"Js", "9s"       //need to add position and oppponent model.
             if (model.length == 1) {
                 action = ai.getAction(round, cardOne, cardTwo, boardCards, stackSize, potSize, 1, 0, minBet, amountBet, stackSize, prevAction);
             }
             else {
+                System.out.println("HERE");
                 for (int i = 0; i < model.length; i++) {
                     System.out.print(model[i]+ ' ');
                 }
+                System.out.println("END HERE");
                 Map<String, Double> modelMap = createOpponentMap(model);
                 action = ai.getAction(round, cardOne, cardTwo, boardCards, stackSize, potSize, modelMap, 0, minBet, amountBet, stackSize, prevAction);
             }
@@ -81,10 +84,10 @@ public class WorkerThread implements Runnable {
         int numFoldedAtTurn = Integer.parseInt(model[2]);
         int numFoldedAtRiver = Integer.parseInt(model[3]);
 
-        map.put(DataLoaderStrings.FOLDED_AT_PRE_FLOP, numFoldedAtPreFlop/((double)numHandsPlayed));
-        map.put(DataLoaderStrings.FOLDED_AT_FLOP, numFoldedAtFlop/(((double)numHandsPlayed  - numFoldedAtPreFlop) + 1));
-        map.put(DataLoaderStrings.FOLDED_AT_TURN, numFoldedAtTurn/(((double)numHandsPlayed  - numFoldedAtPreFlop - numFoldedAtFlop) + 1));
-        map.put(DataLoaderStrings.FOLDED_AT_RIVER, numFoldedAtRiver/(((double)numHandsPlayed  - numFoldedAtPreFlop - numFoldedAtFlop - numFoldedAtTurn) + 1));
+        map.put(DataLoaderStrings.PRE_FLOP_FOLDED_RATIO, numFoldedAtPreFlop/((double)numHandsPlayed));
+        map.put(DataLoaderStrings.FLOP_FOLDED_RATIO, numFoldedAtFlop/(((double)numHandsPlayed  - numFoldedAtPreFlop) + 1));
+        map.put(DataLoaderStrings.TURN_FOLDED_RATIO, numFoldedAtTurn/(((double)numHandsPlayed  - numFoldedAtPreFlop - numFoldedAtFlop) + 1));
+        map.put(DataLoaderStrings.RIVER_FOLDED_RATIO, numFoldedAtRiver/(((double)numHandsPlayed  - numFoldedAtPreFlop - numFoldedAtFlop - numFoldedAtTurn) + 1));
         return map;
     }
 

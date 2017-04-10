@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/testwebapp');
 
+var NUM_HANDS_BEFORE_NOT_DEFAULT = 25;
 var playerSchema = mongoose.Schema({
                                         name: String,
                                         numHandsPlayed: Number,
@@ -80,6 +81,7 @@ var db = {
     },
     saveIntoDBPlayerHandWin: function (playerName) {
         Player.findOne({'name': playerName}, function(err, player) {
+            console.log(playerName);
             if (err) {
                 throw err;
             }
@@ -103,21 +105,21 @@ var db = {
             });
         });
     },
-    retrieveModelFromDB: function(playerName) {
+    retrieveModelFromDB: function(playerName, cb) {
         console.log('CALLING LoadIntoDB');
         Player.findOne({'name': playerName}, function(err, player) {
             if (err) throw err;
             // will need to create a json object with relevant info;
-            if (player.numHandsPlayed < 20) {
+            if (player.numHandsPlayed < NUM_HANDS_BEFORE_NOT_DEFAULT) {
                 console.log('default');
-                return "default";
+                modelString = 'default';
             }
             else {
                 var modelString = player.numFoldsPreFlop + ' ' + player.numFoldsFlop + ' ' + player.numFoldsTurn
                                     + ' ' + player.numFoldsRiver + ' ' + player.numHandsPlayed;
                 console.log(modelString);
-                return modelString;
             }
+            cb(modelString);
         });
     }
 }

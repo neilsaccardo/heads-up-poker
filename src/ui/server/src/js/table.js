@@ -311,7 +311,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
             }
             socket.emit('evaluate hands', { playerCards: [ctrl.player.cardOne.evalValue, ctrl.player.cardTwo.evalValue],
                                             aiCards: [ctrl.aiplayer.cardOne.evalValue, ctrl.aiplayer.cardTwo.evalValue],
-                                            communityCards: communityCardsEvalValues, id: ctrl.id});
+                                            communityCards: communityCardsEvalValues, id: ctrl.username});
         }
     }
 
