@@ -21,12 +21,12 @@ public class AiAgent {
     private final int randomTopLimit = 100;
     private final int randomisationThreshold = 95;
 
-    public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
-                            int stackSize, int potSize, int playerType, int position, int minBet, int amountBet, int opponentStackSize, String previousAction) {
-        String cards = HandRankings.transformCardsForHandRanking(holeCard1, holeCard2);
-        Map<String, Double> playerCluster = PlayerCluster.getPlayerInfo(playerType);
-        if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
 
+    public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
+                            int stackSize, int potSize, Map<String, Double> playerCluster, int position, int minBet, int amountBet, int opponentStackSize, String previousAction) {
+        String cards = HandRankings.transformCardsForHandRanking(holeCard1, holeCard2);
+
+        if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
             String action = preFlopAction(cards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
             String a = getCorrectOutputAction(action, position, stageOfPlay, previousAction);
             return noUnNecessaryFolds(a, position, stageOfPlay, previousAction);
@@ -49,6 +49,15 @@ public class AiAgent {
         else {
             return ActionStrings.ACTION_FOLD;
         }
+
+
+    }
+
+    public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
+                            int stackSize, int potSize, int playerType, int position, int minBet, int amountBet, int opponentStackSize, String previousAction) {
+        Map<String, Double> playerCluster = PlayerCluster.getPlayerInfo(playerType);
+        return getAction(stageOfPlay, holeCard1, holeCard2, boardCards,
+                stackSize, potSize, playerCluster, position, minBet, amountBet, opponentStackSize, previousAction);
     }
 
     private String riverAction(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {

@@ -122,6 +122,8 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         //send event to server saying opponent lost.
         ctrl.addPotToStackAI(ctrl.potSize);
         console.log('I HAVE FOLDED');
+        var obj = {id: ctrl.username, round: pokerStage}
+        socket.emit('playerFold', obj);
         ctrl.newHand();
     }
 

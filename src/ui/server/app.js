@@ -11,7 +11,6 @@ console.log(obj);
 var JAVA_PORT = 3500;
 var HOST = 'localhost';
 
-db.saveIntoDB('name');
 
 app.use(express.static(__dirname + '/src'));
 
@@ -78,6 +77,7 @@ io.on('connection', function (socket) {
     socket.on('testmessage', function (data) {
         console.log(data);
         idSocketMap[data.id] = socket;
+        db.createRecordIfNoneExistent(data.id);
         //javaServerSocket.write('Testing, attention please ' + data.id.toString() + '\n');
     });
 
@@ -98,6 +98,11 @@ io.on('connection', function (socket) {
         }
         sendActionToAIServer(data);
     });
+    socket.on('playerFold', function(data) {
+        db.saveIntoDBPlayerFold(data.id, data.round);
+        console.log('PLAYER HAS FOLDED');
+    });
+
     socket.on('call', function (data) {
         socket.emit('fcb', {action: 'check', amount: 0});
     });
@@ -125,17 +130,19 @@ io.on('connection', function (socket) {
            (playerHandRank.handType === aiHandRank.handType
             && playerHandRank.handRank > aiHandRank.handRank)) {
             console.log('Win for the Player'); //inform AI about this.
+            db.saveIntoDBPlayerHandWin(data.id);
             socket.emit('playerwin', playerHandRank);
         }
         else if (playerHandRank.handType < aiHandRank.handType ||
                 (playerHandRank.handType === aiHandRank.handType
-             && playerHandRank.handRank < aiHandRank.handRank)) {
+                 && playerHandRank.handRank < aiHandRank.handRank)) {
             console.log('Win for the AI!!!!');
             socket.emit('aiwin', aiHandRank);
-
+            db.saveIntoDBPlayerLossAtShowdown(data.id);
         } else { //its a draw
             console.log('Its A draw. What are the odds?');
             socket.emit('playeraidraw', playerHandRank);
+            db.saveIntoDBPlayerLossAtShowdown(data.id);
         }
     });
 });
@@ -154,6 +161,7 @@ javaServerSocket.on('data', function(data) {
 
 
 function sendActionToAIServer(data) {
+    var modelString = db.retrieveModelFromDB(data.id);
     var action = data.action;
     var amount = data.action | 0;
     var round = data.round;
@@ -167,7 +175,8 @@ function sendActionToAIServer(data) {
         boardCards += (data.boardCards[i].evalValue + ' ');
     }
     var totalString = action + ' ' +  amount + ' ' + round + ' ' + cardOne + ' ' +
-                        cardTwo + ' ' + minBet + ' ' + stackSize + ' ' + potSize +  ' ' + data.id +  ' ' + boardCards + '\n';
+                        cardTwo + ' ' + minBet + ' ' + stackSize + ' ' + potSize +  ' ' + data.id +  ' ' + boardCards
+                        + ': ' +  modelString + '\n';
     console.log(totalString);
     javaServerSocket.write(totalString);
 }

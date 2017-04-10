@@ -2,26 +2,32 @@ package com.saccarn.poker;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.saccarn.poker.ai.AiAgent;
+import com.saccarn.poker.dbprocessor.DataLoaderStrings;
+
 /**
  * Created by Neil on 08/03/2017.
  */
 public class WorkerThread implements Runnable {
 
     private Socket clientSocket = null;
-    private String input   = "HERE WE ARE";
+    private String inputLine   = "HERE WE ARE";
 
 
     public WorkerThread(Socket clientSocket0, String s) {
         clientSocket = clientSocket0;
-        input = s;
+        inputLine = s;
     }
 
 
     public void run() {
         try {
-            String [] splitInput = input.split(" ");
+            String [] splitInputsAndModel = inputLine.split(":");
+            String [] splitInput = splitInputsAndModel[0].split(" ");
+            String [] model = splitInputsAndModel[1].split(" ");
             DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
             System.out.println();
             String prevAction = WorkerThread.getPreviousAction(splitInput[0]);
@@ -45,8 +51,17 @@ public class WorkerThread implements Runnable {
             " min bet " + minBet +
             " amount bet: " + amountBet +
             " previous action: " + prevAction);
-                                                //"Js", "9s"       //need to add position and oppponent model.
-            String action = ai.getAction(round, cardOne, cardTwo, boardCards, stackSize, potSize, 1, 0, minBet, amountBet, stackSize, prevAction);
+            String action = "";                                //"Js", "9s"       //need to add position and oppponent model.
+            if (model.length == 1) {
+                action = ai.getAction(round, cardOne, cardTwo, boardCards, stackSize, potSize, 1, 0, minBet, amountBet, stackSize, prevAction);
+            }
+            else {
+                for (int i = 0; i < model.length; i++) {
+                    System.out.print(model[i]+ ' ');
+                }
+                Map<String, Double> modelMap = createOpponentMap(model);
+                action = ai.getAction(round, cardOne, cardTwo, boardCards, stackSize, potSize, modelMap, 0, minBet, amountBet, stackSize, prevAction);
+            }
             long time = System.currentTimeMillis();
             System.out.println(id + " " + action);
             System.out.println("Request processed: " + time);
@@ -57,6 +72,22 @@ public class WorkerThread implements Runnable {
             e.printStackTrace();
         }
     }
+
+    private Map<String,Double> createOpponentMap(String[] model) {
+        Map<String, Double> map = new HashMap<String, Double>();
+        int numHandsPlayed = Integer.parseInt(model[4]);
+        int numFoldedAtPreFlop = Integer.parseInt(model[0]);
+        int numFoldedAtFlop = Integer.parseInt(model[1]);
+        int numFoldedAtTurn = Integer.parseInt(model[2]);
+        int numFoldedAtRiver = Integer.parseInt(model[3]);
+
+        map.put(DataLoaderStrings.FOLDED_AT_PRE_FLOP, numFoldedAtPreFlop/((double)numHandsPlayed));
+        map.put(DataLoaderStrings.FOLDED_AT_FLOP, numFoldedAtFlop/(((double)numHandsPlayed  - numFoldedAtPreFlop) + 1));
+        map.put(DataLoaderStrings.FOLDED_AT_TURN, numFoldedAtTurn/(((double)numHandsPlayed  - numFoldedAtPreFlop - numFoldedAtFlop) + 1));
+        map.put(DataLoaderStrings.FOLDED_AT_RIVER, numFoldedAtRiver/(((double)numHandsPlayed  - numFoldedAtPreFlop - numFoldedAtFlop - numFoldedAtTurn) + 1));
+        return map;
+    }
+
 
     private static String getPreviousAction(String action) {
         return action.toUpperCase();
