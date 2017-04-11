@@ -105,10 +105,11 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 
     //methods relating to the buttons on the UI
     ctrl.bet = function() {
-        if (!amountService.checkBetRaiseAmount(ctrl.raiseBetAmount, ctrl.playerStackSize, ctrl.bigBlindAmount)) {
+        if (!amountService.checkBetRaiseAmount(parseInt(ctrl.raiseBetAmount), ctrl.playerStackSize, ctrl.bigBlindAmount)) {
             return;
         };
         console.log('betting');
+        ctrl.addToPotPlayer(parseInt(ctrl.raiseBetAmount));
         var obj =  {action: actions.getBetString(), amount: ctrl.raiseBetAmount, round: pokerStage,
                     cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
                     boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
@@ -215,7 +216,8 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     ctrl.continueGame = function() { // Only called when stage is flop, turn, river
-        if (checkWinner()) {
+        if (checkWinner() && pokerStage !== 4) {
+            console.log('CHECK WINNER SUCCEDED ');
             ctrl.message = message.getWinnerMessage(ctrl.playerStackSize, ctrl.aiStackSize);
             ctrl.showNewGameButton = true;
             return;
