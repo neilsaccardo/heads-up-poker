@@ -53,7 +53,7 @@ public class ActionProbability {
 
     public double getPassProbability() {
         double ew = (ewu.getUtilityBet() - ewu.getUtilityPass())/((double)ewu.getBetSize());
-        double result = ActionProbability.ALPHA / (ActionProbability.ALPHA + (cpParams.get(round)* Math.exp(ew)));
+        double result = ActionProbability.ALPHA / (ActionProbability.ALPHA + (cpParams.get(round) * Math.exp(ew)));
         return result;
     }
 }

@@ -1,6 +1,7 @@
 package com.saccarn.poker.dbprocessor;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Map;
  */
 public class PlayerTypeClustererTest {
 
-    @Test
+    @Ignore    @Test
     public void testGetCentroidsCorrectAmountSaved() { // Kind of a 'God' test - a lot of stuff happening
         PlayerTypeClusterer ptc = new PlayerTypeClusterer();
         int n = 4;
