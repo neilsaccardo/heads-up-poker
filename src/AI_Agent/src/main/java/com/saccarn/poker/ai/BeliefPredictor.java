@@ -75,7 +75,6 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
         double probOfCardRanksBetterThanCurrentRank;
         HandType ht = new HandType();
         if (boardCards.length == FLOP) {
-
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
                                                         boardCards[2]);
             HandPotential hp = new HandPotential(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
@@ -101,7 +100,7 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
             probOfWinning = probOfCardRanksBetterThanCurrentRank; // no potential on the river.
         }
         System.out.println("Probability of Win: " + probOfWinning);
-        return BeliefPredictor.TOTAL - probOfWinning;
+        return probOfWinning;
     }
 
 }
