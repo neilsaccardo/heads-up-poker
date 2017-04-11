@@ -61,19 +61,19 @@ public class ActionDeterminer {
     }
 
     public String determinePassOrBetAction(double passProbability, double randomDouble) {
-        if (randomDouble < passProbability) {
+        if (randomDouble > passProbability) {
             return ActionStrings.ACTION_PASS;
         }
-        if (randomDouble < (passProbability * ActionDeterminer.BET1_CONST)) {
+        if (randomDouble > (passProbability / ActionDeterminer.BET1_CONST)) {
             return ActionStrings.ACTION_BET1;
         }
-        if (randomDouble < (passProbability * ActionDeterminer.BET2_CONST)) {
+        if (randomDouble > (passProbability / ActionDeterminer.BET2_CONST)) {
             return ActionStrings.ACTION_BET2;
         }
-        if (randomDouble < (passProbability * ActionDeterminer.BET3_CONST)) {
+        if (randomDouble > (passProbability / ActionDeterminer.BET3_CONST)) {
             return ActionStrings.ACTION_BET3;
         }
-        if (randomDouble == ActionDeterminer.TOTAL) {
+        if (randomDouble < 0.0025) {
             return ActionStrings.ACTION_ALLIN;
         }
         else {
@@ -86,6 +86,7 @@ public class ActionDeterminer {
     }
 
     public boolean determineShouldFold(double foldProb, double random) {
-        return foldProb < random;
+        System.out.println("Determine should fold : Fold Prob= " + foldProb + ". Random = " + random);
+        return foldProb > random;
     }
 }

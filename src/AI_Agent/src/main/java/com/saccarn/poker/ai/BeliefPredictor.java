@@ -58,12 +58,13 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
                             + opponentModel.get(DataLoaderStrings.FLOP_FOLDED_RATIO)
                             + opponentModel.get(DataLoaderStrings.TURN_FOLDED_RATIO);
         }
-        return (roundDoubt * BeliefPredictor.ALPHA*(round+1));
+        System.out.println("The round doubt for " + round + " is: " + (roundDoubt * BeliefPredictor.ALPHA));
+        return (roundDoubt * BeliefPredictor.ALPHA);
     }
 
     private double calculateProbabilityOfLossAtShowdown() {
         int rank;
-        double probOfLoss;
+        double probOfWinning;
         double probOfCardRanksBetterThanCurrentRank;
         HandType ht = new HandType();
         if (boardCards.length == FLOP) {
@@ -73,7 +74,10 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
             HandPotential hp = new HandPotential(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
                     boardCards[2]);
             probOfCardRanksBetterThanCurrentRank = ht.calculateProbOfCardRanksBetterThan(rank);
-            probOfLoss = hp.calculateHandPotential(probOfCardRanksBetterThanCurrentRank);
+            probOfWinning = hp.calculateHandPotential(probOfCardRanksBetterThanCurrentRank);
+            System.out.println("rank           " + rank);
+            System.out.println("probOfCardRanksBetterThanCurrentRank           " + probOfCardRanksBetterThanCurrentRank);
+            System.out.println("probability of win           " + probOfWinning);
         }
         else if (boardCards.length == TURN) {
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
@@ -81,15 +85,16 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
             probOfCardRanksBetterThanCurrentRank = ht.calculateProbOfCardRanksBetterThan(rank);
             HandPotential hp = new HandPotential(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
                     boardCards[2], boardCards[3]);
-            probOfLoss = hp.calculateHandPotential(probOfCardRanksBetterThanCurrentRank);
+            probOfWinning = hp.calculateHandPotential(probOfCardRanksBetterThanCurrentRank);
         }
         else { // boardCards.length == 5
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0],
                                                         boardCards[1], boardCards[2], boardCards[3], boardCards[4]);
             probOfCardRanksBetterThanCurrentRank = ht.calculateProbOfCardRanksBetterThan(rank);
-            probOfLoss = probOfCardRanksBetterThanCurrentRank; // no potential on the river.
+            probOfWinning = probOfCardRanksBetterThanCurrentRank; // no potential on the river.
         }
-        return probOfLoss; // - rankPotential
+        System.out.println("Probability of Win: " + probOfWinning);
+        return BeliefPredictor.TOTAL - probOfWinning;
     }
 
 }

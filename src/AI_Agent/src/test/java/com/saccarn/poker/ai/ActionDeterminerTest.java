@@ -2,6 +2,7 @@ package com.saccarn.poker.ai;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
@@ -9,6 +10,7 @@ import java.util.*;
 /**
  * Created by Neil on 23/03/2017.
  */
+@Ignore
 public class ActionDeterminerTest {
     //holeCard1, holeCard2, boardCards, stackSize, opponentStackSize, potSize, amountBet, minBet, playerCluster, round
     private ActionDeterminer ad;

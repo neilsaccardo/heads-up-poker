@@ -19,6 +19,8 @@ public class EWUtility {
         beliefInWinning = beliefInWinning0;
         potPredictor = po;
         beliefInLosing = totalOdds - beliefInWinning;
+        System.out.println("THE BELIEF IN WINNING IS: " + beliefInWinning);
+        System.out.println("THE BELIEF IN LOSING IS: " + beliefInLosing);
     }
 
     public int getUtilityBet() {

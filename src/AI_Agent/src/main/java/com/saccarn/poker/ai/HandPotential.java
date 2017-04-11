@@ -42,7 +42,6 @@ public class HandPotential {
         boardCards[2] = boardCard3;
     }
 
-    //TURN
     public double calculateHandPotential(double probOfCardRanksBetterThanCurrentRank) {
         luck = generateLuckValue();
         double potentialProb = isStraightFlushOn();
@@ -66,7 +65,7 @@ public class HandPotential {
 
     private double generateLuckValue() {
         double randomDouble = new Random().nextDouble();
-        return (randomDouble * (LUCK_MAX-LUCK_MIN)) + LUCK_MIN;
+        return ((randomDouble * (LUCK_MAX-LUCK_MIN)) + LUCK_MIN) / 100;
     }
 
 }
