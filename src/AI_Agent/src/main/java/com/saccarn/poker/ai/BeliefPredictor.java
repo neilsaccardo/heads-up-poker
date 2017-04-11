@@ -31,7 +31,14 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
     public double calculateBeliefInWinning() {
         double probabilityOfLosingAtShowdown = calculateProbabilityOfLossAtShowdown();
         double doubt = calculateDoubt();
-        return BeliefPredictor.TOTAL - probabilityOfLosingAtShowdown - doubt;
+        double beliefInWinning = BeliefPredictor.TOTAL - probabilityOfLosingAtShowdown - doubt;
+        if (beliefInWinning < 0.0) {
+            return 0.0;
+        }
+        else {
+            return beliefInWinning;
+        }
+
     }
 
     private double calculateDoubt() {
