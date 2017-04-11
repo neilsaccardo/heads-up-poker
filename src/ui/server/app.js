@@ -151,6 +151,10 @@ javaServerSocket.on('data', function(data) {
     var keyToSocketList = socketID.toString().substring(2, socketID.toString().length).toString();
     console.log(keyToSocketList);
     var action = data.toString().trim().split(' ')[1].trim();
+    if (idSocketMap[keyToSocketList] === undefined) {
+        console.log('Error. User has been disconnected previously');
+        return;
+    }
     idSocketMap[keyToSocketList].emit('AIAction', {action: action});
 });
 
