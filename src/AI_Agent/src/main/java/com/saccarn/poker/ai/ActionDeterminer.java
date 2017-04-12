@@ -1,5 +1,8 @@
 package com.saccarn.poker.ai;
 
+import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
+import com.saccarn.poker.ai.betpassdeterminer.BetPassDeterminer;
+
 import java.util.Map;
 import java.util.Random;
 
@@ -61,23 +64,23 @@ public class ActionDeterminer {
     }
 
     public String determinePassOrBetAction(double passProbability, double randomDouble) {
-        if (randomDouble < passProbability) {
+        BetPassDeterminer bpd = new BetPassDeterminer(randomDouble, passProbability);
+        double passBetActionDouble = bpd.calculateBetFunction();
+        System.out.println("PASS OR BET: Random= " + randomDouble + " PassProb= " + passProbability + " action value=" + passBetActionDouble);
+        if (passBetActionDouble < BetPassActionValues.PASS_CONST) {
             return ActionStrings.ACTION_PASS;
         }
-        if (randomDouble < (passProbability * ActionDeterminer.BET1_CONST)) {
+        else if (passBetActionDouble < BetPassActionValues.BET1_CONST) {
             return ActionStrings.ACTION_BET1;
         }
-        if (randomDouble < (passProbability * ActionDeterminer.BET2_CONST)) {
+        else if (passBetActionDouble < BetPassActionValues.BET2_CONST) {
             return ActionStrings.ACTION_BET2;
         }
-        if (randomDouble < (passProbability * ActionDeterminer.BET3_CONST)) {
+        else if (passBetActionDouble < BetPassActionValues.BET3_CONST) {
             return ActionStrings.ACTION_BET3;
         }
-        if (randomDouble > 0.96) {
+        else {      // < BetPassActionValues.ALLIN_CONST
             return ActionStrings.ACTION_ALLIN;
-        }
-        else {
-            return ActionStrings.ACTION_BET2;
         }
     }
 
