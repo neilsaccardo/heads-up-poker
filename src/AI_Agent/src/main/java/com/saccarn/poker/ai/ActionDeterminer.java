@@ -68,19 +68,24 @@ public class ActionDeterminer {
         double passBetActionDouble = bpd.calculateBetFunction();
         System.out.println("PASS OR BET: Random= " + randomDouble + " PassProb= " + passProbability + " action value=" + passBetActionDouble);
         if (passBetActionDouble < BetPassActionValues.PASS_CONST) {
+            System.out.println("< PASS_CONST");
             return ActionStrings.ACTION_PASS;
         }
-        else if (passBetActionDouble < BetPassActionValues.BET1_CONST) {
-            return ActionStrings.ACTION_BET1;
+        else if (passBetActionDouble > BetPassActionValues.ALLIN_CONST && passProbability > 0.8) {
+            System.out.println("> ALL_IN");
+            return ActionStrings.ACTION_ALLIN;
         }
-        else if (passBetActionDouble < BetPassActionValues.BET2_CONST) {
-            return ActionStrings.ACTION_BET2;
-        }
-        else if (passBetActionDouble < BetPassActionValues.BET3_CONST) {
+        else if (passBetActionDouble > BetPassActionValues.BET3_CONST) {
+            System.out.println("> BET3");
             return ActionStrings.ACTION_BET3;
         }
+        else if (passBetActionDouble < BetPassActionValues.BET2_CONST) {
+            System.out.println("> BET2");
+            return ActionStrings.ACTION_BET2;
+        }
         else {      // < BetPassActionValues.ALLIN_CONST
-            return ActionStrings.ACTION_ALLIN;
+            System.out.println("> BET1");
+            return ActionStrings.ACTION_BET1;
         }
     }
 
