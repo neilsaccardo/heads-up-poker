@@ -27,9 +27,19 @@ function AmountService($uibModal) {
         return Math.floor(numChips);
     }
 
+    function checkRaiseOverOtherPlayerStack(amount, otherPlayerStack) {
+        console.log('dsds');
+        if (amount > otherPlayerStack) {
+            $uibModal.open({templateUrl: path + 'modalContentBetTooBigForAI.html'});
+            return false;
+        } else {
+            return true;
+        }
+    }
     return {
         checkBetRaiseAmount : checkBetRaiseAmount,
-        getBetRaiseAmount : getBetRaiseAmount
+        getBetRaiseAmount : getBetRaiseAmount,
+        checkRaiseOverOtherPlayerStack: checkRaiseOverOtherPlayerStack
     }
 }
 
