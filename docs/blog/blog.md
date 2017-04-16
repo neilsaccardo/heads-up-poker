@@ -28,7 +28,7 @@ Against one of the two users which tested the system, who plays in a very 'tight
 
 Against the user, who could be described as more loose and aggressive the AI held its own but did not manage to win any games. It did manage to bluff regularly enough but was called out on it more, as the user was more aggressive. Im still happy enough with its performance though, and hope to make improvements in order to further challenge this kind of opponent.
 
-Overall I'm pretty satisfied with the peroformance of the AI - I was impressed by its action selection(folding at correct points), bluffing, and also on occasion its (Sandbagging) [http://www.poker-king.com/dictionary/sandbagging/] the opponent.
+Overall I'm pretty satisfied with the peroformance of the AI - I was impressed by its action selection(folding at correct points), bluffing, and also on occasion its [Sandbagging] (http://www.poker-king.com/dictionary/sandbagging/) the opponent.
 
 
 
