@@ -41,7 +41,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         ctrl.isPlayerDealer = !ctrl.isPlayerDealer;
         ctrl.isPlayerTurn = false;
         ctrl.checkBetOptions = !ctrl.isPlayerTurn;
-        ctrl.hideAICards = false;
+        ctrl.hideAICards = true;
         pokerStage = 0;
         ctrl.potSize = 0;
         ctrl.aiToPot = 0;
@@ -406,32 +406,32 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         }
         else if (data.action.toLowerCase() === actions.getBet1String()) {
             var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 1);
-            numChips = (ctrl.aiStackSize < numChips) ? minBet : numChips;
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
             ctrl.aiBet(numChips);
         }
         else if (data.action.toLowerCase() === actions.getBet2String()) {
             var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 2);
-            numChips = (ctrl.aiStackSize < numChips) ? minBet : numChips;
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
             ctrl.aiBet(numChips);
         }
         else if (data.action.toLowerCase() === actions.getBet3String()) {
             var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 3);
-            numChips = (ctrl.aiStackSize < numChips) ? minBet : numChips;
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
             ctrl.aiBet(numChips);
         }
         else if (data.action.toLowerCase() === actions.getRaise1String()) {
             var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 1);
-            numChips = (ctrl.aiStackSize < numChips) ? minBet : numChips;
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
             ctrl.aiRaise(numChips);
         }
         else if (data.action.toLowerCase() === actions.getRaise2String()) {
             var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 2);
-            numChips = (ctrl.aiStackSize < numChips) ? minBet : numChips;
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
             ctrl.aiRaise(numChips);
         }
         else if (data.action.toLowerCase() === actions.getRaise3String()) {
             var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 3);
-            numChips = (ctrl.aiStackSize < numChips) ? minBet : numChips;
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
             ctrl.aiRaise(numChips);
         }
         else if (data.action.toLowerCase() === actions.getCallString()) {
