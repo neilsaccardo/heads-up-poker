@@ -29,7 +29,6 @@ public class ActionDeterminer {
     private final static double BET2_CONST = 3;
     private final static double BET3_CONST = 4;
 
-
     public ActionDeterminer(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int opponentStackSize, int potSize, int numChipsBet, int minBet, Map<String, Double> playerCluster, int round) {
         this.holeCard1 = holeCard1;
         this.holeCard2 = holeCard2;
