@@ -36,6 +36,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
             ctrl.bigBlindAmount = ctrl.bigBlindAmount + ctrl.bigBlindAmount;
             ctrl.handsLeftTillBetIncrease = ctrl.betIncreaseEveryNumHands;
         }
+        ctrl.raiseBetAmount = ctrl.bigBlindAmount;
         ctrl.showNewHandButton = false;
         console.log('NEW GAME');
         ctrl.isPlayerDealer = !ctrl.isPlayerDealer;
@@ -215,7 +216,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         else {
             numChips = ctrl.aiStackSize;
         }
-        ctrl.raiseBetAmount = numChips;
+        ctrl.raiseBetAmount = (numChips - amountToCall());
         ctrl.raise();
     }
 
