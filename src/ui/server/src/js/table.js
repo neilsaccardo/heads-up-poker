@@ -507,8 +507,11 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     ctrl.aiBet = function(numChips) {
-        if (numChips > ctrl.playerStackSize) {
+        if (numChips >= ctrl.playerStackSize) {
             numChips = ctrl.playerStackSize;
+            ctrl.goToShowDown = true;
+        }
+        if (numChips === ctrl.aiStackSize) {
             ctrl.goToShowDown = true;
         }
         ctrl.message = message.getAIHasBetMessage(numChips);
