@@ -8,7 +8,7 @@ import org.junit.Test;
  * Created by Neil on 18/04/2017.
  */
 public class CommonHandTest {
-    
+
     @Test
     public void testCommonHandTwoPair() {
         String c1 = "Js";
@@ -23,7 +23,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandTypeAceHighPair() {
+    public void testCommonHandAceHighPair() {
         String c1 = "Js";
         String c2 = "Qd";
         String c3 = "Ac";
@@ -37,7 +37,7 @@ public class CommonHandTest {
 
 
     @Test
-    public void testHandTypeKingHighPair() {
+    public void testCommonHandKingHighPair() {
         String c1 = "Ks";
         String c2 = "Kh";
         String c3 = "6c";
@@ -50,7 +50,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandTypeQueenHighPair() {
+    public void testCommonHandQueenHighPair() {
         String c1 = "As";
         String c2 = "2h";
         String c3 = "Qc";
@@ -63,8 +63,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandTypeJackHighPair() {
-        HandType ht = new HandType();
+    public void testCommonHandJackHighPair() {
         String c1 = "Js";
         String c2 = "2h";
         String c3 = "Jc";
@@ -77,7 +76,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandTypeTenHighPair() {
+    public void testCommonHandTenHighPair() {
         String c1 = "Js";
         String c2 = "2h";
         String c3 = "Kc";
@@ -90,8 +89,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandType9HighPair() {
-        HandType ht = new HandType();
+    public void testCommonHand9HighPair() {
         String c1 = "Qs";
         String c2 = "9h";
         String c3 = "Jc";
@@ -104,8 +102,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandType8HighPair() {
-        HandType ht = new HandType();
+    public void testCommonHand8HighPair() {
         String c1 = "8d";
         String c2 = "8h";
         String c3 = "Jc";
@@ -119,7 +116,7 @@ public class CommonHandTest {
 
 
     @Test
-    public void testHandType7HighPair() {
+    public void testCommonHand7HighPair() {
         String c1 = "7d";
         String c2 = "7h";
         String c3 = "Jc";
@@ -133,7 +130,7 @@ public class CommonHandTest {
 
 
     @Test
-    public void testHandType6HighPair() {
+    public void testCommonHand6HighPair() {
         String c1 = "6d";
         String c2 = "7h";
         String c3 = "Jc";
@@ -146,7 +143,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandType5HighPair() {
+    public void testCommonHand5HighPair() {
         String c1 = "6d";
         String c2 = "5h";
         String c3 = "Jc";
@@ -160,7 +157,7 @@ public class CommonHandTest {
 
 
     @Test
-    public void testHandType4HighPair() {
+    public void testCommonHand4HighPair() {
         String c1 = "4d";
         String c2 = "5h";
         String c3 = "Jc";
@@ -173,8 +170,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandType3HighPair() {
-        HandType ht = new HandType();
+    public void testCommonHand3HighPair() {
         String c1 = "4d";
         String c2 = "5h";
         String c3 = "3c";
@@ -187,7 +183,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandType2HighPair() {
+    public void testCommonHand2HighPair() {
         String c1 = "4d";
         String c2 = "5h";
         String c3 = "2c";
@@ -200,7 +196,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandTypeAceHighCard() {
+    public void testCommonHandAceHighCard() {
         String c1 = "Js";
         String c2 = "Qd";
         String c3 = "Ac";
@@ -213,8 +209,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandTypeKingHighCard() {
-        HandType ht = new HandType();
+    public void testCommonHandKingHighCard() {
         String c1 = "Js";
         String c2 = "Qd";
         String c3 = "6c";
@@ -227,8 +222,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandTypeQueenHighCard() {
-        HandType ht = new HandType();
+    public void testCommonHandQueenHighCard() {
         String c1 = "Js";
         String c2 = "Qd";
         String c3 = "2c";
@@ -242,8 +236,7 @@ public class CommonHandTest {
 
 
     @Test
-    public void testHandTypeMedHighCard() {
-        HandType ht = new HandType();
+    public void testCommonHandMedHighCard() {
         String c1 = "Js";
         String c2 = "3d";
         String c3 = "2c";
@@ -265,7 +258,7 @@ public class CommonHandTest {
     }
 
     @Test
-    public void testHandTypeLowHighCard() {
+    public void testCommonHandLowHighCard() {
         String c1 = "4s";
         String c2 = "3d";
         String c3 = "2c";
