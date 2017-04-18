@@ -30,7 +30,7 @@ public class CommonHand {
             return true;
         }
         int highCardRankInBoardCards = isHighCard();
-        return (cardRank == highCardRankInBoardCards)
+        return (cardRank == highCardRankInBoardCards);
     }
 
     private int isHighCard() {

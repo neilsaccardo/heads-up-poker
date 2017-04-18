@@ -139,7 +139,7 @@ public class HandTypeTest {
         String c4 = "2d";
         String c5 = "4s";
         int rank = ht.calculateHandRanking(c1, c2, c3, c4, c5);
-        Assert.assertEquals("5 cards should evaluate to a king high pair (rank 7)", 8, rank);
+        Assert.assertEquals("5 cards should evaluate to a king high pair (rank 8)", 8, rank);
     }
 
     @Test
@@ -262,7 +262,7 @@ public class HandTypeTest {
         String c4 = "3c";
         String c5 = "Th";
         int rank = ht.calculateHandRanking(c1, c2, c3, c4, c5);
-        Assert.assertEquals("5 cards should evaluate to a four high pair (rank 18)", 18, rank);
+        Assert.assertEquals("5 cards should evaluate to a three high pair (rank 18)", 18, rank);
     }
 
     @Test
@@ -274,7 +274,7 @@ public class HandTypeTest {
         String c4 = "3c";
         String c5 = "2h";
         int rank = ht.calculateHandRanking(c1, c2, c3, c4, c5);
-        Assert.assertEquals("5 cards should evaluate to a four high pair (rank 18)", 19, rank);
+        Assert.assertEquals("5 cards should evaluate to a two high pair (rank 18)", 19, rank);
     }
 
     @Test
