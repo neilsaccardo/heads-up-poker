@@ -153,9 +153,6 @@ function TableController($scope, cards, socket, $timeout, message, amountService
                     potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
         ctrl.addToPotPlayer(parseInt(ctrl.raiseBetAmount) + amount);
         ctrl.isPlayerTurn = false;
-        console.log('DDD ' + ((ctrl.aiStackSize - parseInt(ctrl.raiseBetAmount))));
-        console.log('ddddddd1 ' + ((ctrl.aiStackSize - parseInt(ctrl.raiseBetAmount)) < ctrl.bigBlindAmount));
-        console.log('ddddddd2 ' + (ctrl.playerStackSize < ctrl.bigBlindAmount));
         if (ctrl.playerStackSize < ctrl.bigBlindAmount || (ctrl.aiStackSize - parseInt(ctrl.raiseBetAmount)) < ctrl.bigBlindAmount) {
             console.log('ALL INS');
             ctrl.goToShowDown = true;
@@ -210,6 +207,18 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         }
     }
 
+    ctrl.allIn = function() {
+        var numChips = 0;
+        if (ctrl.playerStackSize < ctrl.aiStackSize) {
+            numChips = ctrl.playerStackSize;
+        }
+        else {
+            numChips = ctrl.aiStackSize;
+        }
+        ctrl.raiseBetAmount = numChips;
+        ctrl.raise();
+    }
+
     ctrl.startHand = function() {
         console.log('Starting Hand. ');
         if (checkWinner()) {
@@ -234,12 +243,6 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     ctrl.continueGame = function() { // Only called when stage is flop, turn, river
-//        if (checkWinner() && pokerStage !== 4) {
-//            console.log('CHECK WINNER SUCCEDED ');
-//            ctrl.message = message.getWinnerMessage(ctrl.playerStackSize, ctrl.aiStackSize);
-//            ctrl.showNewGameButton = true;
-//            return;
-//        }
         if (pokerStage === 4) { //SHOWDOWN. do nothing.
             return;
         }
@@ -323,9 +326,9 @@ function TableController($scope, cards, socket, $timeout, message, amountService
             pokerStage++;
         }
     }
+
     function incrementStage() {
         pokerStage++;
-
         if (ctrl.goToShowDown) {
             console.log('GO TO SHOWDOWN');
             bringPokerStageToShowDown();

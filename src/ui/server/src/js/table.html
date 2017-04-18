@@ -53,14 +53,16 @@
 
                         <div class="col-sm-6">
                             <div ng-if="$ctrl.checkBetOptions">
-                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-primary" ng-click="$ctrl.bet()">Bet</button>
-                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-success" ng-click="$ctrl.check()">Check</button>
-                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()">Fold</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-primary" ng-click="$ctrl.bet()" uib-tooltip="Bet the AI">Bet</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-success" ng-click="$ctrl.check()" uib-tooltip="Check ">Check</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()" uib-tooltip="Fold this hand">Fold</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-warning" ng-click="$ctrl.allIn()" uib-tooltip="All in">All In</button>
                             </div>
                             <div ng-if="!$ctrl.checkBetOptions" >
-                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn && !$ctrl.goToShowdown" class="btn btn-primary" ng-click="$ctrl.raise()">Raise</button>
-                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-success" ng-click="$ctrl.call()">Call</button>
-                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()">Fold</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn && !$ctrl.goToShowdown" class="btn btn-primary" ng-click="$ctrl.raise()" uib-tooltip="Raise the AI">Raise</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-success" ng-click="$ctrl.call()" uib-tooltip="Call the AI bet">Call</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-danger" ng-click="$ctrl.fold()" uib-tooltip="Fold this hand">Fold</button>
+                                <button type="button" ng-disabled="!$ctrl.isPlayerTurn" class="btn btn-warning" ng-click="$ctrl.allIn()" uib-tooltip="All in">All In</button>
                             </div>
                         </div>
                         <min-bet bet="$ctrl.bigBlindAmount" hands="$ctrl.handsLeftTillBetIncrease">
