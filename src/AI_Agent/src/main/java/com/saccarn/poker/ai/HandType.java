@@ -1,6 +1,7 @@
 package com.saccarn.poker.ai;
 
 import com.saccarn.poker.ai.util.BucketTable;
+import com.saccarn.poker.ai.util.CardValueTable;
 import com.saccarn.poker.ai.util.PairTable;
 
 import java.util.HashMap;
@@ -13,34 +14,17 @@ import java.util.Set;
 public class HandType {
 
     private BucketTable handTypes = new BucketTable();
-    private HashMap<Character, Integer> cardValues = new HashMap<>();
+    private CardValueTable cardValues = new CardValueTable();
     private PairTable pairTable = new PairTable();
-    public HandType() {
-        fillCardValues();
-    }
-    
+
+    public HandType() { }
+
     public double calculateProbOfCardRanksBetterThan(int rank) {
         double probability = 0.0;
         for (int i = 0; i < rank; i++) {
             probability = handTypes.get(i) + probability;
         }
         return probability;
-    }
-
-    private void fillCardValues() {
-        cardValues.put('2', 0); //0
-        cardValues.put('3', 1); //1
-        cardValues.put('4', 2); //2
-        cardValues.put('5', 3); //3
-        cardValues.put('6', 4); //4
-        cardValues.put('7', 5);  //5
-        cardValues.put('8', 6);  //6
-        cardValues.put('9', 7);  //7
-        cardValues.put('T', 8);  //8
-        cardValues.put('J', 9);  //9
-        cardValues.put('Q', 10);  //10
-        cardValues.put('K', 11);  //11
-        cardValues.put('A', 12); //12
     }
 
     // inputted 'Js' '4d' 'Ac' 'Th' etc
