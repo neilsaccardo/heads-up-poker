@@ -1,5 +1,6 @@
 package com.saccarn.poker.ai;
 
+import com.saccarn.poker.ai.commonhand.CommonHand;
 import com.saccarn.poker.dbprocessor.DataLoaderStrings;
 
 import java.util.Map;
@@ -17,6 +18,7 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
 
     private final int FLOP = 3;
     private final int TURN = 4;
+    private final int RIVER = 5;
     private static final double TOTAL = 1.0;
     private static final double ALPHA = 0.5;
 
@@ -79,28 +81,42 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
                                                         boardCards[2]);
             HandPotential hp = new HandPotential(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
                     boardCards[2]);
+            CommonHand ch = new CommonHand(rank, boardCards);
             probOfCardRanksBetterThanCurrentRank = ht.calculateProbOfCardRanksBetterThan(rank);
+            probOfCardRanksBetterThanCurrentRank = modifyBeliefIfBestCardsAreCommunal(ch, probOfCardRanksBetterThanCurrentRank, FLOP);
             probOfWinning = hp.calculateHandPotential(probOfCardRanksBetterThanCurrentRank);
-            System.out.println("rank           " + rank);
-            System.out.println("probOfCardRanksBetterThanCurrentRank           " + probOfCardRanksBetterThanCurrentRank);
-            System.out.println("probability of win           " + probOfWinning);
         }
         else if (boardCards.length == TURN) {
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
                                                         boardCards[2], boardCards[3]);
             probOfCardRanksBetterThanCurrentRank = ht.calculateProbOfCardRanksBetterThan(rank);
+            CommonHand ch = new CommonHand(rank, boardCards);
             HandPotential hp = new HandPotential(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
                     boardCards[2], boardCards[3]);
+            probOfCardRanksBetterThanCurrentRank = modifyBeliefIfBestCardsAreCommunal(ch, probOfCardRanksBetterThanCurrentRank, TURN);
             probOfWinning = hp.calculateHandPotential(probOfCardRanksBetterThanCurrentRank);
         }
         else { // boardCards.length == 5
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0],
                                                         boardCards[1], boardCards[2], boardCards[3], boardCards[4]);
             probOfCardRanksBetterThanCurrentRank = ht.calculateProbOfCardRanksBetterThan(rank);
+            CommonHand ch = new CommonHand(rank, boardCards);
+            probOfCardRanksBetterThanCurrentRank = modifyBeliefIfBestCardsAreCommunal(ch, probOfCardRanksBetterThanCurrentRank, RIVER);
             probOfWinning = probOfCardRanksBetterThanCurrentRank; // no potential on the river.
         }
-        System.out.println("Probability of Win: " + probOfWinning);
+        System.out.println("rank:           " + rank);
+        System.out.println("Probability of Losing at showdown: " + probOfWinning);
         return probOfWinning;
+    }
+
+    private double modifyBeliefIfBestCardsAreCommunal(CommonHand ch, double probOfCardRanksBetterThanCurrentRank, int round) {
+        if (ch.isCommonHand()) {
+            double moddedProb = probOfCardRanksBetterThanCurrentRank * (double)round;
+            return (moddedProb > 0.99) ? 0.99 : moddedProb;
+        }
+        else {
+            return probOfCardRanksBetterThanCurrentRank;
+        }
     }
 
 }

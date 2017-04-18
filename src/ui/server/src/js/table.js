@@ -210,11 +210,14 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 
     ctrl.allIn = function() {
         var numChips = 0;
-        if (ctrl.playerStackSize < ctrl.aiStackSize) {
+        if ((ctrl.playerStackSize) < ctrl.aiStackSize) {
             numChips = ctrl.playerStackSize;
         }
         else {
             numChips = ctrl.aiStackSize;
+        }
+        if (amountToCall() > 0) {
+            console.log('amount to call is : '+ amountToCall());
         }
         ctrl.raiseBetAmount = (numChips - amountToCall());
         ctrl.raise();
