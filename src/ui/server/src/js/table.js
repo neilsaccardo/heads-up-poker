@@ -17,8 +17,8 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         ctrl.isPlayerDealer = false;
         ctrl.showNewHandButton = false;
         ctrl.goToShowDown = false;
-        ctrl.playerStackSize = ctrl.stackSize | 5000;
-        ctrl.aiStackSize = ctrl.stackSize | 5000;
+        ctrl.playerStackSize = ctrl.stackSize | 10000;
+        ctrl.aiStackSize = ctrl.stackSize | 10000;
         ctrl.potSize = 0;
         ctrl.aiToPot = 0;
         ctrl.playerToPot = 0;

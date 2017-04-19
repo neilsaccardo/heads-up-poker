@@ -70,6 +70,7 @@ var db = {
             else {
                 console.log('ROUND INPUT ERROR');
             }
+            console.log(player.totalFolds);
             player.totalFolds = player.totalFolds + 1;
             player.numHandsPlayed = player.numHandsPlayed + 1;
             player.save(function(err) {
