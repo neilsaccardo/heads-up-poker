@@ -1,9 +1,8 @@
 package com.saccarn.poker.ai;
 
-import com.saccarn.poker.dbprocessor.DataLoaderStrings;
+import com.saccarn.poker.ai.preflop.HandRankings;
+import com.saccarn.poker.ai.preflop.PreFlopDeterminer;
 
-import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -24,10 +23,9 @@ public class AiAgent {
 
     public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
                             int stackSize, int potSize, Map<String, Double> playerCluster, int position, int minBet, int amountBet, int opponentStackSize, String previousAction) {
-        String cards = HandRankings.transformCardsForHandRanking(holeCard1, holeCard2);
 
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
-            String action = preFlopAction(cards, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
+            String action = preFlopAction(holeCard1, holeCard2, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
             String a = getCorrectOutputAction(action, position, stageOfPlay, previousAction);
             return noUnNecessaryFolds(a, position, stageOfPlay, previousAction);
         }
@@ -79,42 +77,10 @@ public class AiAgent {
     }
 
 
-    // TODO : Abstract this out to another Pre Flop action class.
-    private String preFlopAction(String cards, int stackSize, int potSize, int position, int amountBet , Map<String, Double> playerCluster,
+    private String preFlopAction(String holeCard1, String holeCard2, int stackSize, int potSize, int position, int amountBet , Map<String, Double> playerCluster,
                                  int minBet, int opponentStackSize) {
-        HandRankings hrs = new HandRankings(); //(100-playerCluster.get(DataLoaderStrings.FOLDED_AT_PRE_FLOP))
-        if (hrs.getEVRankOfCardPair(cards) < 70) {
-            if (position == 0) { //first - bet check etc.
-                if (randomGenerator.nextInt(randomTopLimit) < randomisationThreshold) {
-                    int randomNum = randomGenerator.nextInt(randomTopLimit);
-                    if (randomNum < randomTopLimit / 3 && stackSize > (2*minBet)) {
-                        return ActionStrings.ACTION_BET2;
-                    } else if (randomNum < ((randomTopLimit / 3) * 2) && stackSize > (minBet)) {
-                        return ActionStrings.ACTION_BET1;
-                    }
-                    else {
-                        return ActionStrings.ACTION_PASS;
-                    }
-                } else {
-                    return ActionStrings.ACTION_FOLD;
-                }
-            } else {
-                if (randomGenerator.nextInt(randomTopLimit) < randomisationThreshold) {
-                    int randomNum = randomGenerator.nextInt(randomTopLimit);
-                    if (randomNum < randomTopLimit / 3 && stackSize > (2*minBet)) {
-                        return ActionStrings.ACTION_RAISE2;
-                    } else if (randomNum < ((randomTopLimit / 3) * 2) && stackSize > (minBet)) {
-                        return ActionStrings.ACTION_RAISE1;
-                    }
-                    else {
-                        return ActionStrings.ACTION_PASS;
-                    }
-                } else {
-                    return ActionStrings.ACTION_FOLD;
-                }
-            }
-        }
-        return ActionStrings.ACTION_PASS;
+        PreFlopDeterminer pfd = new PreFlopDeterminer();
+        return pfd.preFlopAction(holeCard1, holeCard2, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
     }
 
     public String noUnNecessaryFolds(String action, int position, String stageOfPlay, String previousAction) {

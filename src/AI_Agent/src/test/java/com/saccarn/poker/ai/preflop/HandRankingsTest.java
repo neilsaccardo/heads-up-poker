@@ -1,5 +1,6 @@
-package com.saccarn.poker.ai;
+package com.saccarn.poker.ai.preflop;
 
+import com.saccarn.poker.ai.preflop.HandRankings;
 import org.junit.Assert;
 import org.junit.Test;
 

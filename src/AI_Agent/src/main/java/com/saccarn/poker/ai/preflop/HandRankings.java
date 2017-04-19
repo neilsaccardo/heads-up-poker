@@ -1,4 +1,4 @@
-package com.saccarn.poker.ai;
+package com.saccarn.poker.ai.preflop;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
