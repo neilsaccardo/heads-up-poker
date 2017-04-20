@@ -22,7 +22,6 @@ public class WorkerThread implements Runnable {
         inputLine = s;
     }
 
-
     public void run() {
         try {
             String [] splitInputsAndModel = inputLine.split(":");
@@ -62,7 +61,7 @@ public class WorkerThread implements Runnable {
                     System.out.print(model[i]+ ' ');
                 }
                 System.out.println("END HERE");
-                Map<String, Double> modelMap = createOpponentMap(model);
+                Map<String, Double> modelMap = WorkerThread.createOpponentMap(model);
                 action = ai.getAction(round, cardOne, cardTwo, boardCards, stackSize, potSize, modelMap, 0, minBet, amountBet, stackSize, prevAction);
             }
             long time = System.currentTimeMillis();
@@ -76,7 +75,7 @@ public class WorkerThread implements Runnable {
         }
     }
 
-    private Map<String,Double> createOpponentMap(String[] model) {
+    public static Map<String,Double> createOpponentMap(String[] model) {
         Map<String, Double> map = new HashMap<String, Double>();
         int numHandsPlayed = Integer.parseInt(model[4]);
         int numFoldedAtPreFlop = Integer.parseInt(model[0]);

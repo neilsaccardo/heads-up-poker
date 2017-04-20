@@ -32,6 +32,7 @@ public class HandTypeTest {
         int rank = ht.calculateHandRanking(c1, c2, c3, c4, c5);
         Assert.assertEquals("5 cards should evaluate to a flush straight (rank 0)", 0, rank);
     }
+
     @Test
     public void testHandTypeFourOfAKind() {
         HandType ht = new HandType();
