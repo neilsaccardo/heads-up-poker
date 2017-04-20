@@ -6,7 +6,7 @@ function LoginController($scope, socket, $uibModal) {
         console.log('Log in requested...');
         if (badUsername()) {
             console.log('Log in declined....');
-            $uibModal.open({templateUrl: 'js/modalContent.html'});
+            $uibModal.open({templateUrl: 'js/services/modals/modalContentBadUserName.html'});
         }
         else {
             socket.emit('loginRequest', {id: ctrl.username});
@@ -21,6 +21,9 @@ function LoginController($scope, socket, $uibModal) {
             return true;
         }
         if (ctrl.username.length > 100) {
+            return true;
+        }
+        if (ctrl.username.includes(':')) {
             return true;
         }
         else {
