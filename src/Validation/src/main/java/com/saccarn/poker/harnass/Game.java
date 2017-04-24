@@ -18,16 +18,16 @@ public class Game {
     private AiAgent aiAgentPlayerTwo= new AiAgent();
 
 
-    private int numHandsWonPlayerOne = 0;
-    private int numHandsWonPlayerTwo = 0;
     private Card [] playerOneCards = new Card[7];
     private Card [] playerTwoCards = new Card[7];
     private Card [] fullDeckArray;
     private int deckPointer = 0;
 
 
-    private HashMap<String, Double> playerOneModel;
-    private HashMap<String, Double> playerTwoModel;
+    private Map<String, Double> playerOneModel;
+    private Map<String, Double> playerTwoModel;
+
+
 
     private boolean isPlayerOneSmallBlind = false;
     private int playerOneStack = 10000;
@@ -39,12 +39,24 @@ public class Game {
     private Map<String, Integer> roundMapToBoardCards = new HashMap<>();
 
     public Game() {
+        fillRounds();
+    }
+
+    public Game(AiAgent playerOne, AiAgent playerTwo, boolean whosFirst, Map<String, Double> oppModelPlayerOne,Map<String, Double> oppModelPlayerTwo) {
+        aiAgentPlayerTwo = playerTwo;
+        aiAgentPlayerOne = playerOne;
+        playerOneTurn = whosFirst;
+        playerOneModel = oppModelPlayerOne;
+        playerTwoModel = oppModelPlayerTwo;
+        fillRounds();
+    }
+
+    private void fillRounds() {
         roundMapToBoardCards.put(AiAgent.PRE_FLOP, 0);
         roundMapToBoardCards.put(AiAgent.FLOP, 3);
         roundMapToBoardCards.put(AiAgent.TURN, 4);
         roundMapToBoardCards.put(AiAgent.RIVER, 5);
     }
-
 
     public void playHand() {
         if (checkGameOver()) {
@@ -166,7 +178,7 @@ public class Game {
         for (int i = 0; i < boardCards.length; i++) {
             boardCards [i] = playerTwoCards [i+2].toString();
         }
-        return aiAgentPlayerTwo.getAction(stageOfPlay, playerTwoCards[0].toString(), playerTwoCards[1].toString(), boardCards, playerTwoStack, pot, 0/*playerOneModel*/, 0, bigBlindAmount, amountBet, playerOneStack, previousAction);
+        return aiAgentPlayerTwo.getAction(stageOfPlay, playerTwoCards[0].toString(), playerTwoCards[1].toString(), boardCards, playerTwoStack, pot, playerOneModel, 0, bigBlindAmount, amountBet, playerOneStack, previousAction);
     }
 
 
@@ -176,7 +188,7 @@ public class Game {
         for (int i = 0; i < boardCards.length; i++) {
             boardCards [i] = playerOneCards[i+2].toString();
         }
-        return aiAgentPlayerOne.getAction(stageOfPlay, playerTwoCards[0].toString(), playerTwoCards[1].toString(), boardCards, playerTwoStack, pot, /*playerTwoModel*/0, 0, bigBlindAmount, amountBet, playerOneStack, previousAction);
+        return aiAgentPlayerOne.getAction(stageOfPlay, playerTwoCards[0].toString(), playerTwoCards[1].toString(), boardCards, playerTwoStack, pot, playerTwoModel, 0, bigBlindAmount, amountBet, playerOneStack, previousAction);
     }
 
 
