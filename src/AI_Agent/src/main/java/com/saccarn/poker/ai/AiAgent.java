@@ -17,7 +17,8 @@ public class AiAgent {
     public static final String RIVER = "river";
 
     public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
-                            int stackSize, int potSize, Map<String, Double> playerCluster, int position, int minBet, int amountBet, int opponentStackSize, String previousAction) {
+                            int stackSize, int potSize, Map<String, Double> playerCluster, int position,
+                            int minBet, int amountBet, int opponentStackSize, String previousAction) {
 
         if (stageOfPlay.equals(AiAgent.PRE_FLOP)) {
             String action = preFlopAction(holeCard1, holeCard2, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
