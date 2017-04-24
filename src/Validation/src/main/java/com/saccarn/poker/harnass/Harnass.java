@@ -15,54 +15,16 @@ import java.util.Scanner;
 public class Harnass {
 
     public static void main(String [] args) throws IOException, URISyntaxException {
-
-        AiAgent aiPlayerOne = new AiAgent();
-        AiAgent aiPlayerTwo = new AiAgent();
-
-//        File file = new File(Harnass.class.getResource("/testresource.txt").toURI());
-//        Scanner in = new Scanner(file);
-//
-//        PrintWriter pw = new PrintWriter(new File("test1234.txt"));
-//        pw.println("trest");
-//        pw.close();
-//
-//        while(in.hasNextLine()) {
-//            System.out.println(in.next());
-//        }
-
-        CardSet cs = CardSet.shuffledDeck();
-        Card [] fullDeckArray = cs.toArray();
-        Card [] holeCards1 = new Card[7];
-        Card [] holeCards2 = new Card[7];
-        int deckPointer = 0;
-        for (deckPointer = 0; deckPointer < 2; deckPointer++) {
-            holeCards1[deckPointer] = fullDeckArray[deckPointer];
-            holeCards2[deckPointer] = fullDeckArray[deckPointer + 2];
+        int totalIterations = 1000;
+        int i = 0;
+        while (i < totalIterations) {
+            Game game = new Game();
+            game.playHand();
+            System.out.println("finished");
+            System.out.println(game.getBigBlindAmount());
+            System.out.println(game.getPlayerOneStack());
+            System.out.println(game.getPlayerTwoStack());
+            i++;
         }
-        deckPointer = 4;
-
-        for (int i = 0; i < 5; i++) {
-            holeCards1[i+2] = fullDeckArray[deckPointer + i];
-            holeCards2[i+2] = fullDeckArray[deckPointer + i];
-        }
-        System.out.println();
-        for (int i = 0; i < holeCards1.length; i++) {
-            System.out.print(holeCards1[i]);
-        }
-        System.out.println();
-
-        for (int i = 0; i < holeCards2.length; i++) {
-            System.out.print(holeCards2[i]);
-        }
-        System.out.println();
-        long enHand1 = HandEval.encode(holeCards1);
-        long enHand2 = HandEval.encode(holeCards2);
-        System.out.println(enHand1);
-        System.out.println(enHand2);
-        System.out.println(cs);
-        int rank1 = HandEval.hand7Eval(enHand1);
-        int rank2 = HandEval.hand7Eval(enHand2);
-        System.out.println(rank1);
-        System.out.println(rank2);
     }
 }
