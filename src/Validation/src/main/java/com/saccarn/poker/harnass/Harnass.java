@@ -1,10 +1,5 @@
 package com.saccarn.poker.harnass;
 
-import cards.Card;
-import cards.CardSet;
-import cards.HandEval;
-import com.saccarn.poker.ai.AiAgent;
-
 import java.io.*;
 import java.net.URISyntaxException;
 import java.util.Scanner;
