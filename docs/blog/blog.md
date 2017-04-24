@@ -2,6 +2,62 @@
 
 **Neil Saccardo**
 
+## Blog Entry - 16/04/17
+
+Over the past number of days I have been working on the following:
+
+- Implementing Mongoose to track player actions
+- Improving the AI effectiveness/aggressiveness
+- Some user testing
+
+### Mongoose
+
+I have used [Mongoose](http://mongoosejs.com/) as part of the web app to act as an interface and read and write to the MongoDB instance running. I use it mainly to track certain user statistics, all together make up an opponent model. The opponent model can then be used as an input to the AI system, rather than using one of the default opponent models obtained from clustering. I found Mongoose pretty easy to use and have attempted to adopt a micro-service like architecture with it in its design - all reading/writing function is stored in a seperate file to the main app.js file.
+
+### Improving the AI
+
+From my own experience and observations of playing against the AI, one thing in particular stood out to me - I found that it was easily  'bullied' off a pot, and would often fold too easily. This, in general, is not a good ploy to win a game in Heads Up poker. As such I decided to examine the code I had written which determines the action to take- in particular the function which  determines whether to fold or pass(continue playing). I actually noticed an error here in implementation of the function, which was part of the reason as to why the AI was being so 'tight' in its play. I fixed it up and noticed an immediate improvement in its play.
+
+I have also changed the way the betting function has been implemented, with a particular focus on what amount to bet. I wanted a more aggresive AI, something that would try and bully another user off a pot, but would not make ridiculous calls that would make zero sense. Once again, when I implemented my changes I noticed an immediate change in its play. It is now much more aggresive and makes for a much more interesting game to play against. 
+
+### User testing
+
+Once I implemented these changes, I decided that I wanted to let a couple of my friends who play poker (online) to see how the AI would cope. I'm happy to report it actually won some games!
+
+Against one of the two users which tested the system, who plays in a very 'tight' way, the aggressiveness of the AI allowed it to win a  majority of hands and often bluffed its own hand strength, even more so when the system used the user opponent model rather than the default model. It also often correctly predicted when to fold and not continue with the hand - I attribute this to the opponent modelling part of the system. The AI played notably well against this user and I was thrilled with its performance.
+
+Against the user, who could be described as more loose and aggressive the AI held its own but did not manage to win any games. It did manage to bluff regularly enough but was called out on it more, as the user was more aggressive. Im still happy enough with its performance though, and hope to make improvements in order to further challenge this kind of opponent.
+
+Overall I'm pretty satisfied with the peroformance of the AI - I was impressed by its action selection(folding at correct points), bluffing, and also on occasion its [Sandbagging] (http://www.poker-king.com/dictionary/sandbagging/) the opponent.
+
+
+
+## Blog Entry - 09/04/17
+
+Over the last number of days I have been working on the following things:
+ - Unit tests
+ - Test documentation
+ - AI improvement (straight and flush potential)
+
+### Unit tests
+I spent a few days writing unit tests (using JUnit) for my main AI module. During this process, it also allowed me to fix up a few bugs that the tests help me pick up. I have been using the Intellij junit runner to run the tests with class, method and line coverage. I use this coverage as an indicator to see if there are specific tests I have missed out and I feel its proved to be a useful enough tool.
+
+### Test Documentation
+All my unit tests written in JUnit have a message associated with each one, explaining what the test should and giving an indicator of why it might fail (if it does fail).
+
+I have also spent some time writing up and documentating test cases for the UI of the game. The pdf with this info can be found in the docs/documentation folder of this repo. Each feature of the game/gameplay has been broken down and scenarios(test cases) have been identifed within each of these. Each scenario has the following three attributes:
+ - Preconditions
+ - Action
+ - Expected Result
+ 
+The way I have decided to document these test cases is inspired by the [Gherkin Syntax](https://github.com/cucumber/cucumber/wiki/Given-When-Then) (i.e. Preconditions=Given, Action=When, Expected Result=Then). I found this method of documentation to be particularly clear to read and analyse.
+
+
+### AI Improvement
+
+Finally I have also been working on improving my AI, I have added a partial flush and partial straight identifier. This means that the AI can now add belief into winning the hand at show down, depending on how lucky it thinks it will be. Currently, luck is determined by a randomly generated value. I will need to evaluate the effect of this partial straight/flush identification, and see if it does indeed improve the AI's performance.
+
+
 ## Blog Entry - 03/04/17
 
 Over the past week I've been fixing up defects in terms of my UI and over all user experience.

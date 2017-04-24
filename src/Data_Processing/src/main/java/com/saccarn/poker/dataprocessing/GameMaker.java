@@ -45,14 +45,10 @@ public class GameMaker {
     }
 
     public GamePlayerRecord readGame(String gameId, int numPlayers) throws FileNotFoundException {
-//        String gameId = inHroster.next();
-//        int numPlayers = Integer.parseInt(inHroster.next());
         String [] players = new String[numPlayers];
         for(int i = 0; i < numPlayers; i++) {
             players[i] = inHroster.next();
-//            System.out.println(players[i]);
         }
-//        System.out.println(gameId + " " + numPlayers);
         return getPlayerActions(players[0], players[1], gameId);
     }
 

@@ -26,6 +26,7 @@ public class DataLoader {
 
 
     public void saveClusterCentroids(List<Vector<Double>> clusterCentroids) {
+        dropClusterCollection(); //drop everything before continuing
         MongoClient client = new MongoClient();
         MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
         MongoCollection<Document> playerCollection = database.getCollection(DataLoaderStrings.CLUSTER_COLLECTION);
@@ -54,6 +55,7 @@ public class DataLoader {
     }
 
     public void loadDataIntoMongo() throws InterruptedException {
+        dropPlayerCollection(); //drop existing players from collection
         List<GamePlayerRecord> gprs;
         try {
             gprs = getListOfRecords();
@@ -199,7 +201,6 @@ public class DataLoader {
         playerDoc.put(DataLoaderStrings.TOTAL_FLOP_ACTIONS, p.getTotalNumActionsFlop());
         playerDoc.put(DataLoaderStrings.TOTAL_TURN_ACTIONS, p.getTotalNumActionsTurn());
         playerDoc.put(DataLoaderStrings.TOTAL_RIVER_ACTIONS, p.getTotalNumActionsRiver());
-        System.out.println("Hello  " + p.getName());
         if (p.isWinner()) {
             playerDoc.put(DataLoaderStrings.NUM_WINS, 1);
         } else {
@@ -235,14 +236,12 @@ public class DataLoader {
             Map<Integer, String> docObjectKeys = fillDocObjectMap();
             Vector<Double> v = new Vector<>();
             String playerName = (String) doc.get(DataLoaderStrings.NAME);
-            System.out.println(playerName);
             for (int i = 0; i < docObjectKeys.size(); i++) {
                 double value = (double) doc.get(docObjectKeys.get(i));
                 v.add(value);
             }
             mappedVectors.put(playerName, v);
         }
-        System.out.println(mappedVectors);
         return mappedVectors;
     }
 
@@ -264,6 +263,18 @@ public class DataLoader {
             centroids.add(centroidMap);
         }
         return centroids;
+    }
+
+    private void dropPlayerCollection() {
+        MongoClient client = new MongoClient();
+        MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
+        database.getCollection(DataLoaderStrings.PLAYER_COLLECTION).drop();
+    }
+
+    private void dropClusterCollection() {
+        MongoClient client = new MongoClient();
+        MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
+        database.getCollection(DataLoaderStrings.CLUSTER_COLLECTION).drop();
     }
 
     public static void main(String [] args) throws InterruptedException {

@@ -2,7 +2,7 @@
     <!--<img class="col-md-1" ng-if="$ctrl.isHidden"  ng-src="js/util/playing-card/imgs/card_back.svg">-->
 <li>
 <span ng-if="!$ctrl.isHidden">
-    <span class="card rank-{{$ctrl.getRankValue()}} {{$ctrl.suit}}">
+    <div class="card rank-{{$ctrl.getRankValue()}} {{$ctrl.suit}}">
         <span class="rank">{{$ctrl.value}}</span>
         <span class="suit" ng-if="$ctrl.suit === 'diams'">
             <span ng-if="!$ctrl.isFaceCard()">&nbsp;</span>
@@ -20,11 +20,11 @@
             <span ng-if="!$ctrl.isFaceCard()">&nbsp;</span>
             <span ng-if="$ctrl.isFaceCard()">&spades;</span>
         </span>
-    </span>
+    </div>
 </span>
 
 <span ng-if="$ctrl.isHidden">
-    <span class="card back" style="color:red;">
-    </span>
+    <div class="card back" style="color:red;">
+    </div>
 </span>
 </li>

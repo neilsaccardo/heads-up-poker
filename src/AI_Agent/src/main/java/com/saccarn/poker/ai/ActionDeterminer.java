@@ -1,5 +1,8 @@
 package com.saccarn.poker.ai;
 
+import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
+import com.saccarn.poker.ai.betpassdeterminer.BetPassDeterminer;
+
 import java.util.Map;
 import java.util.Random;
 
@@ -25,7 +28,6 @@ public class ActionDeterminer {
     private final static double BET1_CONST = 2;
     private final static double BET2_CONST = 3;
     private final static double BET3_CONST = 4;
-
 
     public ActionDeterminer(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int opponentStackSize, int potSize, int numChipsBet, int minBet, Map<String, Double> playerCluster, int round) {
         this.holeCard1 = holeCard1;
@@ -61,22 +63,27 @@ public class ActionDeterminer {
     }
 
     public String determinePassOrBetAction(double passProbability, double randomDouble) {
-        if (randomDouble < passProbability) {
+        BetPassDeterminer bpd = new BetPassDeterminer(randomDouble, passProbability);
+        double passBetActionDouble = bpd.calculateBetFunction();
+        System.out.println("PASS OR BET: Random= " + randomDouble + " PassProb= " + passProbability + " action value=" + passBetActionDouble);
+        if (passBetActionDouble < BetPassActionValues.PASS_CONST) {
+            System.out.println("< PASS_CONST");
             return ActionStrings.ACTION_PASS;
         }
-        if (randomDouble < (passProbability * ActionDeterminer.BET1_CONST)) {
-            return ActionStrings.ACTION_BET1;
-        }
-        if (randomDouble < (passProbability * ActionDeterminer.BET2_CONST)) {
-            return ActionStrings.ACTION_BET2;
-        }
-        if (randomDouble < (passProbability * ActionDeterminer.BET3_CONST)) {
-            return ActionStrings.ACTION_BET3;
-        }
-        if (randomDouble == ActionDeterminer.TOTAL) {
+        else if (passBetActionDouble > BetPassActionValues.ALLIN_CONST && passProbability > 0.8) {
+            System.out.println("> ALL_IN");
             return ActionStrings.ACTION_ALLIN;
         }
-        else {
+        else if (passBetActionDouble > BetPassActionValues.BET3_CONST) {
+            System.out.println("> BET3");
+            return ActionStrings.ACTION_BET3;
+        }
+        else if (passBetActionDouble < BetPassActionValues.BET2_CONST) {
+            System.out.println("> BET2");
+            return ActionStrings.ACTION_BET2;
+        }
+        else {      // < BetPassActionValues.ALLIN_CONST
+            System.out.println("> BET1");
             return ActionStrings.ACTION_BET1;
         }
     }
@@ -86,6 +93,7 @@ public class ActionDeterminer {
     }
 
     public boolean determineShouldFold(double foldProb, double random) {
-        return foldProb < random;
+        System.out.println("Determine should fold : Fold Prob= " + foldProb + ". Random = " + random);
+        return foldProb > random;
     }
 }

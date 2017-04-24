@@ -1,4 +1,4 @@
-package com.saccarn.poker.dataprocessing.unit;
+package com.saccarn.poker.dataprocessing;
 
 import com.saccarn.poker.dataprocessing.TarGzNameRetriever;
 import org.junit.Assert;

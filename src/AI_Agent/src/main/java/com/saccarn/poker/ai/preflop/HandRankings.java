@@ -1,4 +1,4 @@
-package com.saccarn.poker.ai;
+package com.saccarn.poker.ai.preflop;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -73,7 +73,6 @@ public class HandRankings {
         for (String card: mappedCardsToEVPercentagePosition.keySet()) {
             mappedCardsToEVPercentagePosition.put(card, (mappedCardsToEVPercentagePosition.get(card) / size) * multiplier);
         }
-        System.out.println(mappedCardsToEVPercentagePosition);
     }
 
     //cards are inputted as: 'Jh', '7d', '8s', '5s', '4c'
@@ -106,10 +105,5 @@ public class HandRankings {
                 return "" + characterCardTwo + characterCardOne + suited;
             }
         }
-    }
-
-    public static void main(String [] args) throws IOException {
-        HandRankings hrs = new HandRankings();
-        hrs.getHandRankings();
     }
 }

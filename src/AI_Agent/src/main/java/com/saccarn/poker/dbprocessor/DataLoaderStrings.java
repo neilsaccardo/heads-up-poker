@@ -5,6 +5,8 @@ package com.saccarn.poker.dbprocessor;
  */
 public class DataLoaderStrings {
 
+    private DataLoaderStrings() {} //No need to initialise this class
+
     public final static String PLAYER_COLLECTION = "players";
     public final static String DB_NAME = "test1";
     public final static String CLUSTER_COLLECTION = "clusters";

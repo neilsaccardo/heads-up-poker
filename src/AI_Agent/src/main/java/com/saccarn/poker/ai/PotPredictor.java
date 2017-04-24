@@ -72,7 +72,7 @@ public class PotPredictor {
                 + calculateOpponentFutureContributionsPass(round);
     }
 
-    private int calculateOpponentFutureContributionsPass( int round) {
+    private int calculateOpponentFutureContributionsPass(int round) {
         int roundsLeft = mappedRoundsLeft.get(round);
         double b = ((betSize * roundsLeft) * alphaPass);
         return (int)(Math.round(b));
@@ -105,10 +105,5 @@ public class PotPredictor {
             betSize = stackSize;
         }
         return betSize;
-    }
-
-    public static void main(String [] args) {
-        PotPredictor po = new PotPredictor(); //1, 75, 75, 2, 0, 30
-        po.calculatePotAndFutureContribution(1, 75, 75, 30, 0, 10);
     }
 }

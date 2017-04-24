@@ -9,9 +9,7 @@ import java.util.Vector;
  */
 public class Matrix {
 
-    private int horizontal;
-    private int vertical;
-    private List<List<Double>> matrix = new ArrayList<List<Double>>();
+    private List<List<Double>> matrix = new ArrayList<>();
     private int counter = 0;
     private int dimension = 0;
 
@@ -30,14 +28,6 @@ public class Matrix {
         counter++;
     }
 
-    public void print() {
-        for (int i = 0; i < matrix.size(); i++) {
-            for(int j = 0; j < matrix.get(i).size(); j++) {
-                System.out.print(matrix.get(i).get(j) + " ");
-            }
-            System.out.println();
-        }
-    }
 
     public double getValue(int x, int y) {
         return  matrix.get(y).get(x);
@@ -59,15 +49,4 @@ public class Matrix {
         return matrix.size();
     }
 
-    public static void main(String [] args) {
-
-        Matrix m = new Matrix(3);
-        m.put(2);
-        m.put(3);
-        m.put(4);
-        m.put(5);
-        m.put(6);
-        m.put(7);
-        m.print();
-    }
 }

@@ -27,7 +27,6 @@ public class GameAnalyser {
             GameMaker gm = new GameMaker(new File(fs[i], "hroster"));
             gprs.addAll(gm.readAllGames());
         }
-        System.out.println(gprs.size());
         return gprs;
     }
 

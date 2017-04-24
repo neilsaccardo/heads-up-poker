@@ -11,6 +11,7 @@
   "dependencies": {
     "express": "^4.14.1",
     "gulp": "^3.9.1",
+    "mongoose": "^4.9.4",
     "poker-evaluator": "^0.3.1",
     "socket.io": "^1.7.2"
   },

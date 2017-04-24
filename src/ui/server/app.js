@@ -3,14 +3,14 @@ var app = express();
 var server = require('http').Server(app)
 var io = require('socket.io')(server);
 var PokerEvaluator = require('poker-evaluator');
+var db = require('./db.js');
 var net = require('net');
-
 var obj = PokerEvaluator.evalHand(["Th", "Kh", "Qh", "Jh", "9h", "3s", "5h"]);
-
 console.log(obj);
 
 var JAVA_PORT = 3500;
 var HOST = 'localhost';
+
 
 app.use(express.static(__dirname + '/src'));
 
@@ -77,6 +77,7 @@ io.on('connection', function (socket) {
     socket.on('testmessage', function (data) {
         console.log(data);
         idSocketMap[data.id] = socket;
+        db.createRecordIfNoneExistent(data.id);
         //javaServerSocket.write('Testing, attention please ' + data.id.toString() + '\n');
     });
 
@@ -97,6 +98,11 @@ io.on('connection', function (socket) {
         }
         sendActionToAIServer(data);
     });
+    socket.on('playerFold', function(data) {
+        db.saveIntoDBPlayerFold(data.id, data.round);
+        console.log('PLAYER HAS FOLDED');
+    });
+
     socket.on('call', function (data) {
         socket.emit('fcb', {action: 'check', amount: 0});
     });
@@ -104,11 +110,6 @@ io.on('connection', function (socket) {
         if (data.action === 'check') {
             socket.emit('fcb', {action: 'check', amount: data.amount});
         }
-    });
-
-    socket.on('startgame', function (data) {
-        //receive the card info.
-        socket.emit('cfr', {action: 'call', amount: 0}); //start game will be call raise or fold on the - big blind
     });
 
     socket.on('evaluate hands', function (data) {
@@ -124,17 +125,19 @@ io.on('connection', function (socket) {
            (playerHandRank.handType === aiHandRank.handType
             && playerHandRank.handRank > aiHandRank.handRank)) {
             console.log('Win for the Player'); //inform AI about this.
+            db.saveIntoDBPlayerHandWin(data.id);
             socket.emit('playerwin', playerHandRank);
         }
         else if (playerHandRank.handType < aiHandRank.handType ||
                 (playerHandRank.handType === aiHandRank.handType
-             && playerHandRank.handRank < aiHandRank.handRank)) {
+                 && playerHandRank.handRank < aiHandRank.handRank)) {
             console.log('Win for the AI!!!!');
             socket.emit('aiwin', aiHandRank);
-
+            db.saveIntoDBPlayerLossAtShowdown(data.id);
         } else { //its a draw
             console.log('Its A draw. What are the odds?');
             socket.emit('playeraidraw', playerHandRank);
+            db.saveIntoDBPlayerLossAtShowdown(data.id);
         }
     });
 });
@@ -148,42 +151,35 @@ javaServerSocket.on('data', function(data) {
     var keyToSocketList = socketID.toString().substring(2, socketID.toString().length).toString();
     console.log(keyToSocketList);
     var action = data.toString().trim().split(' ')[1].trim();
+    if (idSocketMap[keyToSocketList] === undefined) {
+        console.log('Error. User has been disconnected previously');
+        return;
+    }
     idSocketMap[keyToSocketList].emit('AIAction', {action: action});
 });
 
-/*javaServerSocket.on('data', function(data) {
-   console.log('Data: ' + data.toString() );
-
-   var socketID = data.toString().trim().split(' ')[0].trim();
-    console.log(socketID.trim() + ' - socketID');
-    var keyToSocketList = socketID.toString().substring(2, socketID.toString().length).toString();
-    socketList[keyToSocketList].emit('PrintToConsole', 'Printing to the Console I hope......' + data);
-    console.log(i++ + ": " + data.toString());
-});*/
-
-function ab2str(buf) { //http://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
-  return String.fromCharCode.apply(null, new Uint16Array(buf));
-}
 
 function sendActionToAIServer(data) {
-    var action = data.action;
-    var amount = data.action | 0;
-    var round = data.round;
-    var cardOne = data.cardOne.evalValue;
-    var cardTwo = data.cardTwo.evalValue;
-    var minBet = data.minBet;
-    var stackSize = data.stackSize;
-    var potSize = data.potSize;
-    var boardCards = '';
-    for (var i  = 0; i < data.boardCards.length; i++) {
-        boardCards += (data.boardCards[i].evalValue + ' ');
-    }
-    var totalString = action + ' ' +  amount + ' ' + round + ' ' + cardOne + ' ' +
-                        cardTwo + ' ' + minBet + ' ' + stackSize + ' ' + potSize +  ' ' + data.id +  ' ' + boardCards + '\n';
-    console.log(totalString);
-    javaServerSocket.write(totalString);
+   db.retrieveModelFromDB(data.id, function(modelString) {
+        var action = data.action;
+        var amount = data.action | 0;
+        var round = data.round;
+        var cardOne = data.cardOne.evalValue;
+        var cardTwo = data.cardTwo.evalValue;
+        var minBet = data.minBet;
+        var stackSize = data.stackSize;
+        var potSize = data.potSize;
+        var boardCards = '';
+        for (var i  = 0; i < data.boardCards.length; i++) {
+            boardCards += (data.boardCards[i].evalValue + ' ');
+        }
+        var totalString = action + ' ' +  amount + ' ' + round + ' ' + cardOne + ' ' +
+                            cardTwo + ' ' + minBet + ' ' + stackSize + ' ' + potSize +  ' ' + data.id +  ' ' + boardCards
+                            + ': ' +  modelString + '\n';
+        console.log(totalString);
+        javaServerSocket.write(totalString);
+    });
 }
-
 
 
 server.listen(3000);

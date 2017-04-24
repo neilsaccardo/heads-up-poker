@@ -47,21 +47,17 @@ public class ActionProbability {
 
     public double getFoldProbability() {
         double ew = (ewu.getUtilityPass() - ewu.getUtilityFold())/((double)ewu.getBetSize());
-        double result = ActionProbability.ALPHA / (ActionProbability.ALPHA + (fpParams.get(round) * Math.exp(ew)));
+        System.out.println("The FOLD EW probability is :" + ew);
+        double result = ActionProbability.ALPHA / (ActionProbability.ALPHA + ( Math.exp(fpParams.get(round) * ew)));
+        System.out.println("Result is " + result);
         return result;
     }
 
     public double getPassProbability() {
         double ew = (ewu.getUtilityBet() - ewu.getUtilityPass())/((double)ewu.getBetSize());
-        double result = ActionProbability.ALPHA / (ActionProbability.ALPHA + (cpParams.get(round)* Math.exp(ew)));
+        System.out.println("The PASS EW probability is :" + ew);
+        double result = ActionProbability.ALPHA / (ActionProbability.ALPHA + ( Math.exp(ew * cpParams.get(round))));
+        System.out.println("Result is " + result);
         return result;
-    }
-
-    public static void main(String [] args) {
-        PotPredictor po = new PotPredictor(); //1, 75, 75, 2, 0, 30
-        po.calculatePotAndFutureContribution(1, 75, 75, 30, 0, 0);
-        ActionProbability ap = new ActionProbability(po);
-        System.out.println(ap.getPassProbability());
-        System.out.println(ap.getFoldProbability());
     }
 }

@@ -91,7 +91,6 @@ public class GamePlayerRecord {
             playerNames.add(playerName);
         }
         if(action == PokerAction.ALL_IN) {
-//            System.out.println("WE'RE HERE: " + stageOfPlay);
             stageOfPlay.remove(stageOfPlay.size() - 2);
             stageOfPlay.add(stageOfPlay.size() - 1, l);
         } else {

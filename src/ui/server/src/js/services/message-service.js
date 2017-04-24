@@ -12,7 +12,7 @@ function Message(actions) {
         return 'The AI has raised ' + amount + ' chips.';
     }
 
-    function getAIHasBetMessage() {
+    function getAIHasBetMessage(amount) {
         return 'The AI has bet ' + amount + ' chips.';
     }
 

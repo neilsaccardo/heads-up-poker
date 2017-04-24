@@ -16,7 +16,7 @@ public class PlayerTypeClusterer {
         return new DataLoader().retrieveVectorsForEveryPlayer();
     }
 
-    public void computeDistanceMatrix() {
+    private void computeDistanceMatrix() {
         playerVectors = getPlayerVectors();
         distMatrix= new Matrix(playerVectors.size());
         Set<String> pvSet = playerVectors.keySet();
@@ -31,8 +31,6 @@ public class PlayerTypeClusterer {
                 distMatrix.put(computeDistance(playerVectors.get(s1), playerVectors.get(s2)));
             }
         }
-        System.out.println(mappedIdsToNames);
-        //distMatrix.print();
     }
 
 
@@ -41,11 +39,20 @@ public class PlayerTypeClusterer {
     }
 
     public void getClusters(int n) {
+        loadPlayerDB();
         computeDistanceMatrix();
         mergeVectorsWhereDistanceIsZero();
         getNClusters(n);
         List<Vector<Double>> lvectors = computeClusterCentroids();
         saveCentroidsIntoDB(lvectors);
+    }
+
+    private void loadPlayerDB() {
+        try {
+            new DataLoader().loadDataIntoMongo();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Vector<Double>> computeClusterCentroids() {
@@ -55,11 +62,10 @@ public class PlayerTypeClusterer {
             List<Integer> li = mappedIDsToClusters.get(id);
             clusterCentroids.add(computeCentroid(li));
         }
-        System.out.println("Centroids : " + clusterCentroids);
         return clusterCentroids;
     }
 
-    public void saveCentroidsIntoDB(List<Vector<Double>> centroids) {
+    private void saveCentroidsIntoDB(List<Vector<Double>> centroids) {
         new DataLoader().saveClusterCentroids(centroids);
     }
 
@@ -99,13 +105,12 @@ public class PlayerTypeClusterer {
 
     }
 
-    public void getNClusters(int n) {
+    private void getNClusters(int n) {
         if (n > mappedIDsToClusters.size()) {
             throw new IllegalArgumentException(); //Maybe some other exception might be more appropriate?
         }
         while(mappedIDsToClusters.size() != n) {
             Point p = getMinDistPointFromMatrix();
-            System.out.println(p);
             int x = p.getX();
             int y = p.getY();
             if (x < y) {
@@ -114,13 +119,11 @@ public class PlayerTypeClusterer {
                 updateMapIdToClusters(y, x);
             }
             updateMatrix(p);
-            //distMatrix.print();
-            System.out.println(mappedIDsToClusters);
         }
     }
     // method is used to deal when the distance between two points
     // (i.e. two players who have played the exact same no of times, bet preflop, flop etc).
-    public void mergeVectorsWhereDistanceIsZero() {
+    private void mergeVectorsWhereDistanceIsZero() {
         List<Integer> listOfMergedVectors = new LinkedList<>();
         for (int i = 0; i < distMatrix.xDimensionSize(); i++) {
             for (int j = i; j < distMatrix.yDimensionSize(); j++) {
@@ -140,10 +143,8 @@ public class PlayerTypeClusterer {
 
 
 
-    public void updateMapIdToClusters(int small, int large) {
+    private void updateMapIdToClusters(int small, int large) {
         List ly = mappedIDsToClusters.get(large);
-        System.out.println("Y" + large);
-        System.out.println("ly" + ly);
         if(ly == null) { //these two are already clustered together.
             return;
         }
@@ -151,7 +152,7 @@ public class PlayerTypeClusterer {
         mappedIDsToClusters.remove(large);
     }
 
-    public void updateMatrix(Point p) {
+    private void updateMatrix(Point p) {
         int x  = p.getX();
         int y = p.getY();
         // using shortest distance
@@ -167,7 +168,7 @@ public class PlayerTypeClusterer {
         }
     }
 
-    public Point getMinDistPointFromMatrix() {
+    private Point getMinDistPointFromMatrix() {
         double minDist = Double.MAX_VALUE;
         int x = 0, y = 0;
         for (int i = 0; i < mappedIdsToNames.size(); i++) {
@@ -182,7 +183,7 @@ public class PlayerTypeClusterer {
         return new Point(x, y);
     }
 
-    public double computeDistance(Vector<Double> xVector, Vector<Double> yVector) {
+    private double computeDistance(Vector<Double> xVector, Vector<Double> yVector) {
         double dist = 0;
 
         for ( int i = 0; i < xVector.size(); i++) {

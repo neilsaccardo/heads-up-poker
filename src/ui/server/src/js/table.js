@@ -1,8 +1,8 @@
 function TableController($scope, cards, socket, $timeout, message, amountService, actions) {
     var ctrl = this;
 
-    ctrl.player = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
-    ctrl.aiplayer = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}}
+    ctrl.player = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}};
+    ctrl.aiplayer = {cardOne: {suit: 'hearts', value: '2'}, cardTwo: {suit: 'hearts', value: '2'}};
     ctrl.hideAICards = true;
     ctrl.communityCards = []; //empty
 
@@ -15,18 +15,29 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     ctrl.newGame = function() {
         ctrl.showNewGameButton = false;
         ctrl.isPlayerDealer = false;
-        ctrl.playerStackSize = ctrl.stackSize | 500;
-        ctrl.aiStackSize = ctrl.stackSize | 500;
+        ctrl.showNewHandButton = false;
+        ctrl.goToShowDown = false;
+        ctrl.playerStackSize = ctrl.stackSize | 10000;
+        ctrl.aiStackSize = ctrl.stackSize | 10000;
         ctrl.potSize = 0;
         ctrl.aiToPot = 0;
         ctrl.playerToPot = 0;
-        ctrl.bigBlindAmount = 100;
+        ctrl.betIncreaseEveryNumHands = ctrl.handsIncrease | 10;
+        ctrl.handsLeftTillBetIncrease = ctrl.betIncreaseEveryNumHands;
+        ctrl.bigBlindAmount = ctrl.minimumBet | 100;
         ctrl.isPlayerTurn = ctrl.isPlayerDealer;
         ctrl.newHand();
     }
     //method to start a new hand
     ctrl.newHand = function() {
-
+        ctrl.goToShowDown = false;
+        ctrl.handsLeftTillBetIncrease = ctrl.handsLeftTillBetIncrease - 1;
+        if (ctrl.handsLeftTillBetIncrease === 0) {
+            ctrl.bigBlindAmount = ctrl.bigBlindAmount + ctrl.bigBlindAmount;
+            ctrl.handsLeftTillBetIncrease = ctrl.betIncreaseEveryNumHands;
+        }
+        ctrl.raiseBetAmount = ctrl.bigBlindAmount;
+        ctrl.showNewHandButton = false;
         console.log('NEW GAME');
         ctrl.isPlayerDealer = !ctrl.isPlayerDealer;
         ctrl.isPlayerTurn = false;
@@ -97,15 +108,22 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 
     //methods relating to the buttons on the UI
     ctrl.bet = function() {
-        if (!amountService.checkBetRaiseAmount(ctrl.raiseBetAmount, ctrl.playerStackSize, ctrl.bigBlindAmount)) {
+        if (!amountService.checkBetRaiseAmount(parseInt(ctrl.raiseBetAmount), ctrl.playerStackSize, ctrl.bigBlindAmount)) {
             return;
         };
+        if (!amountService.checkRaiseOverOtherPlayerStack(parseInt(ctrl.raiseBetAmount), ctrl.aiStackSize)) {
+            return;
+        }
         console.log('betting');
+        ctrl.addToPotPlayer(parseInt(ctrl.raiseBetAmount));
         var obj =  {action: actions.getBetString(), amount: ctrl.raiseBetAmount, round: pokerStage,
                     cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
                     boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
                     potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
         ctrl.isPlayerTurn = false;
+        if (ctrl.playerStackSize < ctrl.bigBlindAmount || (ctrl.aiStackSize - parseInt(ctrl.raiseBetAmount)) < ctrl.bigBlindAmount) {
+            ctrl.goToShowDown = true;
+        }
         socket.emit('action', obj);
         //send event to server saying opponent has bet.
     }
@@ -114,6 +132,8 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         //send event to server saying opponent lost.
         ctrl.addPotToStackAI(ctrl.potSize);
         console.log('I HAVE FOLDED');
+        var obj = {id: ctrl.username, round: pokerStage}
+        socket.emit('playerFold', obj);
         ctrl.newHand();
     }
 
@@ -123,6 +143,9 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         if (!amountService.checkBetRaiseAmount(parseInt(ctrl.raiseBetAmount) + amount, ctrl.playerStackSize, ctrl.bigBlindAmount)) {
             return;
         };
+        if (!amountService.checkRaiseOverOtherPlayerStack(parseInt(ctrl.raiseBetAmount), ctrl.aiStackSize)) {
+            return;
+        }
         console.log('I HAVE RAISED');
         console.log('By ' + ctrl.raiseBetAmount);
         var obj =  {action: actions.getRaiseString(), amount: ctrl.raiseBetAmount, round: pokerStage,
@@ -131,6 +154,10 @@ function TableController($scope, cards, socket, $timeout, message, amountService
                     potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
         ctrl.addToPotPlayer(parseInt(ctrl.raiseBetAmount) + amount);
         ctrl.isPlayerTurn = false;
+        if (ctrl.playerStackSize < ctrl.bigBlindAmount || (ctrl.aiStackSize - parseInt(ctrl.raiseBetAmount)) < ctrl.bigBlindAmount) {
+            console.log('ALL INS');
+            ctrl.goToShowDown = true;
+        }
         socket.emit('action', obj);
     }
 
@@ -162,7 +189,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
                     boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
                     potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
         var amount = amountToCall();
-        ctrl.addToPotPlayer(amount); //TODO: put the real number here
+        ctrl.addToPotPlayer(amount);        //TODO: put the real number here
         if (pokerStage === 0 && ctrl.isPlayerDealer && !(bigBlindCalled)) { // player calls the big blind amount
             ctrl.isPlayerTurn = false;
             bigBlindCalled = true;
@@ -181,6 +208,21 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         }
     }
 
+    ctrl.allIn = function() {
+        var numChips = 0;
+        if ((ctrl.playerStackSize) < ctrl.aiStackSize) {
+            numChips = ctrl.playerStackSize;
+        }
+        else {
+            numChips = ctrl.aiStackSize;
+        }
+        if (amountToCall() > 0) {
+            console.log('amount to call is : '+ amountToCall());
+        }
+        ctrl.raiseBetAmount = (numChips - amountToCall());
+        ctrl.raise();
+    }
+
     ctrl.startHand = function() {
         console.log('Starting Hand. ');
         if (checkWinner()) {
@@ -196,7 +238,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         }
         else if (pokerStage === 0 && !(ctrl.isPlayerDealer)) { //else if AI is dealer
             ctrl.isPlayerTurn = false; //than AI must start
-            var obj =  {action: actions.getCallString(), amount: 0, round: pokerStage,
+            var obj =  {action: actions.getCheckString(), amount: 0, round: pokerStage,
                             cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
                             boardCards: ctrl.communityCards, minBet: ctrl.bigBlindAmount,
                             potSize: ctrl.potSize, stackSize: ctrl.aiStackSize, id: ctrl.username};
@@ -205,14 +247,10 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     ctrl.continueGame = function() { // Only called when stage is flop, turn, river
-        if (checkWinner()) {
-            console.log('CHECK WINNER SUCCEDED');
-            ctrl.message = message.getWinnerMessage(ctrl.playerStackSize, ctrl.aiStackSize);
-            ctrl.showNewGameButton = true;
+        if (pokerStage === 4) { //SHOWDOWN. do nothing.
             return;
         }
-
-        if (ctrl.isPlayerDealer) { // if player is dealer, they will act second.
+        if (ctrl.isPlayerDealer) { // if player is dealer, they will act second. AI will act first
             ctrl.isPlayerTurn = false;
             var obj =  {action: actions.getCallString(), amount: 0, round: pokerStage,
                             cardOne: ctrl.aiplayer.cardOne, cardTwo: ctrl.aiplayer.cardTwo,
@@ -278,8 +316,27 @@ function TableController($scope, cards, socket, $timeout, message, amountService
 
     }
 
+    function bringPokerStageToShowDown() {
+        if (pokerStage === 1) {
+            ctrl.flop();
+            pokerStage++;
+        }
+        if (pokerStage === 2) {
+            ctrl.turn();
+            pokerStage++;
+        }
+        if (pokerStage === 3) {
+            ctrl.river();
+            pokerStage++;
+        }
+    }
+
     function incrementStage() {
         pokerStage++;
+        if (ctrl.goToShowDown) {
+            console.log('GO TO SHOWDOWN');
+            bringPokerStageToShowDown();
+        }
         if (pokerStage === 1) { // flop
             console.log('FLOP');
             ctrl.flop();
@@ -300,7 +357,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
             }
             socket.emit('evaluate hands', { playerCards: [ctrl.player.cardOne.evalValue, ctrl.player.cardTwo.evalValue],
                                             aiCards: [ctrl.aiplayer.cardOne.evalValue, ctrl.aiplayer.cardTwo.evalValue],
-                                            communityCards: communityCardsEvalValues, id: ctrl.id});
+                                            communityCards: communityCardsEvalValues, id: ctrl.username});
         }
     }
 
@@ -313,27 +370,31 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     //socket on events relating to player win, loss or draw of hand
     socket.on('playerwin', function(data) {
         console.log('The player has won the hand!! ', data.handName);
-        $timeout(function () {
-                    ctrl.addPotToStackPlayer(ctrl.potSize);
-                    ctrl.newHand();
-                }, 2000);
+        ctrl.message = "You've won the hand. : " + data.handName;
+        ctrl.showNewHandButton = true;
+        ctrl.addPotToStackPlayer(ctrl.potSize);
+        ctrl.isPlayerTurn = false;
     });
 
     socket.on('aiwin', function(data) {
         console.log('The AI has won the hand!! ', data.handName);
-        $timeout(function () {
-                    ctrl.addPotToStackAI();
-                    ctrl.newHand();
-                }, 2000);
+        ctrl.message = "The AI has won the hand. : " + data.handName;
+        ctrl.showNewHandButton = true;
+        ctrl.isPlayerTurn = false;
+        ctrl.addPotToStackAI(ctrl.potSize);
+
     });
 
     socket.on('playeraidraw', function(data) {
         console.log('There was a draw this hand ', data.handName);
-        $timeout(function () {
-            ctrl.addPotToStackAI(ctrl.potSize/2);
-            ctrl.addPotToStackPlayer(ctrl.potSize/2);
-            ctrl.newHand();
-        }, 2000);
+        ctrl.message = "Draw this hand : " + data.handName;
+//        $timeout(function () {
+        ctrl.showNewHandButton = true;
+        ctrl.addPotToStackAI(ctrl.potSize/2);
+        ctrl.addPotToStackPlayer(ctrl.potSize/2);
+        ctrl.isPlayerTurn = false;
+  //          ctrl.newHand();
+  //    }, 5000);
     });
 
     socket.on('PrintToConsole', function(data) {
@@ -346,34 +407,38 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         if (data.action.toLowerCase() === actions.getFoldString()) {
             ctrl.aiFold();
         }
+        else if (ctrl.goToShowDown) {
+            console.log('CALL ALL IN');
+            ctrl.aiCall();
+        }
         else if (data.action.toLowerCase() === actions.getBet1String()) {
-            var numChips = ((ctrl.potSize / 4) * 3) * 1;
-            numChips = (numChips < minBet) ? minBet : numChips;
-            ctrl.aiBet(10);
+            var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 1);
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
+            ctrl.aiBet(numChips);
         }
         else if (data.action.toLowerCase() === actions.getBet2String()) {
-            var numChips = ((ctrl.potSize / 4) * 3) * 2;
-            numChips = (numChips < minBet) ? minBet : numChips;
+            var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 2);
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
             ctrl.aiBet(numChips);
         }
         else if (data.action.toLowerCase() === actions.getBet3String()) {
-            var numChips = ((ctrl.potSize / 4) * 3) * 3;
-            numChips = (numChips < minBet) ? minBet : numChips;
-            ctrl.aiBet(30);
+            var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 3);
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
+            ctrl.aiBet(numChips);
         }
         else if (data.action.toLowerCase() === actions.getRaise1String()) {
-            var numChips = ((ctrl.potSize / 4) * 3) * 1;
-            numChips = (numChips < minBet) ? minBet : numChips;
+            var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 1);
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
             ctrl.aiRaise(numChips);
         }
         else if (data.action.toLowerCase() === actions.getRaise2String()) {
-            var numChips = ((ctrl.potSize / 4) * 3) * 2;
-            numChips = (numChips < minBet) ? minBet : numChips;
+            var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 2);
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
             ctrl.aiRaise(numChips);
         }
         else if (data.action.toLowerCase() === actions.getRaise3String()) {
-            var numChips = ((ctrl.potSize / 4) * 3) * 3;
-            numChips = (numChips < minBet) ? minBet : numChips;
+            var numChips = amountService.getBetRaiseAmount(ctrl.potSize, 3);
+            numChips = (ctrl.aiStackSize < numChips) ? ctrl.aiStackSize : numChips;
             ctrl.aiRaise(numChips);
         }
         else if (data.action.toLowerCase() === actions.getCallString()) {
@@ -384,8 +449,8 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         }
         else if (data.action.toLowerCase() === actions.getAllInString()) {
             ctrl.aiBet(ctrl.aiStackSize);
+            ctrl.goToShowDown = true;
         }
-
     });
 
     ctrl.aiFold = function() {
@@ -394,8 +459,7 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         $timeout(function () {
                     ctrl.addPotToStackPlayer(ctrl.potSize);
                     ctrl.newHand();
-                }, 2000);
-
+                }, 3000);
     }
 
     ctrl.aiCall = function() {
@@ -439,12 +503,24 @@ function TableController($scope, cards, socket, $timeout, message, amountService
         }
         else if (pokerStage > 0 && ctrl.isPlayerDealer) { //  post flop, if the AI plays second
             ctrl.isPlayerTurn = false;
-            ctrl.incrementStage();
+            incrementStage();
+            ctrl.continueGame();
+        }
+        else if (pokerStage > 0 && (!ctrl.isPlayerDealer)) {
+            ctrl.isPlayerTurn = false;
+            incrementStage();
             ctrl.continueGame();
         }
     }
 
     ctrl.aiBet = function(numChips) {
+        if (numChips >= ctrl.playerStackSize) {
+            numChips = ctrl.playerStackSize;
+            ctrl.goToShowDown = true;
+        }
+        if (numChips === ctrl.aiStackSize) {
+            ctrl.goToShowDown = true;
+        }
         ctrl.message = message.getAIHasBetMessage(numChips);
         console.log('AI has bet ' + numChips);
         ctrl.addToPotAI(numChips);
@@ -453,6 +529,10 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     }
 
     ctrl.aiRaise = function(numChips) {
+        if (numChips > ctrl.playerStackSize) {
+            numChips = ctrl.playerStackSize;
+            ctrl.goToShowDown = true;
+        }
         ctrl.message = message.getAIHasRaisedMessage(numChips);
         console.log('Amount to Call : ' + amountToCall());
         console.log('AI has raised ' + numChips);
@@ -495,13 +575,15 @@ function TableController($scope, cards, socket, $timeout, message, amountService
     ctrl.newGame(); // initiate new game
 };
 
-angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'cardsService', 'socketService'
+angular.module('poker-table', ['player', 'ai-player', 'community-cards', 'pot', 'min-bet','cardsService', 'socketService'
                                 , 'messageService', 'amountService', 'actionsService', 'ai-action-message'])
                                 .component('pokerTable', {
     templateUrl: 'js/table.html',
     controller: TableController,
     bindings: {
         username: '@',
-        stackSize: '<'
+        stackSize: '<',
+        minimumBet: '<',
+        handsIncrease: '<'
     }
 });
