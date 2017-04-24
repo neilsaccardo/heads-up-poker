@@ -1,5 +1,6 @@
 package com.saccarn.poker.ai;
 
+import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
 import com.saccarn.poker.ai.preflop.HandRankings;
 import com.saccarn.poker.ai.preflop.PreFlopDeterminer;
 
@@ -15,6 +16,16 @@ public class AiAgent {
     public static final String FLOP = "flop";
     public static final String TURN = "turn";
     public static final String RIVER = "river";
+
+    private BetPassActionValues bpv;
+
+    public AiAgent() {
+        bpv = new BetPassActionValues();
+    }
+
+    public AiAgent(BetPassActionValues bpv) {
+        this.bpv = bpv;
+    }
 
     public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
                             int stackSize, int potSize, Map<String, Double> playerCluster, int position,
@@ -56,19 +67,19 @@ public class AiAgent {
 
     private String riverAction(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
         int round = 2;
-        ActionDeterminer ad = new ActionDeterminer(holeCard1, holeCard2, boardCards, stackSize, opponentStackSize, potSize, amountBet, minBet, playerCluster, round);
+        ActionDeterminer ad = new ActionDeterminer(holeCard1, holeCard2, boardCards, stackSize, opponentStackSize, potSize, amountBet, minBet, playerCluster, round, bpv);
         return ad.getAction();
     }
 
     private String turnAction(String holeCard1, String holeCard2, String [] boardCards, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
         int round = 1;
-        ActionDeterminer ad = new ActionDeterminer(holeCard1, holeCard2, boardCards, stackSize, opponentStackSize, potSize, amountBet, minBet, playerCluster, round);
+        ActionDeterminer ad = new ActionDeterminer(holeCard1, holeCard2, boardCards, stackSize, opponentStackSize, potSize, amountBet, minBet, playerCluster, round, bpv);
         return ad.getAction();
     }
 
     private String flopAction(String holeCard1, String holeCard2, String [] boardCards, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster, int minBet, int opponentStackSize) {
         int round = 0;
-        ActionDeterminer ad = new ActionDeterminer(holeCard1, holeCard2, boardCards, stackSize, opponentStackSize, potSize, amountBet, minBet, playerCluster, round);
+        ActionDeterminer ad = new ActionDeterminer(holeCard1, holeCard2, boardCards, stackSize, opponentStackSize, potSize, amountBet, minBet, playerCluster, round, bpv);
         return ad.getAction();
     }
 

@@ -21,15 +21,11 @@ public class ActionDeterminer {
     private final int minBet;
     private final Map<String, Double> playerCluster;
     private final int round;
+    private final BetPassActionValues bpv;
 
     private Random randomGenerator = new Random();
 
-    private final static double TOTAL = 1.0;
-    private final static double BET1_CONST = 2;
-    private final static double BET2_CONST = 3;
-    private final static double BET3_CONST = 4;
-
-    public ActionDeterminer(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int opponentStackSize, int potSize, int numChipsBet, int minBet, Map<String, Double> playerCluster, int round) {
+    public ActionDeterminer(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int opponentStackSize, int potSize, int numChipsBet, int minBet, Map<String, Double> playerCluster, int round, BetPassActionValues bpv) {
         this.holeCard1 = holeCard1;
         this.holeCard2 = holeCard2;
         this.boardCards = boardCards;
@@ -40,6 +36,7 @@ public class ActionDeterminer {
         this.minBet = minBet;
         this.playerCluster = playerCluster;
         this.round = round;
+        this.bpv = bpv;
     }
 
     public String getAction() {
@@ -66,19 +63,19 @@ public class ActionDeterminer {
         BetPassDeterminer bpd = new BetPassDeterminer(randomDouble, passProbability);
         double passBetActionDouble = bpd.calculateBetFunction();
         System.out.println("PASS OR BET: Random= " + randomDouble + " PassProb= " + passProbability + " action value=" + passBetActionDouble);
-        if (passBetActionDouble < BetPassActionValues.PASS_CONST) {
+        if (passBetActionDouble < bpv.getPassConst()) {
             System.out.println("< PASS_CONST");
             return ActionStrings.ACTION_PASS;
         }
-        else if (passBetActionDouble > BetPassActionValues.ALLIN_CONST && passProbability > 0.8) {
+        else if (passBetActionDouble > bpv.getAllinConst()&& passProbability > 0.8) {
             System.out.println("> ALL_IN");
             return ActionStrings.ACTION_ALLIN;
         }
-        else if (passBetActionDouble > BetPassActionValues.BET3_CONST) {
+        else if (passBetActionDouble > bpv.getBet3Const()) {
             System.out.println("> BET3");
             return ActionStrings.ACTION_BET3;
         }
-        else if (passBetActionDouble < BetPassActionValues.BET2_CONST) {
+        else if (passBetActionDouble < bpv.getBet2Const()) {
             System.out.println("> BET2");
             return ActionStrings.ACTION_BET2;
         }
