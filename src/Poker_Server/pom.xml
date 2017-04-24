@@ -7,6 +7,7 @@
     <groupId>com.saccarn.poker.server</groupId>
     <artifactId>Poker_Server</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <dependencies>
         <dependency>
             <groupId>com.saccarn.ai_agent</groupId>

@@ -32,7 +32,7 @@ public class PreFlopDeterminer {
 
     public String action(double rank, int randomNumFoldOrContinue) {
         // fold x% of the time when rank is above certain value.
-        if (rank > RANK_THRESHOLD && randomNumFoldOrContinue > FOLD_THRESHOLD ) {
+        if (rank > RANK_THRESHOLD && randomNumFoldOrContinue > FOLD_THRESHOLD) {
             return ActionStrings.ACTION_FOLD;
         }
 

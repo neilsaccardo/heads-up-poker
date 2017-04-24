@@ -16,11 +16,6 @@ public class AiAgent {
     public static final String TURN = "turn";
     public static final String RIVER = "river";
 
-    private Random randomGenerator = new Random();
-    private final int randomTopLimit = 100;
-    private final int randomisationThreshold = 95;
-
-
     public String getAction(String stageOfPlay, String holeCard1, String holeCard2, String [] boardCards,
                             int stackSize, int potSize, Map<String, Double> playerCluster, int position, int minBet, int amountBet, int opponentStackSize, String previousAction) {
 
