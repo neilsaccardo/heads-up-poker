@@ -1,14 +1,15 @@
-package betpassvalues;
+package com.saccarn.poker.betpassvalues;
 
 import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
 
 /**
- * Created by Neil on 24/04/2017.
+ * Created by Neil on 25/04/2017.
  */
-public class BetPassValuesTest1 extends BetPassActionValues {
+public class BetPassValuesTest2 extends BetPassActionValues {
+
 
     public double getPassConst() {
-        return 0.2;
+        return 0.1;
     }
 
     public double getBet1Const() {
@@ -26,5 +27,4 @@ public class BetPassValuesTest1 extends BetPassActionValues {
     public double getAllinConst() {
         return 0.9;
     }
-
 }

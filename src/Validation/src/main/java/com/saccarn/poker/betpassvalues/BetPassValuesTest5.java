@@ -1,4 +1,4 @@
-package betpassvalues;
+package com.saccarn.poker.betpassvalues;
 
 /**
  * Created by Neil on 25/04/2017.

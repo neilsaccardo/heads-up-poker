@@ -1,4 +1,4 @@
-package cards;
+package com.saccarn.poker.cards;
 
 import java.util.*;
 
@@ -146,8 +146,8 @@ public final class CardSet implements Set<Card> {
 	}
 
 	/**
-	 * Returns a {@link String} containing a comma-space-separated list of cards.
-	 * @return a {@link String} containing a comma-space-separated list of cards,
+	 * Returns a {@link String} containing a comma-space-separated list of com.saccarn.poker.cards.
+	 * @return a {@link String} containing a comma-space-separated list of com.saccarn.poker.cards,
 	 *			each the result of {@link Card#toString()}.
 	 */
 	@Override public String toString() {

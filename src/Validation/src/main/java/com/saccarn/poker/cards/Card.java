@@ -1,4 +1,4 @@
-package cards;
+package com.saccarn.poker.cards;
 
 /**
  * An immutable poker card.

@@ -1,4 +1,4 @@
-package cards;
+package com.saccarn.poker.cards;
 
 //import pokerai.game.eval.stevebrecher.Card;
 /**
@@ -7,7 +7,7 @@ package cards;
  * All of the methods are thread-safe.
  * <p>
  * Each evaluation method takes a single parameter representing a hand of five to
- * seven cards represented in four 13-bit masks, one mask per suit, in
+ * seven com.saccarn.poker.cards represented in four 13-bit masks, one mask per suit, in
  * the low-order 52 bits of a long (64 bits). In each mask, bit 0 set
  * (0x0001) for a deuce, ..., bit 12 set (0x1000) for an ace. Each mask
  * denotes the ranks present in one of the suits. The ordering of the
@@ -166,7 +166,7 @@ public final class HandEval {
 				else
 					return (STRAIGHT_FLUSH - STRAIGHT) + i;
 		} else
-			/* total cards in other suits <= 7-5: spade flush: */
+			/* total com.saccarn.poker.cards in other suits <= 7-5: spade flush: */
 			if ((i = straightValue[s]) == 0)
 				return FLUSH | hi5RanksMask[s];
 			else
@@ -175,8 +175,8 @@ public final class HandEval {
 	}
 
 	/**
-	 * Returns the value of the best 5-card high poker hand from 7 cards.
-	 * @param hand bit mask with one bit set for each of 7 cards.
+	 * Returns the value of the best 5-card high poker hand from 7 com.saccarn.poker.cards.
+	 * @param hand bit mask with one bit set for each of 7 com.saccarn.poker.cards.
 	 * @return the value of the best 5-card high poker hand.
 	 */
 	public static int hand7Eval(long hand) {
@@ -293,8 +293,8 @@ public final class HandEval {
 
 
 	/**
-	 * Returns the value of the best 5-card Razz poker hand from 7 cards.
-	 * @param hand bit mask with one bit set for each of 7 cards.
+	 * Returns the value of the best 5-card Razz poker hand from 7 com.saccarn.poker.cards.
+	 * @param hand bit mask with one bit set for each of 7 com.saccarn.poker.cards.
 	 * @return the value of the best 5-card Razz poker hand.
 	 */
 	public static int handRazzEval(long hand) {
@@ -412,7 +412,7 @@ public final class HandEval {
 				else
 					return (STRAIGHT_FLUSH - STRAIGHT) + i;
 		} else
-			/* total cards in other suits <= N-5: spade flush: */
+			/* total com.saccarn.poker.cards in other suits <= N-5: spade flush: */
 			if ((i = straightValue[s]) == 0)
 				return FLUSH | hi5RanksMask[s];
 			else
@@ -421,8 +421,8 @@ public final class HandEval {
 	}
 
 	/**
-	 * Returns the value of the best 5-card high poker hand from 6 cards.
-	 * @param hand bit mask with one bit set for each of 6 cards.
+	 * Returns the value of the best 5-card high poker hand from 6 com.saccarn.poker.cards.
+	 * @param hand bit mask with one bit set for each of 6 com.saccarn.poker.cards.
 	 * @return the value of the best 5-card high poker hand.
 	 */
 	public static int hand6Eval(long hand) {
@@ -504,7 +504,7 @@ public final class HandEval {
 
 	/**
 	 * Returns the value of a 5-card poker hand.
-	 * @param hand bit mask with one bit set for each of 5 cards.
+	 * @param hand bit mask with one bit set for each of 5 com.saccarn.poker.cards.
 	 * @return the value of the hand.
 	 */
 	public static int hand5Eval(long hand) {
@@ -577,7 +577,7 @@ public final class HandEval {
 
 	/**
 	 * Returns the Ace-to-5 value of a 5-card low poker hand.
-	 * @param hand bit mask with one bit set for each of 5 cards.
+	 * @param hand bit mask with one bit set for each of 5 com.saccarn.poker.cards.
 	 * @return the Ace-to-5 low value of the hand.
 	 */
 	public static int hand5Ato5LoEval(long hand) {
@@ -633,7 +633,7 @@ public final class HandEval {
 
 	/**
 	 * Returns the bitwise OR of the suit masks comprising <code>hand</code>; Ace is high.
-	 * @param hand bit mask with one bit set for each of 0 to 52 cards.
+	 * @param hand bit mask with one bit set for each of 0 to 52 com.saccarn.poker.cards.
 	 * @return the bitwise OR of the suit masks comprising <code>hand</code>.
 	 */
 	public static int ranksMask(long hand) {
@@ -647,7 +647,7 @@ public final class HandEval {
 
 	/**
 	 * Returns the bitwise OR of the suit masks comprising <code>hand</code>; Ace is low.
-	 * @param hand bit mask with one bit set for each of 0 to 52 cards.
+	 * @param hand bit mask with one bit set for each of 0 to 52 com.saccarn.poker.cards.
 	 * @return the bitwise OR of the suit masks comprising <code>hand</code>.
 	 */
 	public static int ranksMaskLo(long hand) {
@@ -661,7 +661,7 @@ public final class HandEval {
 
 	/**
 	 * Returns the 8-or-better low value of a 5-card poker hand or {@link #NO_8_LOW}.
-	 * @param hand bit mask with one bit set for each of up to 7 cards.
+	 * @param hand bit mask with one bit set for each of up to 7 com.saccarn.poker.cards.
 	 * @return the 8-or-better low value of <code>hand</code> or {@link #NO_8_LOW}.
 	 */
 	public static int hand8LowEval(long hand) {
@@ -676,10 +676,10 @@ public final class HandEval {
 	}
 
 	/**
-	 * Returns the 8-or-better low value of the best hand from hole cards and 3 board cards or {@link #NO_8_LOW}.
-	 * @param holeRanks bit mask of the rank(s) of hole cards (Ace is LS bit).
-	 * @param boardRanks bit mask of the rank(s) of board cards (Ace is LS bit).
-	 * @return the 8-or-better low value of the best hand from hole cards and 3 board cards or {@link #NO_8_LOW}.
+	 * Returns the 8-or-better low value of the best hand from hole com.saccarn.poker.cards and 3 board com.saccarn.poker.cards or {@link #NO_8_LOW}.
+	 * @param holeRanks bit mask of the rank(s) of hole com.saccarn.poker.cards (Ace is LS bit).
+	 * @param boardRanks bit mask of the rank(s) of board com.saccarn.poker.cards (Ace is LS bit).
+	 * @return the 8-or-better low value of the best hand from hole com.saccarn.poker.cards and 3 board com.saccarn.poker.cards or {@link #NO_8_LOW}.
 	 * @see #ranksMaskLo
 	 */
 	public static int Omaha8LowEval(int holeRanks, int boardRanks) {

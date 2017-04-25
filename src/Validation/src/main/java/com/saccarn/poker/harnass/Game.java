@@ -1,8 +1,8 @@
 package com.saccarn.poker.harnass;
 
-import cards.Card;
-import cards.CardSet;
-import cards.HandEval;
+import com.saccarn.poker.cards.Card;
+import com.saccarn.poker.cards.CardSet;
+import com.saccarn.poker.cards.HandEval;
 import com.saccarn.poker.ai.ActionStrings;
 import com.saccarn.poker.ai.AiAgent;
 
