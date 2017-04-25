@@ -17,25 +17,41 @@ import java.util.Map;
 public class Harnass {
 
     public static void main(String [] args) throws IOException, URISyntaxException {
-        int totalIterations = 1000;
+        int totalIterations = 100;
         int i = 0;
         BetPassActionValues bpvTest1 = new BetPassValuesTest1();
-        AiAgent playerOne = new AiAgent(bpvTest1);
-        AiAgent playerTwo = new AiAgent(bpvTest1);
+        AiAgent playerOne = new AiAgent();
+        AiAgent playerTwo = new AiAgent();
         long start = System.currentTimeMillis();
         Map<String, Double> defaultOpponentModel = Harnass.getDefaultOpponentModel();
         Map<String, Double> testOpponentModel = Harnass.getDefaultOpponentModel();
-        long totalPlayerOne = 0;
-        long totalPlayerTwo = 0;
+        int totalPlayerOne = 0;
+        int totalPlayerTwo = 0;
         while (i < totalIterations) {
-            boolean firstPlay = (i%2==0);
-            Game game = new Game(playerOne, playerTwo, firstPlay, defaultOpponentModel, testOpponentModel);
+            boolean firstPlay = (i % 2 == 0);
+            Game game = new Game(playerOne, playerTwo, firstPlay, defaultOpponentModel, defaultOpponentModel, firstPlay);
             game.playHand();
             System.out.println(game.getBigBlindAmount());
             System.out.println(game.getPlayerOneStack());
             System.out.println(game.getPlayerTwoStack());
-            totalPlayerOne = totalPlayerOne + ((game.getPlayerOneStack() - game.getStartingStack()) / game.getBigBlindAmount());
-            totalPlayerTwo = totalPlayerTwo + ((game.getPlayerTwoStack() - game.getStartingStack()) / game.getBigBlindAmount());
+            System.out.println(game.getPlayerOneStack() + "GPLAYERONE STACK HERE");
+            if (game.getPlayerOneStack() > game.getPlayerTwoStack()) {
+                System.out.println("PLAYER ONE STACK IS GREATER");
+            }
+            else if (game.getPlayerOneStack() == game.getPlayerTwoStack()) {
+                System.out.println("PLAYER STACKS ARE EQUAL");
+            }
+            else {
+                System.out.println("PLAYER TWO STACK IS GREATER");
+            }
+            if (game.getPlayerOneStack() < 0) {
+                System.out.println("LESS THAN ZERO");
+            }
+            totalPlayerOne = totalPlayerOne + game.getPlayerOneStack();
+            totalPlayerTwo = totalPlayerTwo + game.getPlayerTwoStack();
+
+//            totalPlayerOne = totalPlayerOne + ((game.getPlayerOneStack() - game.getStartingStack()) / game.getBigBlindAmount());
+//            totalPlayerTwo = totalPlayerTwo + ((game.getPlayerTwoStack() - game.getStartingStack()) / game.getBigBlindAmount());
             i++;
         }
         long stop = System.currentTimeMillis();
