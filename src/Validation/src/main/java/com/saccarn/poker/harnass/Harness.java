@@ -1,57 +1,49 @@
 package com.saccarn.poker.harnass;
 
 import betpassvalues.BetPassValuesTest1;
-import com.saccarn.poker.ai.ActionStrings;
+import betpassvalues.BetPassValuesTest2;
 import com.saccarn.poker.ai.AiAgent;
 import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
 import com.saccarn.poker.dbprocessor.DataLoaderStrings;
 
-import java.io.*;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Neil on 21/04/2017.
  */
-public class Harnass {
+public class Harness {
 
-    public static void main(String [] args) throws IOException, URISyntaxException {
-        int totalIterations = 100;
+    private int totalIterations = 1000;
+    private AiAgent playerOne;
+    private AiAgent playerTwo;
+    private Map<String, Double> defaultOpponentModel;
+
+    public Harness(BetPassActionValues bpv) {
+        playerOne = new AiAgent();
+        playerTwo = new AiAgent(bpv);
+        defaultOpponentModel = getDefaultOpponentModel();
+    }
+
+
+    public Harness(BetPassActionValues bpv1, BetPassActionValues bpv2) {
+        playerOne = new AiAgent(bpv1);
+        playerTwo = new AiAgent(bpv2);
+        defaultOpponentModel = getDefaultOpponentModel();
+    }
+
+    public void playOutHands() {
         int i = 0;
-        BetPassActionValues bpvTest1 = new BetPassValuesTest1();
-        AiAgent playerOne = new AiAgent();
-        AiAgent playerTwo = new AiAgent();
         long start = System.currentTimeMillis();
-        Map<String, Double> defaultOpponentModel = Harnass.getDefaultOpponentModel();
-        Map<String, Double> testOpponentModel = Harnass.getDefaultOpponentModel();
         int totalPlayerOne = 0;
         int totalPlayerTwo = 0;
         while (i < totalIterations) {
             boolean firstPlay = (i % 2 == 0);
             Game game = new Game(playerOne, playerTwo, firstPlay, defaultOpponentModel, defaultOpponentModel, firstPlay);
             game.playHand();
-            System.out.println(game.getBigBlindAmount());
-            System.out.println(game.getPlayerOneStack());
-            System.out.println(game.getPlayerTwoStack());
-            System.out.println(game.getPlayerOneStack() + "GPLAYERONE STACK HERE");
-            if (game.getPlayerOneStack() > game.getPlayerTwoStack()) {
-                System.out.println("PLAYER ONE STACK IS GREATER");
-            }
-            else if (game.getPlayerOneStack() == game.getPlayerTwoStack()) {
-                System.out.println("PLAYER STACKS ARE EQUAL");
-            }
-            else {
-                System.out.println("PLAYER TWO STACK IS GREATER");
-            }
-            if (game.getPlayerOneStack() < 0) {
-                System.out.println("LESS THAN ZERO");
-            }
-            totalPlayerOne = totalPlayerOne + game.getPlayerOneStack();
-            totalPlayerTwo = totalPlayerTwo + game.getPlayerTwoStack();
 
-//            totalPlayerOne = totalPlayerOne + ((game.getPlayerOneStack() - game.getStartingStack()) / game.getBigBlindAmount());
-//            totalPlayerTwo = totalPlayerTwo + ((game.getPlayerTwoStack() - game.getStartingStack()) / game.getBigBlindAmount());
+            totalPlayerOne = totalPlayerOne + ((game.getPlayerOneStack() - game.getStartingStack()) / game.getBigBlindAmount());
+            totalPlayerTwo = totalPlayerTwo + ((game.getPlayerTwoStack() - game.getStartingStack()) / game.getBigBlindAmount());
             i++;
         }
         long stop = System.currentTimeMillis();
@@ -61,9 +53,10 @@ public class Harnass {
 
         System.out.println("Player One winnings: " + totalPlayerOne);
         System.out.println("Player Two winnings: " + totalPlayerTwo);
+
     }
 
-    private static Map<String,Double> getDefaultOpponentModel() {
+    private Map<String,Double> getDefaultOpponentModel() {
         Map<String, Double>  model = new HashMap<>();
         model.put(DataLoaderStrings.PRE_FLOP_FOLDED_RATIO, 0.30429600503908655);
         model.put(DataLoaderStrings.FLOP_FOLDED_RATIO, 0.07954173703910809);
@@ -79,6 +72,14 @@ public class Harnass {
         model.put(DataLoaderStrings.TURN_FOLDED_RATIO, 0.06401239437996795);
         model.put(DataLoaderStrings.RIVER_FOLDED_RATIO, 0.031076351136104537);
         return model;
+    }
+
+
+    public static void main(String [] args) {
+        BetPassActionValues bpv2 = new BetPassValuesTest1();
+
+        Harness harness = new Harness(bpv2);
+        harness.playOutHands();
     }
 
 }

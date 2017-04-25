@@ -66,20 +66,16 @@ public class Game {
         int amount;
         if (isPlayerOneSmallBlind) {
             action = aiAgentPlayerOne.getAction(AiAgent.PRE_FLOP, playerOneCards[0].toString(), playerOneCards[1].toString(), boardCards, playerOneStack, pot, playerTwoModel, 0, bigBlindAmount, 0, playerTwoStack, "CHECK");
-//            System.out.println("PREFLOP:: action1: :: " + action);
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerOneStack);
             if (checkFold(action, true)) {
-//                System.out.println("folded");
                 return;// true if the action is from playerOne. false if from playerTwo
             }
             addToPotPlayerOne(amount);
         }
         else {
             action = getPlayerTwoAction(AiAgent.PRE_FLOP, 0, "CALL");
-//            System.out.println("PREFLOP:: player 2 action is: " + action);
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerTwoStack);
             if (checkFold(action, false)) {
-//                System.out.println("folded");
                 return;// true if the action is from playerOne. false if from playerTwo
             }
             addToPotPlayerTwo(amount);
@@ -88,9 +84,7 @@ public class Game {
         if (!isPlayerOneSmallBlind) {
             action = getPlayerTwoAction(AiAgent.PRE_FLOP, amount, action);
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerTwoStack);
-//            System.out.println("PREFLOP:: player 2 action is: " + action);
             if (checkFold(action, false)) {
-//                System.out.println("folded");
                 return;// true if the action is from playerOne. false if from playerTwo
             }
             playerOneTurn = true;
@@ -98,10 +92,8 @@ public class Game {
         }
         else {
             action = getPlayerOneAction(AiAgent.PRE_FLOP, amount, action);
-//            System.out.println("PREFLOP:: player 1 action is: " + action);
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerOneStack);
             if (checkFold(action, true)) {
-//                System.out.println("folded");
                 return;// true if the action is from playerOne. false if from playerTwo
             }
             playerOneTurn = false;
@@ -123,7 +115,6 @@ public class Game {
             if (!playerOneTurn) {
                 action = getPlayerOneAction(AiAgent.PRE_FLOP, amount, action);
                 if (checkFold(action, true)) {
-//                    System.out.println("folded");
                     return;// true if the action is from playerOne. false if from playerTwo
                 }
                 amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerOneStack);
@@ -134,7 +125,6 @@ public class Game {
             else {
                 action = getPlayerTwoAction(AiAgent.PRE_FLOP, amount, action);
                 if (checkFold(action, false)) {
-//                    System.out.println("folded");
                     return;// true if the action is from playerOne. false if from playerTwo
                 }
                 amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerTwoStack);
@@ -166,7 +156,6 @@ public class Game {
     }
 
     private String getPlayerTwoAction(String stageOfPlay, int amountBet, String previousAction) {
-//        System.out.println(roundMapToBoardCards.get(stageOfPlay));
         String [] boardCards = new String [roundMapToBoardCards.get(stageOfPlay)];
         for (int i = 0; i < boardCards.length; i++) {
             boardCards [i] = playerTwoCards [i+2].toString();
@@ -176,7 +165,6 @@ public class Game {
 
 
     private String getPlayerOneAction(String stageOfPlay, int amountBet, String previousAction) {
-//        System.out.println(roundMapToBoardCards.get(stageOfPlay));
         String [] boardCards = new String [roundMapToBoardCards.get(stageOfPlay)];
         for (int i = 0; i < boardCards.length; i++) {
             boardCards [i] = playerOneCards[i+2].toString();
@@ -204,7 +192,7 @@ public class Game {
             addToPotPlayerOne(amount);
         }
 
-        if (playerOneTurn) {
+        if (!playerOneTurn) {
             action = getPlayerOneAction(AiAgent.FLOP, amount, action);
             System.out.println("ON the FLOP:: player one action is " + action);
             if (checkFold(action, true)) {
@@ -215,7 +203,7 @@ public class Game {
             addToPotPlayerOne(amount);
         }
         else {
-            action = "FOLD" ;//getPlayerTwoAction(AiAgent.FLOP, amount, action);
+            action = getPlayerTwoAction(AiAgent.FLOP, amount, action);
                 System.out.println("ON the FLOP:: THIS SHOULD APPEAR HALF player two action is " + action);
             if (checkFold(action, false)) {
 //                System.out.println("folded");
@@ -239,7 +227,6 @@ public class Game {
         while ((!action.equals(ActionStrings.ACTION_CALL))) {
             if (!playerOneTurn) {
                 action = getPlayerOneAction(AiAgent.FLOP, amount, action);
-                System.out.println("FLOP :::: in the while loop PLAYER ONE " + action );
                 if (checkFold(action, playerOneTurn)) {
                     return;// true if the action is from playerOne. false if from playerTwo
                 }
@@ -249,7 +236,6 @@ public class Game {
             }
             else {
                 action = getPlayerTwoAction(AiAgent.FLOP, amount, action);
-                System.out.println("FLOP :::: in the while loop PLAYER TWO " + action );
                 if (checkFold(action, playerOneTurn)) {
                     return; // true if the action is from playerOne. false if from playerTwo
                 }
@@ -280,29 +266,25 @@ public class Game {
         int amount;
         if (isPlayerOneSmallBlind) {
             action = getPlayerTwoAction(AiAgent.TURN, 0, "CALL");
-//            System.out.println("ON the TURN:: player two action is " + action);
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerTwoStack);
             playerOneTurn = true;
             addToPotPlayerTwo(amount);
         }
         else {
             action = getPlayerOneAction(AiAgent.TURN, 0, "CALL");
-//            System.out.println("ON the TURN:: player one action is " + action);
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerOneStack);
             playerOneTurn = false;
             addToPotPlayerOne(amount);
         }
 
-        if (playerOneTurn) {
+        if (!playerOneTurn) {
             action = getPlayerOneAction(AiAgent.TURN, amount, action);
-            System.out.println("ON the TURN:: player one action is " + action);
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerOneStack);
             playerOneTurn = false;
             addToPotPlayerOne(amount);
         }
         else {
             action = getPlayerTwoAction(AiAgent.TURN, amount, action);
-//            System.out.println("ON the TURN:: player two action is " + action);
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerTwoStack);
             playerOneTurn = true;
             addToPotPlayerTwo(amount);
@@ -319,9 +301,7 @@ public class Game {
         while ((!action.equals(ActionStrings.ACTION_CALL))) {
             if (!playerOneTurn) {
                 action = getPlayerOneAction(AiAgent.TURN, amount, action);
-                System.out.println("ON the TURN:: player one action is " + action);
                 if (checkFold(action, playerOneTurn)) {
-                    System.out.println("folded");
                     return;// true if the action is from playerOne. false if from playerTwo
                 }
                 amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerOneStack);
@@ -330,9 +310,7 @@ public class Game {
             }
             else {
                 action = getPlayerTwoAction(AiAgent.TURN, amount, action);
-//                System.out.println("ON the TURN:: player two action is " + action);
                 if (checkFold(action, playerOneTurn)) {
-//                    System.out.println("folded");
                     return;// true if the action is from playerOne. false if from playerTwo
                 }
                 amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerTwoStack);
@@ -362,35 +340,28 @@ public class Game {
         int amount;
         if (isPlayerOneSmallBlind) {
             action = getPlayerTwoAction(AiAgent.RIVER, 0, "CALL");
-//            System.out.println("ON the RIVER:: player two action is " + action);
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerTwoStack);
             playerOneTurn = true;
             addToPotPlayerTwo(amount);
         }
         else {
             action = getPlayerOneAction(AiAgent.RIVER, 0, "CALL");
-//            System.out.println("ON the RIVER:: player one action is " + action);
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerOneStack);
             playerOneTurn = false;
             addToPotPlayerOne(amount);
         }
-        if (playerOneTurn) {
+        if (!playerOneTurn) {
             action = getPlayerOneAction(AiAgent.RIVER, amount, action);
-//            System.out.println("ON the RIVER:: player one action is " + action);
             if (checkFold(action, true)) {
-//                System.out.println("folded");
                 return;// true if the action is from playerOne. false if from playerTwo
             }
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerOneStack);
             playerOneTurn = false;
             addToPotPlayerOne(amount);
-            System.out.println("PLAYER ONE @@@@@@@@@@@@@@@@@@@@");
         }
         else {
             action = getPlayerTwoAction(AiAgent.RIVER, amount, action);
-//            System.out.println("ON the RIVER:: player two action is " + action);
             if (checkFold(action, false)) {
-//                System.out.println("folded");
                 return;// true if the action is from playerOne. false if from playerTwo
             }
             amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerTwoStack);
@@ -408,11 +379,8 @@ public class Game {
         }
         while ((!action.equals(ActionStrings.ACTION_CALL))) {
             if (!playerOneTurn) {
-                System.out.println("PLAYER ONE ACTION IS HERE");
                 action = getPlayerOneAction(AiAgent.RIVER, amount, action);
-//                System.out.println("ON the RIVER:: player one action is " + action);
                 if (checkFold(action, true)) {
-//                    System.out.println("folded");
                     return;// true if the action is from playerOne. false if from playerTwo
                 }
                 amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerOneStack);
@@ -421,9 +389,7 @@ public class Game {
             }
             else {
                 action = getPlayerTwoAction(AiAgent.RIVER, amount, action);
-//                System.out.println("ON the RIVER:: player two action is " + action);
                 if (checkFold(action, false)) {
-//                    System.out.println("folded");
                     return;// true if the action is from playerOne. false if from playerTwo
                 }
                 amount = BetRaiseAmount.calculateBetRaiseAmount(action, pot, playerTwoStack);
