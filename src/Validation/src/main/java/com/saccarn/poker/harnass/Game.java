@@ -30,6 +30,7 @@ public class Game {
 
 
     private boolean isPlayerOneSmallBlind = false;
+    private int startingStack = 10000;
     private int playerOneStack = 10000;
     private int playerTwoStack = 10000;
     private int bigBlindAmount = 100;
@@ -97,7 +98,6 @@ public class Game {
                 System.out.println("folded");
                 return;// true if the action is from playerOne. false if from playerTwo
             }
-
             playerOneTurn = true;
             addToPotPlayerTwo(amount);
         }
@@ -166,8 +166,6 @@ public class Game {
 
     private void addToPotPlayerOne(int amount) {
         int calledAmount = (playerOneStack- playerTwoStack) + amount;
-
-        System.out.println("calledAmount :  " + calledAmount);
         playerOneStack = playerOneStack - calledAmount;
         pot = pot + calledAmount;
     }
@@ -446,7 +444,7 @@ public class Game {
         if (areAllIn) {
             playerTwoStack = 0;
             playerOneStack = 0;
-            pot = 20000;
+            pot = 2 * startingStack;
         }
         return areAllIn;
     }
@@ -457,7 +455,6 @@ public class Game {
     }
 
     private void flopOutCards() {
-
         playerOneCards[2] = fullDeckArray[deckPointer];
         playerTwoCards[2] = fullDeckArray[deckPointer];
         deckPointer++;
@@ -486,16 +483,25 @@ public class Game {
         long enHand2 = HandEval.encode(playerTwoCards);
         int rank1 = HandEval.hand7Eval(enHand1);
         int rank2 = HandEval.hand7Eval(enHand2);
+        if (rank1 == rank2) {
+            drawPot();
+            return;
+        }
         if (rank1 < rank2) {
             System.out.println("player one wins");
             addPotToPlayerOneStack();
             //player one wins
         }
         else {
-            System.out.println("playertwo wins");
+            System.out.println("player two wins");
             addPotToPlayerTwoStack();
             //player two wins
         }
+    }
+
+    private void drawPot() {
+        playerOneStack = startingStack;
+        playerTwoStack = startingStack;
     }
 
     private void payBlinds() {
@@ -575,8 +581,8 @@ public class Game {
     }
 
     public int getBigBlindAmount() {
-        return playerTwoStack;
+        return bigBlindAmount;
     }
 
-
+    public int getStartingStack() { return startingStack; }
 }
