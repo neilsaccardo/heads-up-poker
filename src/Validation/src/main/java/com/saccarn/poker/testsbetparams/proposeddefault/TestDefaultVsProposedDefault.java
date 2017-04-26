@@ -1,7 +1,6 @@
-package com.saccarn.poker.tests.proposeddefault;
+package com.saccarn.poker.testsbetparams.proposeddefault;
 
 import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
-import com.saccarn.poker.betpassvalues.BetPassValuesTest14;
 import com.saccarn.poker.betpassvalues.DefaultValues;
 import com.saccarn.poker.betpassvalues.proposeddefault.ProposedDefaultValues;
 import com.saccarn.poker.harnass.Harness;

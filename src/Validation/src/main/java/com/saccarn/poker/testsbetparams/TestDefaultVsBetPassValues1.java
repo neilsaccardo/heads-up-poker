@@ -1,4 +1,4 @@
-package com.saccarn.poker.tests;
+package com.saccarn.poker.testsbetparams;
 
 import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
 import com.saccarn.poker.betpassvalues.BetPassValuesTest1;

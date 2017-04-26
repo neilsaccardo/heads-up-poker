@@ -1,7 +1,6 @@
-package com.saccarn.poker.tests;
+package com.saccarn.poker.testsbetparams;
 
 import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
-import com.saccarn.poker.betpassvalues.BetPassValuesTest5;
 import com.saccarn.poker.betpassvalues.BetPassValuesTest6;
 import com.saccarn.poker.betpassvalues.BetPassValuesTest7;
 import com.saccarn.poker.harnass.Harness;
