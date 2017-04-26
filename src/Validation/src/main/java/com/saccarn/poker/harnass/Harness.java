@@ -1,6 +1,5 @@
 package com.saccarn.poker.harnass;
 
-import com.saccarn.poker.betpassvalues.BetPassValuesTest1;
 import com.saccarn.poker.ai.AiAgent;
 import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
 import com.saccarn.poker.dbprocessor.DataLoaderStrings;
@@ -13,14 +12,14 @@ import java.util.Map;
  */
 public class Harness {
 
-    private int totalIterations = 1000;
+    private int totalIterations = 10000;
     private AiAgent playerOne;
     private AiAgent playerTwo;
     private Map<String, Double> defaultOpponentModel;
 
     public Harness(BetPassActionValues bpv) {
-        playerOne = new AiAgent();
-        playerTwo = new AiAgent(bpv);
+        playerOne = new AiAgent(bpv);
+        playerTwo = new AiAgent();
         defaultOpponentModel = getDefaultOpponentModel();
     }
 
@@ -53,6 +52,9 @@ public class Harness {
         System.out.println("Player One winnings: " + totalPlayerOne);
         System.out.println("Player Two winnings: " + totalPlayerTwo);
 
+
+        System.out.println("Player One winnings: " + totalPlayerOne/(double)totalIterations);
+        System.out.println("Player Two winnings: " + totalPlayerTwo/(double)totalIterations);
     }
 
     private Map<String,Double> getDefaultOpponentModel() {
@@ -74,11 +76,5 @@ public class Harness {
     }
 
 
-    public static void main(String [] args) {
-        BetPassActionValues bpv2 = new BetPassValuesTest1();
-
-        Harness harness = new Harness(bpv2);
-        harness.playOutHands();
-    }
 
 }
