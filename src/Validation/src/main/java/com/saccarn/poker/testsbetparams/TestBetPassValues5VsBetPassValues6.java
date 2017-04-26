@@ -10,7 +10,6 @@ import com.saccarn.poker.harnass.Harness;
  */
 public class TestBetPassValues5VsBetPassValues6 {
 
-
     public static void main(String [] args) {
         BetPassActionValues bpv5 = new BetPassValuesTest5();
         BetPassActionValues bpv6 = new BetPassValuesTest6();

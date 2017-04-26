@@ -15,19 +15,35 @@ public class Harness {
     private int totalIterations = 10000;
     private AiAgent playerOne;
     private AiAgent playerTwo;
-    private Map<String, Double> defaultOpponentModel;
+    private Map<String, Double> playerOneOpponentModel;
+    private Map<String, Double> playerTwoOpponentModel;
 
     public Harness(BetPassActionValues bpv) {
         playerOne = new AiAgent(bpv);
         playerTwo = new AiAgent();
-        defaultOpponentModel = getDefaultOpponentModel();
+        playerOneOpponentModel = getDefaultOpponentModel();
+        playerTwoOpponentModel = getDefaultOpponentModel();
     }
 
 
     public Harness(BetPassActionValues bpv1, BetPassActionValues bpv2) {
         playerOne = new AiAgent(bpv1);
         playerTwo = new AiAgent(bpv2);
-        defaultOpponentModel = getDefaultOpponentModel();
+        playerOneOpponentModel = getDefaultOpponentModel();
+        playerTwoOpponentModel = getDefaultOpponentModel();
+    }
+
+    public Harness(Map<String, Double> p2OppModel) {
+        playerOne = new AiAgent();
+        playerTwo = new AiAgent();
+        playerTwoOpponentModel = p2OppModel;
+    }
+
+    public Harness(Map<String, Double> p1OppModel, Map<String, Double> p2OppModel) {
+        playerOne = new AiAgent();
+        playerTwo = new AiAgent();
+        playerTwoOpponentModel = p1OppModel;
+        playerOneOpponentModel = p2OppModel;
     }
 
     public void playOutHands() {
@@ -37,9 +53,8 @@ public class Harness {
         int totalPlayerTwo = 0;
         while (i < totalIterations) {
             boolean firstPlay = (i % 2 == 0);
-            Game game = new Game(playerOne, playerTwo, firstPlay, defaultOpponentModel, defaultOpponentModel, firstPlay);
+            Game game = new Game(playerOne, playerTwo, firstPlay, playerOneOpponentModel, playerTwoOpponentModel, firstPlay);
             game.playHand();
-
             totalPlayerOne = totalPlayerOne + ((game.getPlayerOneStack() - game.getStartingStack()) / game.getBigBlindAmount());
             totalPlayerTwo = totalPlayerTwo + ((game.getPlayerTwoStack() - game.getStartingStack()) / game.getBigBlindAmount());
             i++;
