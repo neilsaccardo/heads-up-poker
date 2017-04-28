@@ -4,7 +4,9 @@ import com.saccarn.poker.ai.AiAgent;
 import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
 import com.saccarn.poker.dbprocessor.DataLoaderStrings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,11 +14,13 @@ import java.util.Map;
  */
 public class Harness {
 
-    private int totalIterations = 10000;
+    private int totalIterations = 1000;
     private AiAgent playerOne;
     private AiAgent playerTwo;
     private Map<String, Double> playerOneOpponentModel;
     private Map<String, Double> playerTwoOpponentModel;
+    private List<Double> totalsPlayerOne = new ArrayList<>();
+    private List<Double> totalsPlayerTwo = new ArrayList<>();
 
     public Harness(BetPassActionValues bpv) {
         playerOne = new AiAgent(bpv);
@@ -25,6 +29,13 @@ public class Harness {
         playerTwoOpponentModel = getDefaultOpponentModel();
     }
 
+
+    public Harness(boolean commonHandPlayerOne, boolean commonHandPlayerTwo) {
+        playerOne = new AiAgent(commonHandPlayerOne);
+        playerTwo = new AiAgent(commonHandPlayerTwo);
+        playerOneOpponentModel = getDefaultOpponentModel();
+        playerTwoOpponentModel = getDefaultOpponentModel();
+    }
 
     public Harness(BetPassActionValues bpv1, BetPassActionValues bpv2) {
         playerOne = new AiAgent(bpv1);
@@ -46,7 +57,15 @@ public class Harness {
         playerOneOpponentModel = p2OppModel;
     }
 
-    public void playOutHands() {
+    //int 'potential' is added solely to differentiate the harness constructors between common hand and hand potential
+    public Harness(boolean handPotentialP1, boolean handPotentialP2, int potential) {
+        playerOne = new AiAgent(true, handPotentialP1);
+        playerTwo = new AiAgent(true, handPotentialP2);
+        playerOneOpponentModel = getDefaultOpponentModel();
+        playerTwoOpponentModel = getDefaultOpponentModel();
+    }
+
+    public void playOutHands1() {
         int i = 0;
         long start = System.currentTimeMillis();
         int totalPlayerOne = 0;
@@ -68,8 +87,44 @@ public class Harness {
         System.out.println("Player Two winnings: " + totalPlayerTwo);
 
 
+
+        totalsPlayerOne.add(totalPlayerOne/(double)totalIterations);
+
+        totalsPlayerTwo.add(totalPlayerTwo/(double)totalIterations);
+
         System.out.println("Player One winnings: " + totalPlayerOne/(double)totalIterations);
         System.out.println("Player Two winnings: " + totalPlayerTwo/(double)totalIterations);
+    }
+
+    public void playOutHands() {
+
+        for (int i = 0; i < 20; i++) {
+            playOutHands1();
+        }
+        System.out.println(totalsPlayerOne);
+        System.out.println(totalsPlayerTwo);
+        double mean = mean(totalsPlayerOne);
+        double variance = variance(totalsPlayerOne);
+        System.out.println("MEAN: " + mean);
+        System.out.println("VARIANCE: " + variance);
+    }
+
+    private double mean(List<Double> li) {
+        double total = 0;
+        for (int i = 0; i < li.size(); i++) {
+            total = total + li.get(i);
+        }
+        return  total / li.size();
+    }
+
+    private double variance(List<Double> li) {
+        double mean = mean(li);
+        double totalDiffSquared = 0;
+        for (int i = 0; i < li.size(); i++) {
+            double d = li.get(i);
+            totalDiffSquared = ((mean - d) * (mean-d)) + totalDiffSquared;
+        }
+        return totalDiffSquared / li.size();
     }
 
     private Map<String,Double> getDefaultOpponentModel() {

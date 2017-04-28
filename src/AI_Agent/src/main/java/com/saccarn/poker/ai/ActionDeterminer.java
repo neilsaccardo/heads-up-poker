@@ -23,9 +23,14 @@ public class ActionDeterminer {
     private final int round;
     private final BetPassActionValues bpv;
 
+    private boolean checkCommonCards;
+    private boolean affectPotential;
+
     private Random randomGenerator = new Random();
 
-    public ActionDeterminer(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int opponentStackSize, int potSize, int numChipsBet, int minBet, Map<String, Double> playerCluster, int round, BetPassActionValues bpv) {
+    public ActionDeterminer(String holeCard1, String holeCard2, String[] boardCards, int stackSize, int opponentStackSize,
+                            int potSize, int numChipsBet, int minBet, Map<String, Double> playerCluster, int round,
+                            BetPassActionValues bpv, boolean checkCommonCards, boolean affectPotential) {
         this.holeCard1 = holeCard1;
         this.holeCard2 = holeCard2;
         this.boardCards = boardCards;
@@ -37,10 +42,12 @@ public class ActionDeterminer {
         this.playerCluster = playerCluster;
         this.round = round;
         this.bpv = bpv;
+        this.checkCommonCards = checkCommonCards;
+        this.affectPotential = affectPotential;
     }
 
     public String getAction() {
-        BeliefPredictor bp = new BeliefPredictor(holeCard1, holeCard2, boardCards, playerCluster, round);
+        BeliefPredictor bp = new BeliefPredictor(holeCard1, holeCard2, boardCards, playerCluster, round, checkCommonCards, affectPotential);
         double belief = bp.calculateBeliefInWinning();
         PotPredictor potPredictor = new PotPredictor(minBet, stackSize, opponentStackSize, potSize, round, numChipsBet);
         ActionProbability ap = new ActionProbability(potPredictor, belief);
