@@ -25,16 +25,6 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
     private static final double ALPHA = 0.5;
     private boolean affectPotential;
 
-    public BeliefPredictor(String holeCard1, String holeCard2, String[] boardCards, Map<String, Double> opponentModel, int round) {
-        this.holeCardOne = holeCard1;
-        this.holeCardTwo = holeCard2;
-        this.boardCards = boardCards;
-        this.opponentModel = opponentModel;
-        this.round = round;
-        this.checkCommonCards = true;
-        this.affectPotential = true;
-    }
-
     public BeliefPredictor(String holeCard1, String holeCard2, String[] boardCards, Map<String, Double> opponentModel, int round, boolean checkCommonCards, boolean affectPotential) {
         this.holeCardOne = holeCard1;
         this.holeCardTwo = holeCard2;

@@ -87,7 +87,7 @@ public class ActionDeterminerTest {
     public void testActionDeterminerGetActionAlwaysReturnsAValidActionFlop() {
         String [] bcs3 = {"2c", "4d", "Ad"};
         Map<String, Double> playerCluster = PlayerCluster.getPlayerInfo(0);
-        ad = new ActionDeterminer("As", "Ac", bcs3, 2, 2, 20, 15, 3, playerCluster, 0, bpv, checkCommonCards, affectPotential);
+        ad = new ActionDeterminer("As", "Ac", bcs3, 2, 2, 20, 15, 3, playerCluster, 0, bpv, !checkCommonCards, affectPotential);
         String [] validActions = {ActionStrings.ACTION_FOLD, ActionStrings.ACTION_PASS, ActionStrings.ACTION_BET2, ActionStrings.ACTION_BET1, ActionStrings.ACTION_BET3, ActionStrings.ACTION_ALLIN};
         List<String> listOfValidActions = Arrays.asList(validActions);
         int totalTimes = 15;

@@ -46,7 +46,7 @@ public class CommonHandTest {
         String [] boardCards = {c1, c2, c3, c4, c5};
         CommonHand ch = new CommonHand(8, boardCards);
         boolean actual = ch.isCommonHand();
-        Assert.assertEquals("5 cards should evaluate to a king high pair (rank 8). Should be true, should be identifed as common", actual, true);
+        Assert.assertEquals("5 cards should evaluate to a king high pair (rank 8). Should be true, should be identified as common", actual, true);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class CommonHandTest {
         String [] boardCards = {c1, c2, c3, c4, c5};
         CommonHand ch = new CommonHand(9, boardCards);
         boolean actual = ch.isCommonHand();
-        Assert.assertEquals("5 cards should evaluate to a queen high pair (rank 9). Should be true, should be identifed as common", true, actual);
+        Assert.assertEquals("5 cards should evaluate to a queen high pair (rank 9). Should be true, should be identified as common", true, actual);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class CommonHandTest {
         String [] boardCards = {c1, c2, c3, c4, c5};
         CommonHand ch = new CommonHand(10, boardCards);
         boolean actual = ch.isCommonHand();
-        Assert.assertEquals("5 cards should evaluate to a jack high pair (rank 10). Should be true, should be identifed as common", true, actual);
+        Assert.assertEquals("5 cards should evaluate to a jack high pair (rank 10). Should be true, should be identified as common", true, actual);
     }
 
     @Test

@@ -48,11 +48,7 @@ public class PlayerTypeClusterer {
     }
 
     private void loadPlayerDB() {
-        try {
-            new DataLoader().loadDataIntoMongo();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        new DataLoader().loadDataIntoMongo();
     }
 
     public List<Vector<Double>> computeClusterCentroids() {
@@ -190,12 +186,6 @@ public class PlayerTypeClusterer {
             dist = i * (yVector.get(i) - xVector.get(i)) * (yVector.get(i) - xVector.get(i));
         }
         return Math.sqrt(dist);
-
-//
-//        for (int i = 0; i < xVector.size(); i++) { //manhattan distance
-//            dist += (Math.abs(xVector.get(i) - yVector.get(i)));
-//        }
-//        return dist;
     }
 
     public static void main(String [] args) {
