@@ -16,6 +16,8 @@ public class GameAnalyser {
         dir = dir0;
     }
 
+
+    /* Change the directory to point where your data is kept */
     public GameAnalyser() {
         dir = new File("C:\\Data\\test\\nolimit\\");
     }

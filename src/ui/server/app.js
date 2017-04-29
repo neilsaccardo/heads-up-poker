@@ -8,6 +8,7 @@ var net = require('net');
 var obj = PokerEvaluator.evalHand(["Th", "Kh", "Qh", "Jh", "9h", "3s", "5h"]);
 console.log(obj);
 
+var PORT_NUM = 3000;
 var JAVA_PORT = 3500;
 var HOST = 'localhost';
 
@@ -182,5 +183,5 @@ function sendActionToAIServer(data) {
 }
 
 
-server.listen(3000);
-console.log('Listening on port 3000:');
+server.listen(PORT_NUM);
+console.log('Listening on port ' + PORT_NUM + ': ');
