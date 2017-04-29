@@ -15,12 +15,23 @@ public class CommonHand {
 
     private String [] boardCards;
     private int cardRank;
-    
+
+    /**
+     * Full args constructor with card rank and board cards.
+     *
+     * @param cardRank0 card rank obtained with board cards and hole cards
+     * @param boardCards0 board cards
+     */
     public CommonHand(int cardRank0, String [] boardCards0) {
         cardRank = cardRank0;
         boardCards = boardCards0;
     }
 
+    /**
+     * Returns if the rank obtained is available for all players, i.e. if it is a hand on the board.
+     *
+     * @return true if the hand is on the board, false if not
+     */
     public boolean isCommonHand() {
         if (cardRank < 7) {
             return false;

@@ -1,6 +1,7 @@
 package com.saccarn.poker.ai.betpassdeterminer;
 
 /**
+ * This class contains values for betting curve- extend this class and it can be supplied when creating AI_Agent object.
  * Created by Neil on 12/04/2017.
  */
 public class BetPassActionValues {

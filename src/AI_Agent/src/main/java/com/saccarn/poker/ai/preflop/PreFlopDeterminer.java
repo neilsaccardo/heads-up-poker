@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Random;
 
 /**
+ * This class is used to determine what action to carry out at the pre flop stage.
+ *
  * Created by Neil on 19/04/2017.
  */
 public class PreFlopDeterminer {
@@ -18,6 +20,22 @@ public class PreFlopDeterminer {
     private int stackSize;
     private int position;
 
+    /**
+     * Returns action to carry out.
+     *
+     * Uses mixture of randomisation and card EVs to work out what action to carry out.
+     *
+     * @param holeCard1 hole card one
+     * @param holeCard2 hole card two
+     * @param stackSize size of stack
+     * @param potSize size of pot
+     * @param position position relative to betting
+     * @param amountBet the amount bet in previous action
+     * @param playerCluster the opponent model
+     * @param minBet the minimum bet
+     * @param opponentStackSize the size of the opponent stack
+     * @return action to carry out
+     */
     public String preFlopAction(String holeCard1, String holeCard2, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster,
                                 int minBet, int opponentStackSize) {
         this.minBet = minBet;

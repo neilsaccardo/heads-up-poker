@@ -6,6 +6,8 @@ import com.saccarn.poker.dbprocessor.DataLoaderStrings;
 import java.util.Map;
 
 /**
+ * This class is used to create a value of belief in winning at showdown.
+ *
  * Created by Neil on 22/03/2017.
  */
 public class BeliefPredictor {  //gonna need hole cards, board cards, round, opponent model, hand so far.
@@ -25,6 +27,16 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
     private static final double ALPHA = 0.5;
     private boolean affectPotential;
 
+    /**
+     *
+     * @param holeCard1 Hole Card One
+     * @param holeCard2 Hole Card Two
+     * @param boardCards array of board cards, if there are any
+     * @param opponentModel The specified opponent model
+     * @param round Round of play. PREFLOP, FLOP, TURN, RIVER
+     * @param checkCommonCards Whether to let CommonHand functionality affect belief or not
+     * @param affectPotential Whether to let HandPotential affect belief or not
+     */
     public BeliefPredictor(String holeCard1, String holeCard2, String[] boardCards, Map<String, Double> opponentModel, int round, boolean checkCommonCards, boolean affectPotential) {
         this.holeCardOne = holeCard1;
         this.holeCardTwo = holeCard2;
@@ -35,6 +47,12 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
         this.affectPotential = affectPotential;
     }
 
+
+    /**
+     * Returns a value for belief in winning at showdown between 0.0 and 1.0
+     * <p>Makes use of opponent model, and the probability of winning at show down.</p>
+     * @return a value of belief in winning at show down
+     */
 
     public double calculateBeliefInWinning() {
         double probabilityOfLosingAtShowdown = calculateProbabilityOfLossAtShowdown();

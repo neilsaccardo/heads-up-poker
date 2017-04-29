@@ -11,6 +11,7 @@ import java.util.*;
 
 
 /**
+ * Hand Rankings class is used in {@link PreFlopDeterminer} class to determine action for Preflop.
  * Created by Neil on 07/03/2017.
  */
 public class HandRankings {
@@ -22,9 +23,13 @@ public class HandRankings {
     private Map<String, Double> mappedCardsToDistribution = new LinkedHashMap<>();
     private Map<String, Integer> mappedEVRankToCards = new LinkedHashMap<>();
 
+    /**
+     * Default no args constructor.
+     */
     public HandRankings() {
         getHandRankings();
     }
+
     private void getHandRankings() {
         Document handRankingPage;
         try {
@@ -75,6 +80,12 @@ public class HandRankings {
         }
     }
 
+    /**
+     * Returns String representation of cards as needed for the HandRankings class
+     * @param cardOne hole card one
+     * @param cardTwo hole card two
+     * @return String representation of cards  - needed for HandRankings class.
+     */
     //cards are inputted as: 'Jh', '7d', '8s', '5s', '4c'
     public static String transformCardsForHandRanking(String cardOne, String cardTwo) {
         Character [] arraySpecialChars = {'T', 'J', 'Q', 'K', 'A'};
