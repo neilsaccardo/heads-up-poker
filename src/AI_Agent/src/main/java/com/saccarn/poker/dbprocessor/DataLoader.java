@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
+ * DataLoader loads all data obtained from parsing University of Alberta data.
  * Created by Neil on 21/02/2017.
  */
 public class DataLoader {
@@ -22,6 +23,12 @@ public class DataLoader {
         List<GamePlayerRecord> gprs = ga.analyse();
         return gprs;
     }
+
+    /**
+     * Saves the cluster centroid into MongoDB instance.
+     *
+     * @param clusterCentroids list of cluster centroids.
+     */
 
     public void saveClusterCentroids(List<Vector<Double>> clusterCentroids) {
         dropClusterCollection(); //drop everything before continuing
@@ -52,6 +59,10 @@ public class DataLoader {
         return docObjectKeysBetRaises;
     }
 
+    /**
+     * Takes data from U.A. and fills mongo db collection.
+     *
+     */
     public void loadDataIntoMongo() {
         dropPlayerCollection(); //drop existing players from collection
         List<GamePlayerRecord> gprs;
@@ -222,7 +233,10 @@ public class DataLoader {
         return playerDoc;
     }
 
-
+    /**
+     * Returns collection of players
+     * @return Map of players mapped to vector.
+     */
     public Map<String, Vector<Double>> retrieveVectorsForEveryPlayer() {
         Map<String, Vector<Double>> mappedVectors = new HashMap<>();
         MongoClient client = new MongoClient();
@@ -242,6 +256,11 @@ public class DataLoader {
         return mappedVectors;
     }
 
+
+    /**
+     * Retursn centroids obtained from clustering
+     * @return centroids obtained from clustering
+     */
     public List<Map<String, Double>> getCentroids() {
         MongoClient client = new MongoClient();
         MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);

@@ -1,6 +1,8 @@
 package com.saccarn.poker.dbprocessor;
 
 /**
+ * Class containing all constant strings to save and load data from Mongo.
+ *
  * Created by Neil on 06/03/2017.
  */
 public class DataLoaderStrings {
