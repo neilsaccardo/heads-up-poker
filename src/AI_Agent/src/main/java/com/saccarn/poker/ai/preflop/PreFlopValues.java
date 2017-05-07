@@ -10,6 +10,6 @@ public class PreFlopValues {
     }
 
     public int getFoldThreshold() {
-        return 80;
+        return 90;
     }
 }
