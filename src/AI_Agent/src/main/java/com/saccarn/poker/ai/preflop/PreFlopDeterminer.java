@@ -14,12 +14,22 @@ public class PreFlopDeterminer {
 
     private Random randomGenerator = new Random();
     private final int RANDOM_TOP_LIMIT = 100;
-    private final int FOLD_THRESHOLD = 90;
-    private final int RANK_THRESHOLD = 40;
+    private final int FOLD_THRESHOLD;
+    private final int RANK_THRESHOLD;
     private int minBet;
     private int stackSize;
     private int position;
 
+    public PreFlopDeterminer(){
+        PreFlopValues pfv = new PreFlopValues();
+        FOLD_THRESHOLD = pfv.getFoldThreshold();
+        RANK_THRESHOLD = pfv.getRankThreshold();
+    }
+
+    public PreFlopDeterminer(PreFlopValues pfv) {
+        FOLD_THRESHOLD = pfv.getFoldThreshold();
+        RANK_THRESHOLD = pfv.getRankThreshold();
+    }
     /**
      * Returns action to carry out.
      *

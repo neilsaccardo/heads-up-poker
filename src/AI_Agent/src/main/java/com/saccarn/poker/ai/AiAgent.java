@@ -2,6 +2,8 @@ package com.saccarn.poker.ai;
 
 import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
 import com.saccarn.poker.ai.preflop.PreFlopDeterminer;
+import com.saccarn.poker.ai.preflop.PreFlopValues;
+
 import java.util.Map;
 
 /**
@@ -16,6 +18,7 @@ public class AiAgent {
     public static final String RIVER = "river";
 
 
+    private PreFlopValues pfv;
     private BetPassActionValues bpv;
     private boolean checkCommonCards = true; // true by default.
     private boolean affectPotential = true; // true by default
@@ -26,6 +29,7 @@ public class AiAgent {
      *  will use CommonHand and HandPotential functionality
      */
     public AiAgent() {
+        pfv = new PreFlopValues();
         bpv = new BetPassActionValues();
     }
 
@@ -37,11 +41,15 @@ public class AiAgent {
      */
     public AiAgent(boolean checkCommonCards, boolean affectPotential) {
         bpv = new BetPassActionValues();
+        pfv = new PreFlopValues();
         this.checkCommonCards = checkCommonCards;
         this.affectPotential = affectPotential;
     }
 
-
+    public AiAgent(PreFlopValues pfv) {
+        this.pfv = pfv;
+        bpv = new BetPassActionValues();
+    }
     /**
      *  Constructor with custom {@link BetPassActionValues} class.
      *  Will use default values (true) for HandPotential and CommonHand.
@@ -160,7 +168,7 @@ public class AiAgent {
 
     private String preFlopAction(String holeCard1, String holeCard2, int stackSize, int potSize, int position, int amountBet , Map<String, Double> playerCluster,
                                  int minBet, int opponentStackSize) {
-        PreFlopDeterminer pfd = new PreFlopDeterminer();
+        PreFlopDeterminer pfd = new PreFlopDeterminer(pfv);
         return pfd.preFlopAction(holeCard1, holeCard2, stackSize, potSize, position, amountBet, playerCluster, minBet, opponentStackSize);
     }
 

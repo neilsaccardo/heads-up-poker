@@ -12,7 +12,7 @@ import java.util.*;
 
 /**
  * Hand Rankings class is used in {@link PreFlopDeterminer} class to determine action for Preflop.
- * Created by Neil on 07/03/2017.
+ *
  */
 public class HandRankings {
 

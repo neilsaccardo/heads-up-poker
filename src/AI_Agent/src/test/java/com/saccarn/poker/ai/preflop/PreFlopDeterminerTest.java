@@ -30,7 +30,7 @@ public class PreFlopDeterminerTest {
 
     @Test
     public void testPreFlopActionOutput2() {
-        PreFlopDeterminer pfd = new PreFlopDeterminer();
+        PreFlopDeterminer pfd = new PreFlopDeterminer(new PreFlopValues());
         String action = pfd.preFlopAction("2s", "3d", 200, 200 , 200, 200,new HashMap<String, Double>(), 50, 200);
         boolean isActionValidAction = possibleActionList.contains(action);
         Assert.assertEquals("Pre Flop determiner should only output certain subset of actions: FOLD, PASS, BET1, BET2, BET3", true, isActionValidAction);
