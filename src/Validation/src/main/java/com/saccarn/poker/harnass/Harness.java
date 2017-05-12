@@ -2,6 +2,7 @@ package com.saccarn.poker.harnass;
 
 import com.saccarn.poker.ai.AiAgent;
 import com.saccarn.poker.ai.betpassdeterminer.BetPassActionValues;
+import com.saccarn.poker.ai.preflop.PreFlopValues;
 import com.saccarn.poker.dbprocessor.DataLoaderStrings;
 
 import java.util.ArrayList;
@@ -61,6 +62,13 @@ public class Harness {
     public Harness(boolean handPotentialP1, boolean handPotentialP2, int potential) {
         playerOne = new AiAgent(true, handPotentialP1);
         playerTwo = new AiAgent(true, handPotentialP2);
+        playerOneOpponentModel = getDefaultOpponentModel();
+        playerTwoOpponentModel = getDefaultOpponentModel();
+    }
+
+    public Harness(PreFlopValues defaultPFV, PreFlopValues pfv1) {
+        playerOne = new AiAgent(defaultPFV);
+        playerTwo = new AiAgent(pfv1);
         playerOneOpponentModel = getDefaultOpponentModel();
         playerTwoOpponentModel = getDefaultOpponentModel();
     }
