@@ -152,7 +152,4 @@ public class Harness {
         model.put(DataLoaderStrings.RIVER_FOLDED_RATIO, 0.031076351136104537);
         return model;
     }
-
-
-
 }

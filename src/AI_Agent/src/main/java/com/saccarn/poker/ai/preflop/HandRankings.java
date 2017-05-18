@@ -5,8 +5,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 
@@ -60,7 +60,8 @@ public class HandRankings {
     }
 
     private Document getDocument() throws IOException {
-        return Jsoup.parse(new File("C:\\handschart.html"), "UTF-8");
+        InputStream is = this.getClass().getResourceAsStream("/handschart.html");
+        return Jsoup.parse(is, "UTF-8", "");
     }
 
     public double getEVRankOfCardPair(String card) {
