@@ -8,25 +8,16 @@ However, its not the easiest way to read them, so I have also split each blog po
 
 Links are as follows:
 
-[Blog 1](blog1.md)
-
-[Blog 2](blog2.md)
-
-[Blog 3](blog3.md)
-
-[Blog 4](blog4.md)
-
-[Blog 5](blog5.md)
-
-[Blog 6](blog6.md)
-
-[Blog 7](blog7.md)
-
-[Blog 8](blog8.md)
-
-[Blog 9](blog9.md)
-
-[Blog 10](blog10.md)
+- [Blog 1](blog1.md)
+- [Blog 2](blog2.md)
+- [Blog 3](blog3.md)
+- [Blog 4](blog4.md)
+- [Blog 5](blog5.md)
+- [Blog 6](blog6.md)
+- [Blog 7](blog7.md)
+- [Blog 8](blog8.md)
+- [Blog 9](blog9.md)
+- [Blog 10](blog10.md)
 
 
 ## Blog Entry - 15/05/17
