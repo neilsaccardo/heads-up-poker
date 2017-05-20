@@ -2,6 +2,21 @@
 
 **Neil Saccardo**
 
+Over the past few months I have been updating this file as my blog, with the oldest posts at the bottom, and the newest posts at the top.
+
+However, its not the easiest way to read them, so I have split them up into their own files just to make it a bit more convenient to read. Links are as follows:
+
+[Blog 1](blog1.md)
+[Blog 2](blog2.md)
+[Blog 3](blog3.md)
+[Blog 4](blog4.md)
+[Blog 5](blog5.md)
+[Blog 6](blog6.md)
+[Blog 7](blog7.md)
+[Blog 8](blog8.md)
+[Blog 9](blog9.md)
+[Blog 10](blog10.md)
+
 ## Blog Entry - 15/05/17
 
 Over the past couple of weeks I have been working on the following :
