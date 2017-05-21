@@ -16,5 +16,8 @@ Today I have also been working on the video walkthrough. I used [OBS Studio](htt
 - Calling, Checking
 - Showdown scenario
 
+
+As a side note, yesterday I also decided to split the blogs into their own individual files, as well as have them in the way they are presented in this file here. I think that the individual files are probably easier to read. 
+
 ### Onwards
 I'm now looking forward and preparing for both the Expo on Tuesday and the presentation on Wednesday!
