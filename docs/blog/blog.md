@@ -198,12 +198,12 @@ I've made use of existing [Bootstrap](http://getbootstrap.com/) CSS classes and 
 
 Here's a screen shot of what my UI currently looks like:
 
-![Current UI] (https://gitlab.computing.dcu.ie/saccarn2/2017-ca400-saccarn2/raw/WIP_ai/docs/blog/images/updateUI.PNG)
+![Current UI] (https://gitlab.computing.dcu.ie/saccarn2/2017-ca400-saccarn2/raw/master/docs/blog/images/updateUI.PNG)
 
 
 I've also added a simple log in screen to the front end. This helps me keep track of users playing agains the AI.
 
-![Log in screen] (https://gitlab.computing.dcu.ie/saccarn2/2017-ca400-saccarn2/raw/WIP_ai/docs/blog/images/loginUI.PNG)
+![Log in screen] (https://gitlab.computing.dcu.ie/saccarn2/2017-ca400-saccarn2/raw/master/docs/blog/images/loginUI.PNG)
 
 There is still some work to be done on the front end, mainly to do with augmenting the overall UX, and making it more clear precisely what action the AI has taken against them.
 
