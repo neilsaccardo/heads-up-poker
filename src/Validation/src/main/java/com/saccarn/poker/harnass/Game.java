@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Game simulates a hand between two ai agent players. Each player starts by default with 10000 chips and the big blind is 100 chips (i.e. 100 big blinds).
  * Created by Neil on 21/04/2017.
  */
 public class Game {
@@ -58,6 +59,9 @@ public class Game {
         roundMapToBoardCards.put(AiAgent.RIVER, 5);
     }
 
+    /**
+     * Plays out one hand.
+     */
     public void playHand() {
         dealOutCards();
         String action;
@@ -405,6 +409,10 @@ public class Game {
         showDown(playerOneTurn);
     }
 
+    /**
+     * Checks if either players is all in
+     * @return if either player has no chips left.
+     */
     private boolean stackCheck() {
         boolean areAllIn = (playerOneStack  < 1) && (playerTwoStack < 1);
         if (areAllIn) {
@@ -513,12 +521,10 @@ public class Game {
         if (playerOneStack < 0) {
             playerOneStack = 0;
         }
-        System.out.println("OFTEN IS THIS CALLED PLAYEER 2");
         playerTwoStack = pot + playerTwoStack;
     }
 
     private void addPotToPlayerOneStack() {
-        System.out.println("OFTEN ]]]] IS THIS CALLED PLAYEER 1");
         if (playerTwoStack < 0) {
             playerTwoStack = 0;
         }

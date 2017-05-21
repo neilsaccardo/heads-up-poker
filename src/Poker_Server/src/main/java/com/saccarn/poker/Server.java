@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
+ * The server class accepts connections coming in on port 3500. Implements Runnable interface.
  * Created by Neil on 08/03/2017.
  */
 public class Server implements Runnable {
@@ -24,6 +25,9 @@ public class Server implements Runnable {
         }
     }
 
+    /**
+     * For every new input stream, this method spawns a new WorkerThread to deal with getting an action.
+     */
     public void run() {
         synchronized (this) {
             this.runningThread = Thread.currentThread();
@@ -63,6 +67,11 @@ public class Server implements Runnable {
         }
     }
 
+    /**
+     *  This is the main method that kicks everything off.
+     *  Starts a new instance of server - if no connections come in within 50 seconds, the server will stop.
+     * @param args
+     */
     public static void main(String [] args) {
         Server server = new Server();
         System.out.println("Starting......");

@@ -3,6 +3,7 @@ package com.saccarn.poker.harnass;
 import com.saccarn.poker.ai.ActionStrings;
 
 /**
+ * This class determines how much an Agent should raise based on the action code (eg BET1, BET2, etc) and the current pot and stack size.
  * Created by Neil on 24/04/2017.
  */
 public class BetRaiseAmount {
