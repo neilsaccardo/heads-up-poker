@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Used to retrieve all informations about games stored in folder.
  * Created by Neil on 06/02/2017.
  */
 public class GameAnalyser {

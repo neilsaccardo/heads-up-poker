@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
+ * Automated way to download and store tar gz previously hosted on UNiversity of Alberta site.
  * Created by Neil on 31/01/2017.
  */
 public class TarDownloader {
@@ -41,6 +42,11 @@ public class TarDownloader {
         }
     }
 
+    /**
+     * Uses Apache commons io method to download tar gz
+     * @param fileIDNameString name of file to download
+     */
+
     public void downloadTarGz(String fileIDNameString)  {
         try {
             FileUtils.copyURLToFile(new URL(urlBaseString + fileIDNameString), filePath);
@@ -49,6 +55,10 @@ public class TarDownloader {
         }
     }
 
+    /**
+     * Automated way to unpack tar gz folder.
+     * @param fileNameString name of tar gz folder
+     */
     public void unPackTarGz(String fileNameString) {
         Archiver archiver = ArchiverFactory.createArchiver(tar, gz);
         try {
@@ -74,13 +84,16 @@ public class TarDownloader {
         return retrieveFileNames(noLimitRegex);
     }
 
+    /**
+     * Main method used to download files - they are no longer hosted there so this no longer works.
+     * @param args
+     * @throws IOException
+     */
     public static void main(String [] args) throws IOException {
 
         Pattern p = Pattern.compile("7stud\\.\\d{6}\\.tgz");
         TarGzNameRetriever tgzRetriever = new TarGzNameRetriever();
         tgzRetriever.getFileNamesByStringPattern("nolimit\\.\\d{6}\\.tgz");//Pattern("7stud\\.\\d{6}\\.tgz");
         System.out.println(tgzRetriever.getFileNamesByStringPattern("nolimit\\.\\d{6}\\.tgz"));
-//
-        //new TarDownloader().retrieveGameData("nolimit\\.\\d{6}\\.tgz");
     }
 }

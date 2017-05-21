@@ -293,6 +293,11 @@ public class DataLoader {
         database.getCollection(DataLoaderStrings.CLUSTER_COLLECTION).drop();
     }
 
+
+    /**
+     * Use this method to parse all the data and load it in to the mongo. necessary to run the clustering.
+     * @param args
+     */
     public static void main(String [] args) {
         DataLoader dl = new DataLoader();
         dl.loadDataIntoMongo();

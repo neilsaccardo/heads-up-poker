@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Automated way to retrieve the names of the targz files previously hosted on the university of alberta. Unfortunately they are no longer hosted there.
  * Created by Neil on 01/02/2017.
  */
 public class TarGzNameRetriever {
@@ -19,9 +20,18 @@ public class TarGzNameRetriever {
 
     public TarGzNameRetriever() throws MalformedURLException {
     }
+
+
     /* Reading from HTTP stream taken from Oracle JavaDocs here:
     *  http://docs.oracle.com/javase/tutorial/networking/urls/readingWriting.html
-    *  */
+    */
+
+    /**
+     * Retrieves files based on string pattern
+     * @param p string pattern
+     * @return file names that can be retrieved
+     * @throws IOException
+     */
     public List<String> getFileNamesByStringPattern(String p) throws IOException {
         List<String> listOfFileNames = new LinkedList<>();
         URLConnection urlConnection = url.openConnection();

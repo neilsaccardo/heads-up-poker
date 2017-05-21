@@ -1,6 +1,7 @@
 package com.saccarn.poker.dataprocessing;
 
 /**
+ * Encapsulates all information about the player during a game. Used when storing to mongodb for clustering.
  * Created by Neil on 16/02/2017.
  */
 public class Player {

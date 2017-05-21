@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
+ * Used to read a game and player actions from files.
  * Created by Neil on 15/12/2016.
  */
 public class GameMaker {
@@ -57,6 +58,12 @@ public class GameMaker {
         return pa.getAction(name1, name2, gameId);
     }
 
+
+    /**
+     * Main method Used to test and verify manually the output is correct.
+     * @param args
+     * @throws FileNotFoundException
+     */
     public  static void main(String [] args) throws FileNotFoundException {
         GameMaker gm = new GameMaker(new File("C:\\Data\\test\\nolimit\\199701\\hroster"));
         gm.readAllGames();

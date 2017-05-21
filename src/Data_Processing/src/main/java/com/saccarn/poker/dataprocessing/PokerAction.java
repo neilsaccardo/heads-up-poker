@@ -1,6 +1,7 @@
 package com.saccarn.poker.dataprocessing;
 
 /**
+ * Enum to Represent action
  * Created by Neil on 15/12/2016.
  */
 public enum PokerAction {

@@ -157,6 +157,11 @@ public class PlayerTypeClusterer {
         mappedIDsToClusters.remove(large);
     }
 
+
+    /**
+     * Updates using smallest distance metric
+     * @param p p to be updated
+     */
     private void updateMatrix(Point p) {
         int x  = p.getX();
         int y = p.getY();

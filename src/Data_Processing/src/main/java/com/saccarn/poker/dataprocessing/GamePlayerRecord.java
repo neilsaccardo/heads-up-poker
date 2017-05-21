@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Encapsulates all information about a game read from the files - players, winnings, actions.
  * Created by Neil on 15/12/2016.
  */
 public class GamePlayerRecord {
