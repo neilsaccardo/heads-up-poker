@@ -13,8 +13,14 @@ public class PlayerCluster {
 
     private PlayerCluster() {} // no need to initialise this class.
 
+    /**
+     * Returns the default opponent model obtained from clustering
+     *
+     * @param playerType 'player type'
+     * @return default opponent model
+     */
     public static Map<String, Double> getPlayerInfo(int playerType) {
-        return PlayerTypeClusterer.getCentroid(playerType);
+        return PlayerTypeClusterer.getCentroid(0);
     }
 
 

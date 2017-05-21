@@ -14,7 +14,7 @@ import com.saccarn.poker.dbprocessor.DataLoaderStrings;
 public class WorkerThread implements Runnable {
 
     private Socket clientSocket = null;
-    private String inputLine   = "HERE WE ARE";
+    private String inputLine   = "";
 
 
     public WorkerThread(Socket clientSocket0, String s) {

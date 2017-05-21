@@ -6,6 +6,8 @@ import com.saccarn.poker.dbprocessor.DataLoaderStrings;
 import java.util.Map;
 
 /**
+ * This class is used to create a value of belief in winning at showdown.
+ *
  * Created by Neil on 22/03/2017.
  */
 public class BeliefPredictor {  //gonna need hole cards, board cards, round, opponent model, hand so far.
@@ -16,19 +18,41 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
     private final Map<String, Double> opponentModel;
     private int round;
 
+    private boolean checkCommonCards;
+
     private final int FLOP = 3;
     private final int TURN = 4;
     private final int RIVER = 5;
     private static final double TOTAL = 1.0;
     private static final double ALPHA = 0.5;
+    private boolean affectPotential;
 
-    public BeliefPredictor(String holeCard1, String holeCard2, String[] boardCards, Map<String, Double> opponentModel, int round) {
+    /**
+     *
+     * @param holeCard1 Hole Card One
+     * @param holeCard2 Hole Card Two
+     * @param boardCards array of board cards, if there are any
+     * @param opponentModel The specified opponent model
+     * @param round Round of play. PREFLOP, FLOP, TURN, RIVER
+     * @param checkCommonCards Whether to let CommonHand functionality affect belief or not
+     * @param affectPotential Whether to let HandPotential affect belief or not
+     */
+    public BeliefPredictor(String holeCard1, String holeCard2, String[] boardCards, Map<String, Double> opponentModel, int round, boolean checkCommonCards, boolean affectPotential) {
         this.holeCardOne = holeCard1;
         this.holeCardTwo = holeCard2;
         this.boardCards = boardCards;
         this.opponentModel = opponentModel;
         this.round = round;
+        this.checkCommonCards = checkCommonCards;
+        this.affectPotential = affectPotential;
     }
+
+
+    /**
+     * Returns a value for belief in winning at showdown between 0.0 and 1.0
+     * <p>Makes use of opponent model, and the probability of winning at show down.</p>
+     * @return a value of belief in winning at show down
+     */
 
     public double calculateBeliefInWinning() {
         double probabilityOfLosingAtShowdown = calculateProbabilityOfLossAtShowdown();
@@ -84,7 +108,7 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
             CommonHand ch = new CommonHand(rank, boardCards);
             probOfCardRanksBetterThanCurrentRank = ht.calculateProbOfCardRanksBetterThan(rank);
             probOfCardRanksBetterThanCurrentRank = modifyBeliefIfBestCardsAreCommunal(ch, probOfCardRanksBetterThanCurrentRank, FLOP);
-            probOfWinning = hp.calculateHandPotential(probOfCardRanksBetterThanCurrentRank);
+            probOfWinning = hp.calculateHandPotential(probOfCardRanksBetterThanCurrentRank, affectPotential);
         }
         else if (boardCards.length == TURN) {
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
@@ -94,7 +118,7 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
             HandPotential hp = new HandPotential(holeCardOne, holeCardTwo, boardCards[0], boardCards[1],
                     boardCards[2], boardCards[3]);
             probOfCardRanksBetterThanCurrentRank = modifyBeliefIfBestCardsAreCommunal(ch, probOfCardRanksBetterThanCurrentRank, TURN);
-            probOfWinning = hp.calculateHandPotential(probOfCardRanksBetterThanCurrentRank);
+            probOfWinning = hp.calculateHandPotential(probOfCardRanksBetterThanCurrentRank, affectPotential);
         }
         else { // boardCards.length == 5
             rank = ht.calculateHandRanking(holeCardOne, holeCardTwo, boardCards[0],
@@ -110,7 +134,7 @@ public class BeliefPredictor {  //gonna need hole cards, board cards, round, opp
     }
 
     private double modifyBeliefIfBestCardsAreCommunal(CommonHand ch, double probOfCardRanksBetterThanCurrentRank, int round) {
-        if (ch.isCommonHand()) {
+        if (checkCommonCards && ch.isCommonHand()) {
             double moddedProb = probOfCardRanksBetterThanCurrentRank * (double)round;
             return (moddedProb > 0.99) ? 0.99 : moddedProb;
         }

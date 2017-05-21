@@ -6,18 +6,46 @@ import java.util.Map;
 import java.util.Random;
 
 /**
+ * This class is used to determine what action to carry out at the pre flop stage.
+ *
  * Created by Neil on 19/04/2017.
  */
 public class PreFlopDeterminer {
 
     private Random randomGenerator = new Random();
     private final int RANDOM_TOP_LIMIT = 100;
-    private final int FOLD_THRESHOLD = 90;
-    private final int RANK_THRESHOLD = 40;
+    private final int FOLD_THRESHOLD;
+    private final int RANK_THRESHOLD;
     private int minBet;
     private int stackSize;
     private int position;
 
+    public PreFlopDeterminer(){
+        PreFlopValues pfv = new PreFlopValues();
+        FOLD_THRESHOLD = pfv.getFoldThreshold();
+        RANK_THRESHOLD = pfv.getRankThreshold();
+    }
+
+    public PreFlopDeterminer(PreFlopValues pfv) {
+        FOLD_THRESHOLD = pfv.getFoldThreshold();
+        RANK_THRESHOLD = pfv.getRankThreshold();
+    }
+    /**
+     * Returns action to carry out.
+     *
+     * Uses mixture of randomisation and card EVs to work out what action to carry out.
+     *
+     * @param holeCard1 hole card one
+     * @param holeCard2 hole card two
+     * @param stackSize size of stack
+     * @param potSize size of pot
+     * @param position position relative to betting
+     * @param amountBet the amount bet in previous action
+     * @param playerCluster the opponent model
+     * @param minBet the minimum bet
+     * @param opponentStackSize the size of the opponent stack
+     * @return action to carry out
+     */
     public String preFlopAction(String holeCard1, String holeCard2, int stackSize, int potSize, int position, int amountBet, Map<String, Double> playerCluster,
                                 int minBet, int opponentStackSize) {
         this.minBet = minBet;
@@ -32,7 +60,7 @@ public class PreFlopDeterminer {
 
     public String action(double rank, int randomNumFoldOrContinue) {
         // fold x% of the time when rank is above certain value.
-        if (rank > RANK_THRESHOLD && randomNumFoldOrContinue > FOLD_THRESHOLD ) {
+        if (rank > RANK_THRESHOLD && randomNumFoldOrContinue > FOLD_THRESHOLD) {
             return ActionStrings.ACTION_FOLD;
         }
 

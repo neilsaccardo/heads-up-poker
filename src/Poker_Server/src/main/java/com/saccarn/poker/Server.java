@@ -65,6 +65,7 @@ public class Server implements Runnable {
 
     public static void main(String [] args) {
         Server server = new Server();
+        System.out.println("Starting......");
         new Thread(server).start();
         try {
             Thread.sleep(50 * 1000);

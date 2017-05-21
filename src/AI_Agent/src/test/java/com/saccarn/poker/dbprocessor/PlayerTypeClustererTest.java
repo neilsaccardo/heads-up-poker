@@ -1,8 +1,6 @@
 package com.saccarn.poker.dbprocessor;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.List;
 import java.util.Map;
@@ -12,13 +10,40 @@ import java.util.Map;
  */
 public class PlayerTypeClustererTest {
 
-    @Ignore    @Test
-    public void testGetCentroidsCorrectAmountSaved() { // Kind of a 'God' test - a lot of stuff happening
-        PlayerTypeClusterer ptc = new PlayerTypeClusterer();
-        int n = 4;
-        ptc.getClusters(n); //save into DB
-        DataLoader dl = new DataLoader();
-        List<Map<String, Double>> centroids = dl.getCentroids();
-        Assert.assertEquals("Should save the correct number of centroids into correct mongo db collection", n, centroids.size() );
+    private PlayerTypeClusterer ptc;
+    private int numClusters = 4;
+    private List<Map<String, Double>> centroids;
+    private DataLoader dl;
+
+    @Before
+    public void setUp() {
+        ptc = new PlayerTypeClusterer();
+        ptc.getClusters(numClusters); //save into DB
+        dl = new DataLoader();
+        centroids = dl.getCentroids();
+
+    }
+
+    @Test
+    public void testGetCentroidsCorrectAmountSaved() {
+        Assert.assertEquals("Should save the correct number of centroids into correct mongo db collection", numClusters, centroids.size() );
+    }
+
+
+    @Test
+    public void testGetCentroidsHaveCorrectOpponentModelLayout() {
+        boolean clusterHaveKeyValuesForOppModel = true;
+        for (int i = 0; i < centroids.size(); i++) {
+            clusterHaveKeyValuesForOppModel = clusterHaveKeyValuesForOppModel && hasOppModelKeys(centroids.get(i));
+        }
+        Assert.assertEquals("The cluster have the correct opponent model layout (correct keys for use of AI_Agent)",
+                true, clusterHaveKeyValuesForOppModel);
+    }
+
+    private boolean hasOppModelKeys(Map<String, Double> oppModel) {
+        return oppModel.containsKey(DataLoaderStrings.PRE_FLOP_FOLDED_RATIO)
+                && oppModel.containsKey(DataLoaderStrings.RIVER_FOLDED_RATIO)
+                && oppModel.containsKey(DataLoaderStrings.TURN_FOLDED_RATIO)
+                && oppModel.containsKey(DataLoaderStrings.FLOP_FOLDED_RATIO);
     }
 }

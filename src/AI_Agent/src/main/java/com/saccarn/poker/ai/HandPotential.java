@@ -42,7 +42,11 @@ public class HandPotential {
         boardCards[2] = boardCard3;
     }
 
-    public double calculateHandPotential(double probOfCardRanksBetterThanCurrentRank) {
+    public double calculateHandPotential(double probOfCardRanksBetterThanCurrentRank, boolean affectPotential) {
+        if (!affectPotential) { //no hand potential influence on belief.
+            return probOfCardRanksBetterThanCurrentRank;
+        }
+
         luck = generateLuckValue();
         double potentialProb = isStraightFlushOn();
         if (probOfCardRanksBetterThanCurrentRank - potentialProb < 0.0) {

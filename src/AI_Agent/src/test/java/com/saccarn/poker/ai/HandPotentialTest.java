@@ -17,7 +17,7 @@ public class HandPotentialTest {
         String c5 = "6s";
 
         HandPotential hp = new HandPotential(c1, c2, c3, c4, c5);
-        double hpVal = hp.calculateHandPotential(1);
+        double hpVal = hp.calculateHandPotential(1, true);
         Assert.assertEquals("The upper boundary for hand potential should be 1.0", false, (hpVal>1.0));
     }
 
@@ -30,7 +30,7 @@ public class HandPotentialTest {
         String c5 = "6s";
 
         HandPotential hp = new HandPotential(c1, c2, c3, c4, c5);
-        double hpVal = hp.calculateHandPotential(0);
+        double hpVal = hp.calculateHandPotential(0, true);
         Assert.assertEquals("The lower boundary for hand potential should be 0.0", false, (hpVal<0.0));
     }
 
@@ -43,7 +43,7 @@ public class HandPotentialTest {
         String c5 = "6s";
         String c6 = "4h";
         HandPotential hp = new HandPotential(c1, c2, c3, c4, c5, c6);
-        double hpVal = hp.calculateHandPotential(1);
+        double hpVal = hp.calculateHandPotential(1, true);
         Assert.assertEquals("The upper boundary for hand potential should be 1.0", false, (hpVal>1.0));
     }
 
@@ -56,9 +56,22 @@ public class HandPotentialTest {
         String c5 = "6s";
         String c6 = "4h";
         HandPotential hp = new HandPotential(c1, c2, c3, c4, c5, c6);
-        double hpVal = hp.calculateHandPotential(0);
+        double hpVal = hp.calculateHandPotential(0, true);
         Assert.assertEquals("The lower boundary for hand potential should be 0.0", false, (hpVal<0.0));
     }
 
 
+    @Test
+    public void testThatIfHandPotentialNotChangedIfParameterIsFalse() {
+        String c1 = "2s";
+        String c2 = "3s";
+        String c3 = "Ad";
+        String c4 = "5s";
+        String c5 = "6s";
+        String c6 = "4h";
+        HandPotential hp = new HandPotential(c1, c2, c3, c4, c5, c6);
+        double hpVal = hp.calculateHandPotential(0.5, false);
+        Assert.assertEquals("The value passed in for hand potential should be equal to outputed value, if affectHandPotenial=false", 0.5, hpVal, 0.05);
+
+    }
 }

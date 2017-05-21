@@ -137,6 +137,8 @@ public class AiAgentTest {
 
     @Test
     public void testAiAgentGetActionFlop() {
+        agent = new AiAgent(true);
+
         String [] bcs3 = {"2c", "4d", "Ad"};
 
         String action = agent.getAction(AiAgent.FLOP, "As", "5d", bcs3, 2000, 400, 0, 0,100, 0, 2000, ActionStrings.ACTION_CALL);
@@ -146,6 +148,8 @@ public class AiAgentTest {
 
     @Test
     public void testAiAgentGetActionTurn() {
+        agent = new AiAgent(true, false);
+
         String [] bcs4 = {"2c", "4d", "Ad", "3s"};
 
         String action = agent.getAction(AiAgent.TURN, "As", "5d", bcs4, 2000, 400, 0, 0,100, 0, 2000, ActionStrings.ACTION_CALL);
@@ -155,6 +159,7 @@ public class AiAgentTest {
 
     @Test
     public void testAiAgentGetActionRiver() {
+        agent = new AiAgent(false, false);
         String [] bcs5 = {"2c", "4d", "Ad", "3s", "7d"};
 
         String action = agent.getAction(AiAgent.RIVER, "As", "5d", bcs5, 2000, 400, 0, 0,100, 0, 2000, ActionStrings.ACTION_CALL);

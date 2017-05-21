@@ -5,13 +5,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 
 /**
- * Created by Neil on 07/03/2017.
+ * Hand Rankings class is used in {@link PreFlopDeterminer} class to determine action for Preflop.
+ *
  */
 public class HandRankings {
 
@@ -22,9 +23,13 @@ public class HandRankings {
     private Map<String, Double> mappedCardsToDistribution = new LinkedHashMap<>();
     private Map<String, Integer> mappedEVRankToCards = new LinkedHashMap<>();
 
+    /**
+     * Default no args constructor.
+     */
     public HandRankings() {
         getHandRankings();
     }
+
     private void getHandRankings() {
         Document handRankingPage;
         try {
@@ -55,7 +60,8 @@ public class HandRankings {
     }
 
     private Document getDocument() throws IOException {
-        return Jsoup.parse(new File("C:\\handschart.html"), "UTF-8");
+        InputStream is = this.getClass().getResourceAsStream("/handschart.html");
+        return Jsoup.parse(is, "UTF-8", "");
     }
 
     public double getEVRankOfCardPair(String card) {
@@ -75,6 +81,12 @@ public class HandRankings {
         }
     }
 
+    /**
+     * Returns String representation of cards as needed for the HandRankings class
+     * @param cardOne hole card one
+     * @param cardTwo hole card two
+     * @return String representation of cards  - needed for HandRankings class.
+     */
     //cards are inputted as: 'Jh', '7d', '8s', '5s', '4c'
     public static String transformCardsForHandRanking(String cardOne, String cardTwo) {
         Character [] arraySpecialChars = {'T', 'J', 'Q', 'K', 'A'};

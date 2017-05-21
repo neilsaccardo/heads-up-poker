@@ -3,6 +3,7 @@ package com.saccarn.poker.dbprocessor;
 import java.util.*;
 
 /**
+ * Clusteres the player data retrieved from Mongo and forms clusters.
  * Created by Neil on 22/02/2017.
  */
 public class PlayerTypeClusterer {
@@ -38,6 +39,11 @@ public class PlayerTypeClusterer {
         getClusters(4);
     }
 
+    /**
+     * Computes and saves  clusters into MongoDB.
+     * @param n num clusters specified
+     */
+
     public void getClusters(int n) {
         loadPlayerDB();
         computeDistanceMatrix();
@@ -48,11 +54,7 @@ public class PlayerTypeClusterer {
     }
 
     private void loadPlayerDB() {
-        try {
-            new DataLoader().loadDataIntoMongo();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        new DataLoader().loadDataIntoMongo();
     }
 
     public List<Vector<Double>> computeClusterCentroids() {
@@ -73,6 +75,11 @@ public class PlayerTypeClusterer {
         return new DataLoader().getCentroids();
     }
 
+    /**
+     * This method is used to return the default opponent model
+     * @param n - really this should always be 0.
+     * @return default opponent model
+     */
     public static Map<String, Double> getCentroid(int n) {
         List<Map<String, Double>> listmap = getCentroids();
         if (n > listmap.size()) {
@@ -141,8 +148,6 @@ public class PlayerTypeClusterer {
         }
     }
 
-
-
     private void updateMapIdToClusters(int small, int large) {
         List ly = mappedIDsToClusters.get(large);
         if(ly == null) { //these two are already clustered together.
@@ -190,12 +195,6 @@ public class PlayerTypeClusterer {
             dist = i * (yVector.get(i) - xVector.get(i)) * (yVector.get(i) - xVector.get(i));
         }
         return Math.sqrt(dist);
-
-//
-//        for (int i = 0; i < xVector.size(); i++) { //manhattan distance
-//            dist += (Math.abs(xVector.get(i) - yVector.get(i)));
-//        }
-//        return dist;
     }
 
     public static void main(String [] args) {

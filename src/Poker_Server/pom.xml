@@ -7,6 +7,7 @@
     <groupId>com.saccarn.poker.server</groupId>
     <artifactId>Poker_Server</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <dependencies>
         <dependency>
             <groupId>com.saccarn.ai_agent</groupId>
@@ -16,5 +17,17 @@
 
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <mainClass>com.saccarn.poker.Server</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

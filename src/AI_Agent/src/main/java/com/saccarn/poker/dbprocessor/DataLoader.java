@@ -9,11 +9,11 @@ import com.saccarn.poker.dataprocessing.GamePlayerRecord;
 import com.saccarn.poker.dataprocessing.Player;
 import org.bson.*;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
+ * DataLoader loads all data obtained from parsing University of Alberta data.
  * Created by Neil on 21/02/2017.
  */
 public class DataLoader {
@@ -24,6 +24,11 @@ public class DataLoader {
         return gprs;
     }
 
+    /**
+     * Saves the cluster centroid into MongoDB instance.
+     *
+     * @param clusterCentroids list of cluster centroids.
+     */
 
     public void saveClusterCentroids(List<Vector<Double>> clusterCentroids) {
         dropClusterCollection(); //drop everything before continuing
@@ -54,7 +59,11 @@ public class DataLoader {
         return docObjectKeysBetRaises;
     }
 
-    public void loadDataIntoMongo() throws InterruptedException {
+    /**
+     * Takes data from U.A. and fills mongo db collection.
+     *
+     */
+    public void loadDataIntoMongo() {
         dropPlayerCollection(); //drop existing players from collection
         List<GamePlayerRecord> gprs;
         try {
@@ -64,7 +73,6 @@ public class DataLoader {
             System.out.println("Error finding files/data folders");
             return;
         }
-
         int id = 1;
         MongoClient client = new MongoClient();
         MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
@@ -225,7 +233,10 @@ public class DataLoader {
         return playerDoc;
     }
 
-
+    /**
+     * Returns collection of players
+     * @return Map of players mapped to vector.
+     */
     public Map<String, Vector<Double>> retrieveVectorsForEveryPlayer() {
         Map<String, Vector<Double>> mappedVectors = new HashMap<>();
         MongoClient client = new MongoClient();
@@ -245,6 +256,11 @@ public class DataLoader {
         return mappedVectors;
     }
 
+
+    /**
+     * Retursn centroids obtained from clustering
+     * @return centroids obtained from clustering
+     */
     public List<Map<String, Double>> getCentroids() {
         MongoClient client = new MongoClient();
         MongoDatabase database = client.getDatabase(DataLoaderStrings.DB_NAME);
@@ -277,15 +293,8 @@ public class DataLoader {
         database.getCollection(DataLoaderStrings.CLUSTER_COLLECTION).drop();
     }
 
-    public static void main(String [] args) throws InterruptedException {
+    public static void main(String [] args) {
         DataLoader dl = new DataLoader();
         dl.loadDataIntoMongo();
-        dl.retrieveVectorsForEveryPlayer();
-        try {
-            Thread.sleep(300);
-            System.out.println("dsdsds2");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }

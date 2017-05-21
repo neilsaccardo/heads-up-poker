@@ -1,6 +1,7 @@
 package com.saccarn.poker.ai;
 
 /**
+ * This class contains all actions the system recognises.
  * Created by Neil on 23/03/2017.
  */
 public class ActionStrings {

@@ -1,6 +1,5 @@
 package com.saccarn.poker.dbprocessor;
 
-import com.saccarn.poker.ai.ActionStrings;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,4 +19,6 @@ public class DataLoaderStringsTest {
         constructor.setAccessible(true);
         constructor.newInstance();
     }
+
+
 }

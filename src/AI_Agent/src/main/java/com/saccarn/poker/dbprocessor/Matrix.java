@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Vector;
 
 /**
+ * Matrix used to keep track of distances between players in clustering.
  * Created by Neil on 23/02/2017.
  */
 public class Matrix {
@@ -13,10 +14,19 @@ public class Matrix {
     private int counter = 0;
     private int dimension = 0;
 
+    /**
+     * Full args matrix with dimension of matrix specified.
+     * @param num dimension of matrix
+     */
     public Matrix(int num) {
         dimension = num;
     }
 
+
+    /**
+     * Add distance to matrix
+     * @param d to be added.
+     */
     public void put(double d) {
         if (counter % dimension == 0) {
             List<Double> listds = new ArrayList();
@@ -29,10 +39,22 @@ public class Matrix {
     }
 
 
+    /**
+     * Returns distance at x and y co ord.
+     * @param x x co-ord
+     * @param y y co-ord
+     * @return distance at (x,y)
+     */
     public double getValue(int x, int y) {
         return  matrix.get(y).get(x);
     }
 
+    /**
+     * Sets distance at x and y co ord
+     * @param x x co-ord
+     * @param y y co-ord
+     * @param v distance at (x,y)
+     */
     public void setValue(int x, int y, double v) {
         if (x > dimension || matrix.size() < y) {
             throw new IndexOutOfBoundsException();
@@ -41,10 +63,18 @@ public class Matrix {
         matrix.get(x).set(y, v);
     }
 
+    /**
+     * Returns matrix dimension size
+     * @return x dimension size
+     */
     public int xDimensionSize() {
         return dimension;
     }
 
+    /**
+     * Returns matrix dimension size
+     * @return y dimension size
+     */
     public int yDimensionSize() {
         return matrix.size();
     }

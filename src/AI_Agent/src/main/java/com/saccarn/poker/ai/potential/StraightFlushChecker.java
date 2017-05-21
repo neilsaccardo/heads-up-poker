@@ -3,6 +3,8 @@ package com.saccarn.poker.ai.potential;
 import java.util.*;
 
 /**
+ * This class checks for any potential straights or flushes.
+ *
  * Created by Neil on 05/04/2017.
  */
 public class StraightFlushChecker {
@@ -19,6 +21,12 @@ public class StraightFlushChecker {
     private final int NUM_CARDS_TURN = 4;
     private final int NUM_CARDS_RIVER = 5;
 
+    /**
+     * Full args constructor with hole cards and board cards so far.
+     * @param holeCardOne hole card one
+     * @param holeCardTwo hole card two
+     * @param boardCards0 board cards
+     */
     public StraightFlushChecker(String holeCardOne, String holeCardTwo, String[] boardCards0) {
         holeCard1 = holeCardOne;
         holeCard2 = holeCardTwo;
@@ -63,10 +71,19 @@ public class StraightFlushChecker {
         }
     }
 
+
+    /**
+     * Returns the number of potential straights and flushes that can happen.
+     * @return num representing number of straights or flushes that can come up.
+     */
     public int numStraightOrFlushOn() {
         return numFlushOn() + numStraightOn();
     }
 
+    /**
+     * Returns the number of potential straights that can happen.
+     * @return num representing number of straights that can come up.
+     */
     public int numStraightOn() {
         //check straight
         List<Boolean> straightValues = new ArrayList<>(13);
@@ -92,6 +109,10 @@ public class StraightFlushChecker {
         return straightCount;
     }
 
+     /**
+     * Returns the number of potential flushes that can happen.
+     * @return num representing number of flushes that can come up.
+     */
     public int numFlushOn() {
         Map<Character, Integer> suitValues = fillSuitValues();
         for (String card : allCards) {

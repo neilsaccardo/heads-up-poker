@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * HandType is a class which encapsulates the hand buckets.
+ *
  * Created by Neil on 15/03/2017.
  */
 public class HandType {
@@ -17,7 +19,17 @@ public class HandType {
     private CardValueTable cardValues = new CardValueTable();
     private PairTable pairTable = new PairTable();
 
+    /**
+     * Default no args constructor
+     */
     public HandType() { }
+
+    /**
+     * Returns probability of opponent having cards that beat the card rank.
+     *
+     * @param rank rank of cards based on bucket table
+     * @return probabilty of opponent having cards that beat the card rank.
+     */
 
     public double calculateProbOfCardRanksBetterThan(int rank) {
         double probability = 0.0;
@@ -27,6 +39,14 @@ public class HandType {
         return probability;
     }
 
+    /**
+     * Returns rank of 2 card hand.
+     *
+     * This method takes in two hole cards, and calculates the hand ranking as per the bucket table. Not used in the system.
+     * @param card1 hole card one
+     * @param card2 hole card 2
+     * @return hand ranking as per bucket table
+     */
     // inputted 'Js' '4d' 'Ac' 'Th' etc
     public int calculateHandRanking(String card1, String card2) {
         int rank;
@@ -61,6 +81,19 @@ public class HandType {
         return rank;
     }
 
+    /**
+     * Returns card rank as per the bucket table
+     *
+     * Method is for when stage is TURN
+     * @param holeCard1 hole card one
+     * @param holeCard2 hole card two
+     * @param boardCard1 board card one
+     * @param boardCard2 board card two
+     * @param boardCard3 board card three
+     * @param boardCard4 board card four
+     * @return rank as per the bucket table
+     */
+
     public int calculateHandRanking(String holeCard1, String holeCard2, String boardCard1,
                                     String boardCard2, String boardCard3, String boardCard4) {
 
@@ -73,6 +106,20 @@ public class HandType {
 
         return Math.min(rank1, Math.min(rank2, Math.min(rank3, Math.min(rank4, Math.min(rank5, rank6)))));
     }
+
+    /**
+     * Returns card rank as per the bucket table
+     *
+     * Method is for when stage is RIVER
+     * @param holeCard1 hole card one
+     * @param holeCard2 hole card two
+     * @param boardCard1 board card one
+     * @param boardCard2 board card two
+     * @param boardCard3 board card three
+     * @param boardCard4 board card four
+     * @param boardCard5 board card five
+     * @return rank as per the bucket table
+     */
 
     public int calculateHandRanking(String holeCard1, String holeCard2, String boardCard1, String boardCard2, String boardCard3, String boardCard4, String boardCard5) {
         int rank1 = calculateHandRanking(holeCard1, holeCard2, boardCard1, boardCard2, boardCard3);
@@ -119,8 +166,21 @@ public class HandType {
     }
 
 
+    /**
+     * Returns card rank as per the bucket table
+     *
+     * Method is for when stage is FLOP
+     * @param holeCard1 hole card one
+     * @param holeCard2 hole card two
+     * @param boardCard1 board card one
+     * @param boardCard2 board card two
+     * @param boardCard3 board card three
+     * @return rank as per the bucket table
+     *
+     */
+
     public int calculateHandRanking(String holeCard1, String holeCard2, String boardCard1, String boardCard2, String boardCard3) {
-        int rank = 0;
+        int rank;
         String [] cards = {holeCard1, holeCard2, boardCard3, boardCard2, boardCard1};
         if (isFlush(cards)) {
             if (isStraight(cards)) {
