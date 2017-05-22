@@ -1,5 +1,5 @@
 function AIActionMessageController($scope) {
-    
+
 };
 
 angular.module('ai-action-message', []).component('aiActionMessage', {
